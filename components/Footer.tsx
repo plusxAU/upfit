@@ -10,26 +10,48 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="px-10 py-7 flex items-center justify-between">
-      <Link href="/" className="font-serif text-base text-upfit-muted">
-        Up<span className="text-accent">Fit</span>
-      </Link>
-
-      <div className="flex items-center gap-6">
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="text-xs text-upfit-muted hover:text-upfit-text transition-colors"
-          >
-            {link.label}
-          </Link>
-        ))}
+    <footer className="px-6 md:px-10 py-8 border-t border-white/[0.08]">
+      {/* Mobile layout */}
+      <div className="flex flex-col gap-6 md:hidden">
+        <Link href="/" className="font-serif text-base text-upfit-muted">
+          Up<span className="text-accent">Fit</span>
+        </Link>
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-xs text-upfit-muted hover:text-upfit-text transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+        <p className="text-xs text-upfit-faint">
+          © {new Date().getFullYear()} UpFit · ABN XX XXX XXX XXX
+        </p>
       </div>
 
-      <p className="text-xs text-upfit-muted">
-        © {new Date().getFullYear()} UpFit · ABN XX XXX XXX XXX
-      </p>
+      {/* Desktop layout */}
+      <div className="hidden md:flex items-center justify-between">
+        <Link href="/" className="font-serif text-base text-upfit-muted">
+          Up<span className="text-accent">Fit</span>
+        </Link>
+        <div className="flex items-center gap-6">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-xs text-upfit-muted hover:text-upfit-text transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+        <p className="text-xs text-upfit-muted">
+          © {new Date().getFullYear()} UpFit · ABN XX XXX XXX XXX
+        </p>
+      </div>
     </footer>
   );
 }

@@ -27,42 +27,67 @@ const reviews = [
   },
 ];
 
+function ReviewCard({ review }: { review: typeof reviews[0] }) {
+  return (
+    <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-5 md:p-6 flex flex-col gap-4 h-full">
+      <p className="text-accent text-sm tracking-[0.15em]">
+        {"★".repeat(review.stars)}
+      </p>
+      <p className="text-sm text-upfit-text leading-relaxed italic flex-1">
+        &ldquo;{review.text}&rdquo;
+      </p>
+      <div>
+        <p className="text-xs text-upfit-muted">
+          <span className="text-upfit-text font-medium">{review.name}</span>{" "}
+          · {review.suburb}
+        </p>
+        <span className="inline-block text-[11px] text-upfit-faint bg-bg-3 px-2 py-0.5 rounded mt-1.5">
+          {review.vehicle} · {review.service}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function Reviews() {
   return (
-    <section className="px-10 py-16 border-b border-white/[0.08]">
-      <p className="section-label">What customers say</p>
+    <section className="py-16 border-b border-white/[0.08]">
+      <div className="px-6 md:px-10 mb-6">
+        <p className="section-label">What customers say</p>
+      </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      {/* Mobile: horizontal scroll carousel showing ~1.3 cards */}
+      <div
+        className="md:hidden flex gap-3 overflow-x-auto px-6 pb-2 snap-x snap-mandatory"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
         {reviews.map((review, i) => (
           <div
             key={i}
-            className="bg-bg-2 border border-white/[0.08] rounded-xl p-6 flex flex-col gap-4"
+            className="flex-shrink-0 snap-start"
+            style={{ width: "80vw" }}
           >
-            <p className="text-accent text-sm tracking-[0.15em]">
-              {"★".repeat(review.stars)}
-            </p>
-            <p className="text-sm text-upfit-text leading-relaxed italic flex-1">
-              &ldquo;{review.text}&rdquo;
-            </p>
-            <div>
-              <p className="text-xs text-upfit-muted">
-                <span className="text-upfit-text font-medium">{review.name}</span>{" "}
-                · {review.suburb}
-              </p>
-              <span className="inline-block text-[11px] text-upfit-faint bg-bg-3 px-2 py-0.5 rounded mt-1.5">
-                {review.vehicle} · {review.service}
-              </span>
-            </div>
+            <ReviewCard review={review} />
           </div>
+        ))}
+        <div className="flex-shrink-0 w-4" />
+      </div>
+
+      {/* Desktop: 3-column grid */}
+      <div className="hidden md:grid md:grid-cols-3 gap-4 px-10 mb-6">
+        {reviews.map((review, i) => (
+          <ReviewCard key={i} review={review} />
         ))}
       </div>
 
-      <Link
-        href="/reviews"
-        className="text-sm text-upfit-muted hover:text-upfit-text transition-colors"
-      >
-        See all reviews →
-      </Link>
+      <div className="px-6 md:px-10 mt-4">
+        <Link
+          href="/reviews"
+          className="text-sm text-upfit-muted hover:text-upfit-text transition-colors"
+        >
+          See all reviews →
+        </Link>
+      </div>
     </section>
   );
 }

@@ -3,7 +3,7 @@ import { suburbs } from "@/lib/vehicles";
 
 export default function Suburbs() {
   return (
-    <section className="px-10 py-16 border-b border-white/[0.08]">
+    <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
       <p className="section-label">Sydney coverage</p>
 
       <div className="flex flex-wrap gap-2">

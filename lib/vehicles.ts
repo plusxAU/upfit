@@ -379,10 +379,27 @@ export function getModelBySlug(brandSlug: string, modelSlug: string) {
 }
 
 export const suburbs = [
+  // Sydney
   "Parramatta", "Chatswood", "Bondi", "Sutherland", "Liverpool",
   "Penrith", "Hornsby", "Manly", "Newtown", "Bankstown",
   "Castle Hill", "Cronulla", "Hurstville", "Macquarie Park",
   "Strathfield", "Ryde", "Campbelltown", "Blacktown", "North Sydney",
   "Baulkham Hills", "Fairfield", "Auburn", "Kogarah", "Miranda",
   "Gordon", "Pymble", "Dee Why", "Brookvale", "Mosman", "Leichhardt",
+  // Melbourne
+  "Richmond", "Footscray", "St Kilda", "Dandenong", "Frankston",
+  "Ringwood", "Box Hill", "Essendon", "Moonee Ponds", "Werribee",
+  "Cranbourne", "Berwick", "Doncaster", "Chadstone", "Sunshine",
+  "Williamstown", "Northcote", "Fitzroy", "South Yarra", "Cheltenham",
+  // Brisbane
+  "Fortitude Valley", "Chermside", "Carindale", "Ipswich", "Redcliffe",
+  "Logan", "Strathpine", "Springwood", "Indooroopilly", "Wynnum",
+  "Sunnybank", "Nundah", "Toowong", "Eight Mile Plains", "Stafford",
+  // Perth
+  "Fremantle", "Midland", "Joondalup", "Rockingham", "Armadale",
+  "Cannington", "Osborne Park", "Morley", "Karrinyup", "Balcatta",
+  "Mandurah", "Scarborough", "Cottesloe", "Subiaco", "Victoria Park",
+  // Adelaide
+  "Glenelg", "Norwood", "Salisbury", "Marion", "Tea Tree Gully",
+  "Modbury", "Elizabeth", "Noarlunga", "Unley", "Prospect",
 ];
