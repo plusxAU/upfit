@@ -1,0 +1,186 @@
+import { notFound } from "next/navigation";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import Link from "next/link";
+import { vehicles } from "@/lib/vehicles";
+import type { Metadata } from "next";
+
+import type { Generation } from "@/lib/vehicles";
+
+type Props = {
+  params: Promise<{ vehicle: string; service: string }>;
+};
+
+type ServiceEntry = {
+  label: string;
+  priceKey: keyof Pick<Generation, "carplayFrom" | "dashcamFrom" | "revcamFrom">;
+  unit: string;
+};
+
+const serviceMap: Record<string, ServiceEntry> = {
+  "carplay-installation": { label: "Apple CarPlay installation", priceKey: "carplayFrom", unit: "CarPlay retrofit" },
+  "dashcam-installation": { label: "Dashcam installation", priceKey: "dashcamFrom", unit: "Dashcam install" },
+  "reverse-camera-installation": { label: "Reverse camera installation", priceKey: "revcamFrom", unit: "Reverse camera" },
+};
+
+function parseVehicleSlug(slug: string) {
+  for (const brand of vehicles) {
+    for (const model of brand.models) {
+      const expected = `${brand.slug}-${model.slug}`;
+      if (slug === expected) return { brand, model };
+    }
+  }
+  return null;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { vehicle: vehicleSlug, service: serviceSlug } = await params;
+  const vehicle = parseVehicleSlug(vehicleSlug);
+  const service = serviceMap[serviceSlug];
+  if (!vehicle || !service) return {};
+  return {
+    title: `${vehicle.brand.name} ${vehicle.model.name} ${service.label} Sydney — UpFit`,
+    description: `Professional ${service.label} for ${vehicle.brand.name} ${vehicle.model.name} in Sydney. Mobile service, fixed pricing, we come to you.`,
+  };
+}
+
+export async function generateStaticParams() {
+  const params = [];
+  for (const brand of vehicles) {
+    for (const model of brand.models) {
+      for (const service of Object.keys(serviceMap)) {
+        params.push({ vehicle: `${brand.slug}-${model.slug}`, service });
+      }
+    }
+  }
+  return params;
+}
+export default async function VehicleServicePage({ params }: Props) {
+  const { vehicle: vehicleSlug, service: serviceSlug } = await params;
+  const vehicle = parseVehicleSlug(vehicleSlug);
+  const service = serviceMap[serviceSlug];
+
+  if (!vehicle || !service) notFound();
+
+  const { brand, model } = vehicle;
+  const minPrice = Math.min(...model.generations.map((g) => g[service.priceKey] as number));
+
+  return (
+    <main>
+      <Nav />
+
+      {/* Breadcrumb */}
+      <div className="px-10 pt-8 pb-0 flex items-center gap-2 text-xs text-upfit-faint">
+        <Link href="/" className="hover:text-upfit-muted transition-colors">Home</Link>
+        <span>/</span>
+        <Link href={`/vehicles/${brand.slug}`} className="hover:text-upfit-muted transition-colors">{brand.name}</Link>
+        <span>/</span>
+        <span className="text-upfit-muted">{brand.name} {model.name} {service.label}</span>
+      </div>
+
+      {/* Hero */}
+      <section className="px-10 py-16 border-b border-white/[0.08] max-w-3xl">
+        <h1 className="font-serif text-5xl font-normal leading-tight mb-5">
+          {brand.name} {model.name}
+          <br />
+          <em className="text-accent not-italic">{service.label}</em>
+        </h1>
+        <p className="text-upfit-muted text-lg font-light leading-relaxed mb-3 max-w-xl">
+          Mobile {service.label.toLowerCase()} for your {brand.name} {model.name} across Sydney.
+          We come to your home or office. Fixed pricing, no surprises.
+        </p>
+        <p className="text-accent font-serif text-2xl mb-8">From ${minPrice}</p>
+        <Link
+          href={`/book?make=${encodeURIComponent(brand.name)}&model=${encodeURIComponent(model.name)}&service=${serviceSlug}`}
+          className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors"
+        >
+          Book {brand.name} {model.name} →
+        </Link>
+      </section>
+
+      {/* Generation sections */}
+      <section className="px-10 py-16 border-b border-white/[0.08]">
+        <p className="section-label">By year range</p>
+        <div className="space-y-6">
+          {model.generations.map((gen) => (
+            <div key={gen.years} className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h3 className="text-base font-medium text-upfit-text">
+                    {brand.name} {model.name} {gen.years}
+                  </h3>
+                  {gen.label && (
+                    <p className="text-xs text-upfit-muted mt-0.5">{gen.label}</p>
+                  )}
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] text-upfit-faint uppercase tracking-wider">From</p>
+                  <p className="font-serif text-2xl text-upfit-text">
+                    ${gen[service.priceKey] as number}
+                  </p>
+                </div>
+              </div>
+              {gen.notes && (
+                <p className="text-xs text-upfit-muted mb-3 bg-bg-3 rounded-lg px-3 py-2 inline-block">
+                  Note: {gen.notes}
+                </p>
+              )}
+              <Link
+                href={`/book?make=${encodeURIComponent(brand.name)}&model=${encodeURIComponent(model.name)}&year=${encodeURIComponent(gen.years)}&service=${serviceSlug}`}
+                className="text-sm text-accent font-medium hover:text-accent-dark transition-colors"
+              >
+                Book this install →
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="px-10 py-16 border-b border-white/[0.08]">
+        <p className="section-label">Common questions</p>
+        <div className="space-y-5 max-w-2xl">
+          {[
+            {
+              q: `Is ${service.label} possible on all ${brand.name} ${model.name} years?`,
+              a: `Most ${model.name} models from 2012 onwards are fully supported. Older vehicles may require a custom quote. Check the year range above for your specific vehicle.`,
+            },
+            {
+              q: "Do you come to me or do I need to bring the car?",
+              a: `We come to you — your home, office, or wherever your ${model.name} is parked in Sydney. No need to take the car anywhere.`,
+            },
+            {
+              q: "How long does the installation take?",
+              a: `${service.label} on the ${brand.name} ${model.name} typically takes 1.5 to 2 hours depending on the year and configuration.`,
+            },
+          ].map((faq) => (
+            <div key={faq.q} className="border-b border-white/[0.06] pb-5">
+              <h3 className="text-sm font-medium text-upfit-text mb-1.5">{faq.q}</h3>
+              <p className="text-sm text-upfit-muted leading-relaxed">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Other services for this vehicle */}
+      <section className="px-10 py-16 border-b border-white/[0.08]">
+        <p className="section-label">Other services for {brand.name} {model.name}</p>
+        <div className="flex gap-3 flex-wrap">
+          {Object.entries(serviceMap)
+            .filter(([slug]) => slug !== serviceSlug)
+            .map(([slug, svc]) => (
+              <Link
+                key={slug}
+                href={`/${vehicleSlug}/${slug}`}
+                className="bg-bg-2 border border-white/[0.08] rounded-lg px-4 py-3 text-sm text-upfit-muted hover:text-upfit-text hover:border-white/[0.2] transition-all"
+              >
+                {brand.name} {model.name} {svc.label} →
+              </Link>
+            ))}
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}

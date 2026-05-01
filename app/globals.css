@@ -2,26 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #0f0f0d;
+    --bg2: #161614;
+    --bg3: #1e1e1b;
+    --accent: #e8f44a;
+    --accent-dark: #c8d63a;
+    --text: #f0ede6;
+    --muted: #888880;
+    --faint: #444440;
+    --border: rgba(255, 255, 255, 0.08);
+    --border2: rgba(255, 255, 255, 0.14);
+  }
+
+  * {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  input,
+  select,
+  textarea {
+    background: var(--bg2);
+    color: var(--text);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: var(--font-dm-sans);
+    font-size: 14px;
+    width: 100%;
+    appearance: none;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: rgba(232, 244, 74, 0.4);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--faint);
+  }
+
+  select option {
+    background: var(--bg3);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-accent text-bg font-medium text-sm px-6 py-3 rounded-lg transition-colors hover:bg-accent-dark cursor-pointer border-0;
+  }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 text-upfit-muted text-sm transition-colors hover:text-upfit-text cursor-pointer bg-transparent border-0;
+  }
+
+  .section-label {
+    @apply flex items-center gap-3 text-xs text-upfit-muted uppercase tracking-widest mb-10;
+  }
+
+  .section-label::after {
+    content: "";
+    @apply flex-1 h-px bg-white/[0.08];
+  }
+
+  .card {
+    @apply bg-bg-2 border border-white/[0.08] rounded-xl;
   }
 }
