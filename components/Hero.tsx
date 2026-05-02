@@ -51,8 +51,7 @@ export default function Hero() {
       </h1>
 
       <p className="text-base md:text-lg text-upfit-muted font-light leading-relaxed max-w-lg mb-8 md:mb-10">
-        CarPlay, Android Auto, dashcams and reverse cameras — installed at your home or
-        office. Unit + installation included. Same-week availability.
+        CarPlay, Android Auto, dashcams, reverse cameras and parking sensors — installed at your home or office. Unit + installation included. Same-week availability.
       </p>
 
       {/* Vehicle selector */}

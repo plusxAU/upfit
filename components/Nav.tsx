@@ -35,6 +35,12 @@ export default function Nav() {
               {link.label}
             </Link>
           ))}
+          <a
+            href="tel:1300000000"
+            className="text-upfit-muted text-sm hover:text-accent transition-colors whitespace-nowrap"
+          >
+            1300 XXX XXX
+          </a>
           <Link
             href="/book"
             className="bg-accent text-bg text-sm font-medium px-4 py-2 rounded-md hover:bg-accent-dark transition-colors whitespace-nowrap"
@@ -83,6 +89,12 @@ export default function Nav() {
             </Link>
           ))}
           <div className="px-6 py-4">
+            <a
+              href="tel:1300000000"
+              className="block text-sm text-upfit-muted hover:text-accent transition-colors mb-3"
+            >
+              Call 1300 XXX XXX
+            </a>
             <Link
               href="/book"
               onClick={() => setOpen(false)}

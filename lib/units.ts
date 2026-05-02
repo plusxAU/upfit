@@ -6,14 +6,30 @@ export type UnitTier = {
   features: string[];
   priceMultiplier: number;
   popular?: boolean;
+  isModule?: boolean;
 };
 
 export const unitTiers: UnitTier[] = [
   {
+    id: "activation",
+    badge: "Keep your factory screen",
+    name: "CarPlay Activation",
+    screen: "Module only — no head unit replacement",
+    features: [
+      "Adds wireless CarPlay & Android Auto",
+      "Your existing factory screen stays",
+      "Steering wheel controls remain mapped",
+      "Plug-in module — fully reversible",
+      "Best for 2016+ vehicles with factory screen",
+    ],
+    priceMultiplier: 0.78,
+    isModule: true,
+  },
+  {
     id: "standard",
     badge: "",
-    name: "Standard unit",
-    screen: '7" touchscreen',
+    name: "Standard upgrade",
+    screen: '7" touchscreen — full head unit',
     features: [
       "Wired Apple CarPlay & Android Auto",
       "Reverse camera input",
@@ -25,8 +41,8 @@ export const unitTiers: UnitTier[] = [
   {
     id: "premium",
     badge: "Most popular",
-    name: "Premium unit",
-    screen: '9" touchscreen',
+    name: "Premium upgrade",
+    screen: '9" touchscreen — full head unit',
     features: [
       "Wireless Apple CarPlay & Android Auto",
       "Reverse camera included",
@@ -40,8 +56,8 @@ export const unitTiers: UnitTier[] = [
   {
     id: "premium-plus",
     badge: "Best experience",
-    name: "Premium+ unit",
-    screen: '10" touchscreen',
+    name: "Premium+ upgrade",
+    screen: '10" touchscreen — full head unit',
     features: [
       "Wireless Apple CarPlay & Android Auto",
       "360° camera ready",
@@ -55,5 +71,5 @@ export const unitTiers: UnitTier[] = [
 ];
 
 export function getUnitPrice(basePrice: number, multiplier: number): number {
-  return Math.round(basePrice * multiplier / 10) * 10;
+  return Math.round((basePrice * multiplier) / 10) * 10;
 }

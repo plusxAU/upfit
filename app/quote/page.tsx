@@ -26,6 +26,8 @@ export default function QuotePage() {
     name: "",
     phone: "",
     email: "",
+    suburb: "",
+    postcode: "",
     notes: "",
   });
 
@@ -43,6 +45,8 @@ export default function QuotePage() {
       { name: "lastname", value: lastname },
       { name: "email", value: form.email },
       { name: "phone", value: form.phone },
+      { name: "city", value: form.suburb },
+      { name: "zip", value: form.postcode },
       { name: "vehicle_make", value: form.make },
       { name: "vehicle_model", value: form.model },
       { name: "vehicle_year", value: form.year },
@@ -155,6 +159,18 @@ export default function QuotePage() {
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
             />
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                placeholder="Suburb"
+                value={form.suburb}
+                onChange={(e) => update("suburb", e.target.value)}
+              />
+              <input
+                placeholder="Postcode"
+                value={form.postcode}
+                onChange={(e) => update("postcode", e.target.value)}
+              />
+            </div>
             <textarea
               placeholder="Anything else we should know? (optional)"
               value={form.notes}

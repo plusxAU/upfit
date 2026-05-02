@@ -2,10 +2,20 @@ import Link from "next/link";
 
 const services = [
   {
-    tag: "Most popular",
-    title: "Apple CarPlay & Android Auto",
+    tag: "No screen replacement",
+    title: "CarPlay Activation",
     description:
-      "Retrofit any supported vehicle with a factory-quality head unit. Wired cleanly, installed at your door.",
+      "Add wireless CarPlay & Android Auto to your existing factory screen. No head unit replacement needed. Best for 2016+ vehicles.",
+    fromPrice: 350,
+    priceNote: "Module + installation · GST incl. · varies by vehicle",
+    href: "/services/carplay-installation",
+    time: "~1 hour",
+  },
+  {
+    tag: "Most popular",
+    title: "CarPlay & Android Auto Upgrade",
+    description:
+      "Full head unit replacement with a premium touchscreen. Wired cleanly using OEM harness adaptors. Installed at your door.",
     fromPrice: 450,
     priceNote: "Unit + installation · GST incl. · price varies by model",
     href: "/services/carplay-installation",
@@ -15,7 +25,7 @@ const services = [
     tag: "Fast install",
     title: "Dashcam installation",
     description:
-      "Front and rear dashcam fitted and wired cleanly. No loose cables. Done in under an hour.",
+      "Front and rear dashcam hardwired and fitted cleanly. No loose cables. Done in under an hour.",
     fromPrice: 280,
     priceNote: "Front + rear cameras + installation · GST incl.",
     href: "/services/dashcam-installation",
@@ -25,11 +35,21 @@ const services = [
     tag: "45 min install",
     title: "Reverse camera",
     description:
-      "Wired reverse camera integrated with your existing display or a new screen. Crystal clear image.",
+      "Wired reverse camera integrated with your existing or new display. Crystal clear image, triggers on reverse.",
     fromPrice: 220,
     priceNote: "Camera + installation · GST incl.",
     href: "/services/reverse-camera-installation",
     time: "~45 minutes",
+  },
+  {
+    tag: "Park with confidence",
+    title: "Parking sensors",
+    description:
+      "Front and/or rear ultrasonic parking sensors with audible alert. Natural bundle with reverse camera.",
+    fromPrice: 220,
+    priceNote: "Sensors + installation · GST incl. · drilling required",
+    href: "/services/parking-sensors",
+    time: "1–1.5 hours",
   },
 ];
 
@@ -71,12 +91,12 @@ export default function Services() {
         ))}
       </div>
 
-      {/* Desktop: 3-column grid */}
-      <div className="hidden md:grid grid-cols-3 divide-x divide-white/[0.08] border border-white/[0.08] rounded-xl overflow-hidden">
+      {/* Desktop: grid */}
+      <div className="hidden md:grid grid-cols-3 gap-4">
         {services.map((service) => (
           <div
-            key={service.href}
-            className="bg-bg-2 p-8 flex flex-col hover:bg-bg-3 transition-colors"
+            key={service.href + service.title}
+            className="bg-bg-2 border border-white/[0.08] rounded-xl p-8 flex flex-col hover:bg-bg-3 transition-colors"
           >
             <p className="text-[11px] text-accent uppercase tracking-wider font-medium mb-5">
               {service.tag}
