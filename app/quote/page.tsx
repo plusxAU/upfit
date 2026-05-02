@@ -34,9 +34,6 @@ export default function QuotePage() {
   }
 
   async function handleSubmit() {
-    const portalId = "443132944";
-    const formGuid = "333b4302-43d7-4c1f-9e7f-6fe96c5a303b";
-
     const nameParts = form.name.trim().split(" ");
     const firstname = nameParts[0] || "";
     const lastname = nameParts.slice(1).join(" ") || "";
@@ -54,22 +51,16 @@ export default function QuotePage() {
     ];
 
     try {
-      await fetch(
-        `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fields,
-            context: {
-              pageUri: window.location.href,
-              pageName: "UpFit Quote Request",
-            },
-          }),
-        }
-      );
+      await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fields,
+          pageUri: window.location.href,
+        }),
+      });
     } catch (err) {
-      console.error("HubSpot submission error:", err);
+      console.error("Quote submission error:", err);
     }
 
     setSubmitted(true);

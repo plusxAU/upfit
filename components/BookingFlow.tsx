@@ -100,9 +100,6 @@ export default function BookingFlow({
   }
 
   async function handleSubmit() {
-    const portalId = "443132944";
-    const formGuid = "10e9d06c-3b43-4498-9bce-ec65d773006b";
-
     const nameParts = state.name.trim().split(" ");
     const firstname = nameParts[0] || "";
     const lastname = nameParts.slice(1).join(" ") || "";
@@ -131,19 +128,16 @@ export default function BookingFlow({
     ];
 
     try {
-      await fetch(
-        `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fields,
-            context: { pageUri: window.location.href, pageName: "UpFit Booking Request" },
-          }),
-        }
-      );
+      await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fields,
+          pageUri: window.location.href,
+        }),
+      });
     } catch (err) {
-      console.error("HubSpot submission error:", err);
+      console.error("Booking submission error:", err);
     }
 
     setSubmitted(true);
@@ -172,7 +166,7 @@ export default function BookingFlow({
           {state.make} {state.model} installation within 2 hours.
         </p>
         <p className="text-upfit-muted text-sm mb-8">
-          A confirmation has been sent to {state.email}
+          We&apos;ll call or text {state.phone} to lock in a time.
         </p>
         <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-5 text-left mb-6">
           <p className="text-xs text-upfit-muted uppercase tracking-wider mb-3">
