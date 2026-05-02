@@ -36,10 +36,10 @@ export default function Nav() {
             </Link>
           ))}
           <a
-            href="tel:1300000000"
+            href="tel:0435508050"
             className="text-upfit-muted text-sm hover:text-accent transition-colors whitespace-nowrap"
           >
-            1300 XXX XXX
+            0435 508 050
           </a>
           <Link
             href="/book"
@@ -90,10 +90,10 @@ export default function Nav() {
           ))}
           <div className="px-6 py-4">
             <a
-              href="tel:1300000000"
+              href="tel:0435508050"
               className="block text-sm text-upfit-muted hover:text-accent transition-colors mb-3"
             >
-              Call 1300 XXX XXX
+              Call 0435 508 050
             </a>
             <Link
               href="/book"

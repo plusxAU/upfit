@@ -9,9 +9,27 @@ import Suburbs from "@/components/Suburbs";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "UpFit",
+  "description": "Mobile Apple CarPlay, Android Auto, dashcam, reverse camera and parking sensor installation across Australia. We come to you.",
+  "url": "https://upfit.au",
+  "telephone": "+61435508050",
+  "email": "team@upfit.au",
+  "areaServed": ["New South Wales", "Victoria", "Queensland", "Western Australia", "South Australia"],
+  "serviceType": ["Apple CarPlay Installation", "Android Auto Installation", "Dashcam Installation", "Reverse Camera Installation", "Parking Sensor Installation"],
+  "priceRange": "$$",
+  "sameAs": [],
+};
+
 export default function Home() {
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       <Nav />
       <Hero />
       <TrustBar />

@@ -85,8 +85,19 @@ export default async function SuburbPage({ params }: Props) {
 
   const nearbySuburbs = suburbs.filter((s) => s !== suburb).slice(0, 6);
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": `${config.label} in ${suburb}`,
+    "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au", "telephone": "+61435508050" },
+    "areaServed": suburb,
+    "description": `Professional ${config.description.toLowerCase()} in ${suburb}. Mobile service — we come to you. Fixed pricing from $${config.fromPrice}.`,
+    "offers": { "@type": "Offer", "price": String(config.fromPrice), "priceCurrency": "AUD" },
+  };
+
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Nav />
 
       <section className="px-10 py-20 border-b border-white/[0.08] max-w-3xl">

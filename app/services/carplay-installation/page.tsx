@@ -4,14 +4,41 @@ import Link from "next/link";
 import { vehicles } from "@/lib/vehicles";
 
 export const metadata = {
-  title: "Apple CarPlay Installation Sydney — UpFit",
+  title: "Apple CarPlay & Android Auto Installation — UpFit",
   description:
-    "Professional Apple CarPlay and Android Auto retrofit installation across Sydney. Mobile service, fixed pricing, same-week availability.",
+    "Professional Apple CarPlay and Android Auto installation across Australia. Activation module or full head unit upgrade. Mobile service, fixed pricing, same-week availability.",
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Apple CarPlay & Android Auto Installation",
+  "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au" },
+  "areaServed": "Australia",
+  "description": "Professional Apple CarPlay and Android Auto installation. Module activation or full head unit upgrade. Mobile service — we come to you.",
+  "offers": [
+    { "@type": "Offer", "name": "CarPlay Activation (module)", "price": "350", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "CarPlay Upgrade (full head unit)", "price": "450", "priceCurrency": "AUD" },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Will CarPlay work with my car?", "acceptedAnswer": { "@type": "Answer", "text": "CarPlay can be added to most vehicles manufactured after 2010 via a module activation or full head unit replacement. Check your vehicle on our website to confirm compatibility." } },
+    { "@type": "Question", "name": "Do you supply the head unit?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — we supply everything. Choose from standard, premium or premium+ units during booking. Price includes both the unit and installation." } },
+    { "@type": "Question", "name": "How long does installation take?", "acceptedAnswer": { "@type": "Answer", "text": "Module activation takes around 1 hour. Full head unit replacement takes 1.5 to 2 hours depending on the vehicle." } },
+    { "@type": "Question", "name": "Do I need to take my car to a workshop?", "acceptedAnswer": { "@type": "Answer", "text": "No. We come to your home, office or wherever the car is parked. You don't need to go anywhere." } },
+    { "@type": "Question", "name": "Will the installation void my car's warranty?", "acceptedAnswer": { "@type": "Answer", "text": "No. We use OEM-compatible harness adaptors and don't cut any factory wiring. The installation is completely reversible." } },
+  ],
 };
 
 export default function CarPlayPage() {
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Nav />
 
       {/* Hero */}
