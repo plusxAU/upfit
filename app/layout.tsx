@@ -39,8 +39,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${dmSans.variable} ${dmSerif.variable}`}>
-      <body className="bg-bg text-upfit-text font-sans antialiased">
-        {children}
+      <body className="bg-bg text-upfit-text font-sans antialiased overflow-x-hidden">
+        <div className="w-full overflow-x-hidden">
+          {children}
+        </div>
       </body>
     </html>
   );

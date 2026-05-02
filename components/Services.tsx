@@ -38,7 +38,41 @@ export default function Services() {
     <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
       <p className="section-label">Services — fixed pricing on supported models</p>
 
-      <div className="grid grid-cols-3 divide-x divide-white/[0.08] border border-white/[0.08] rounded-xl overflow-hidden">
+      {/* Mobile: stacked */}
+      <div className="flex flex-col gap-3 md:hidden">
+        {services.map((service) => (
+          <div
+            key={service.href}
+            className="bg-bg-2 border border-white/[0.08] rounded-xl p-6 flex flex-col"
+          >
+            <p className="text-[11px] text-accent uppercase tracking-wider font-medium mb-3">
+              {service.tag}
+            </p>
+            <h3 className="font-serif text-2xl font-normal leading-snug mb-2">
+              {service.title}
+            </h3>
+            <p className="text-sm text-upfit-muted leading-relaxed mb-4 flex-1">
+              {service.description}
+            </p>
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="text-[10px] text-upfit-faint uppercase tracking-wider mb-1">From</p>
+                <p className="font-serif text-3xl leading-none text-upfit-text">${service.fromPrice}</p>
+                <p className="text-xs text-upfit-muted mt-1">{service.priceNote}</p>
+              </div>
+              <Link
+                href={service.href}
+                className="text-sm text-accent font-medium border border-accent/25 px-4 py-2 rounded-md hover:bg-accent/[0.08] transition-all whitespace-nowrap"
+              >
+                See details →
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: 3-column grid */}
+      <div className="hidden md:grid grid-cols-3 divide-x divide-white/[0.08] border border-white/[0.08] rounded-xl overflow-hidden">
         {services.map((service) => (
           <div
             key={service.href}
@@ -47,25 +81,17 @@ export default function Services() {
             <p className="text-[11px] text-accent uppercase tracking-wider font-medium mb-5">
               {service.tag}
             </p>
-
             <h3 className="font-serif text-2xl font-normal leading-snug mb-3">
               {service.title}
             </h3>
-
             <p className="text-sm text-upfit-muted leading-relaxed mb-6 flex-1">
               {service.description}
             </p>
-
             <div className="mb-6">
-              <p className="text-[10px] text-upfit-faint uppercase tracking-wider mb-1">
-                From
-              </p>
-              <p className="font-serif text-[34px] leading-none text-upfit-text">
-                ${service.fromPrice}
-              </p>
+              <p className="text-[10px] text-upfit-faint uppercase tracking-wider mb-1">From</p>
+              <p className="font-serif text-[34px] leading-none text-upfit-text">${service.fromPrice}</p>
               <p className="text-xs text-upfit-muted mt-1.5">{service.priceNote}</p>
             </div>
-
             <Link
               href={service.href}
               className="inline-flex items-center gap-1.5 text-sm text-accent font-medium border border-accent/25 px-4 py-2.5 rounded-md hover:bg-accent/[0.08] transition-all w-fit"

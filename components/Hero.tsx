@@ -38,25 +38,25 @@ export default function Hero() {
   }
 
   return (
-    <section className="px-10 pt-20 pb-0 max-w-4xl">
-      <div className="flex items-center gap-2 text-xs text-upfit-muted uppercase tracking-widest mb-7">
-        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-        Mobile installation · Sydney-wide
+    <section className="px-6 md:px-10 pt-10 md:pt-20 pb-0 w-full max-w-4xl overflow-hidden">
+      <div className="flex items-center gap-2 text-xs text-upfit-muted uppercase tracking-widest mb-6 md:mb-7">
+        <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+        Mobile installation · Australia-wide
       </div>
 
-      <h1 className="font-serif text-[68px] leading-[1.0] tracking-[-0.03em] mb-6 font-normal">
+      <h1 className="font-serif text-[48px] md:text-[68px] leading-[1.0] tracking-[-0.03em] mb-5 md:mb-6 font-normal">
         Your car,
         <br />
         <em className="text-accent not-italic font-serif">upgraded.</em>
       </h1>
 
-      <p className="text-lg text-upfit-muted font-light leading-relaxed max-w-lg mb-10">
+      <p className="text-base md:text-lg text-upfit-muted font-light leading-relaxed max-w-lg mb-8 md:mb-10">
         CarPlay, Android Auto, dashcams and reverse cameras — installed at your home or
         office. Unit + installation included. Same-week availability.
       </p>
 
       {/* Vehicle selector */}
-      <div className="bg-bg-2 border border-white/[0.14] rounded-xl p-6 max-w-xl mb-0">
+      <div className="bg-bg-2 border border-white/[0.14] rounded-xl p-5 md:p-6 w-full max-w-xl mb-0">
         <p className="text-xs text-upfit-muted uppercase tracking-widest mb-4">
           Check your vehicle
         </p>
