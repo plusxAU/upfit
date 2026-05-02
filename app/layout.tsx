@@ -17,15 +17,19 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "UpFit — Apple CarPlay & Dashcam Installation Sydney",
+  title: "UpFit — Apple CarPlay & Dashcam Installation Australia",
   description:
-    "Mobile Apple CarPlay, Android Auto, dashcam and reverse camera installation across Sydney. Fixed pricing on supported vehicles. We come to you.",
+    "Mobile Apple CarPlay, Android Auto, dashcam, reverse camera and parking sensor installation across Australia. Fixed pricing on supported vehicles. We come to you.",
   keywords:
-    "Apple CarPlay installation Sydney, dashcam installation Sydney, reverse camera Sydney, CarPlay retrofit Sydney",
+    "Apple CarPlay installation Sydney, dashcam installation Australia, reverse camera installation, CarPlay retrofit, Android Auto installation",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/apple-touch-icon.svg",
+  },
   openGraph: {
     title: "UpFit — Your car, upgraded.",
     description:
-      "Mobile auto electrical upgrades across Sydney. Fixed pricing, same-week availability.",
+      "Mobile auto electrical upgrades across Australia. Fixed pricing, same-week availability.",
     url: "https://upfit.au",
     siteName: "UpFit",
     locale: "en_AU",
