@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -39,6 +40,33 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${dmSans.variable} ${dmSerif.variable}`}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-99GYV07S96"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-99GYV07S96');
+          `}
+        </Script>
+        <Script id="hubspot-tracking" strategy="afterInteractive">
+          {`
+            var _hsq = window._hsq = window._hsq || [];
+            _hsq.push(['setPath', window.location.pathname]);
+            (function(d,s,id){
+              var js,fjs=d.getElementsByTagName(s)[0];
+              if(d.getElementById(id))return;
+              js=d.createElement(s);js.id=id;
+              js.src="//js.hs-scripts.com/443132944.js";
+              fjs.parentNode.insertBefore(js,fjs);
+            }(document,'script','hs-script-loader'));
+          `}
+        </Script>
+      </head>
       <body className="bg-bg text-upfit-text font-sans antialiased overflow-x-hidden">
         <div className="w-full overflow-x-hidden">
           {children}
