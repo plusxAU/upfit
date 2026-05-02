@@ -104,12 +104,21 @@ export default function BookingFlow({
     const firstname = nameParts[0] || "";
     const lastname = nameParts.slice(1).join(" ") || "";
 
-    const timeLabel =
+    const timePreferenceValue =
       state.timePreference === "flexible"
-        ? "ASAP — contact me to lock in a time"
+        ? "ASAP"
         : state.timePreference === "callback"
-        ? "Questions first — call me back"
-        : `${state.date} · ${state.time}`;
+        ? "questions_first"
+        : "preferred_time";
+
+    const notesValue = [
+      state.notes || "",
+      state.timePreference === "schedule" && state.date
+        ? `Preferred time: ${state.date} · ${state.time}`
+        : "",
+    ]
+      .filter(Boolean)
+      .join(" | ");
 
     const fields = [
       { name: "firstname", value: firstname },
@@ -122,8 +131,8 @@ export default function BookingFlow({
       { name: "vehicle_model", value: state.model },
       { name: "vehicle_year", value: state.year },
       { name: "service_type", value: `CarPlay & Android Auto · ${state.unitName} · from $${state.unitPrice}` },
-      { name: "time_preference", value: timeLabel },
-      { name: "notes", value: state.notes || "" },
+      { name: "time_preference", value: timePreferenceValue },
+      { name: "notes", value: notesValue },
       { name: "address", value: state.address || "" },
     ];
 
