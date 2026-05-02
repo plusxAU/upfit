@@ -99,8 +99,53 @@ export default function BookingFlow({
     if (n >= 1 && n <= 5) setStep(n);
   }
 
-  function handleSubmit() {
-    // TODO: POST to /api/booking which triggers Cal.com + email notification
+  async function handleSubmit() {
+    const portalId = "443132944";
+    const formGuid = "10e9d06c-3b43-4498-9bce-ec65d773006b";
+
+    const nameParts = state.name.trim().split(" ");
+    const firstname = nameParts[0] || "";
+    const lastname = nameParts.slice(1).join(" ") || "";
+
+    const timeLabel =
+      state.timePreference === "flexible"
+        ? "ASAP — contact me to lock in a time"
+        : state.timePreference === "callback"
+        ? "Questions first — call me back"
+        : `${state.date} · ${state.time}`;
+
+    const fields = [
+      { name: "firstname", value: firstname },
+      { name: "lastname", value: lastname },
+      { name: "email", value: state.email },
+      { name: "phone", value: state.phone },
+      { name: "city", value: state.suburb },
+      { name: "zip", value: state.postcode },
+      { name: "vehicle_make", value: state.make },
+      { name: "vehicle_model", value: state.model },
+      { name: "vehicle_year", value: state.year },
+      { name: "service_type", value: `CarPlay & Android Auto · ${state.unitName} · from $${state.unitPrice}` },
+      { name: "time_preference", value: timeLabel },
+      { name: "notes", value: state.notes || "" },
+      { name: "address", value: state.address || "" },
+    ];
+
+    try {
+      await fetch(
+        `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fields,
+            context: { pageUri: window.location.href, pageName: "UpFit Booking Request" },
+          }),
+        }
+      );
+    } catch (err) {
+      console.error("HubSpot submission error:", err);
+    }
+
     setSubmitted(true);
   }
 
@@ -600,7 +645,7 @@ export default function BookingFlow({
             className="mb-2.5"
           />
           <input
-            placeholder="Where should we come? (street address)"
+            placeholder="Where should we come? (street address — optional for now)"
             value={state.address}
             onChange={(e) => update({ address: e.target.value })}
             className="mb-2.5"
