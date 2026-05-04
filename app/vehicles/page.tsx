@@ -28,19 +28,19 @@ export default function VehiclesPage() {
         </p>
       </section>
 
-      <section className="px-10 py-16 border-b border-white/[0.08]">
-        <div className="grid grid-cols-2 gap-4">
+      <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...vehicles].sort((a, b) => a.name.localeCompare(b.name)).map((brand) => (
             <Link
               key={brand.slug}
               href={`/vehicles/${brand.slug}`}
               className="bg-bg-2 border border-white/[0.08] rounded-xl p-6 hover:border-white/[0.2] transition-all group"
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center justify-between gap-2 mb-3">
                 <h2 className="text-xl font-medium text-upfit-text group-hover:text-accent transition-colors">
                   {brand.name}
                 </h2>
-                <span className="text-xs text-upfit-faint bg-bg-3 px-2 py-1 rounded">
+                <span className="text-xs text-upfit-faint bg-bg-3 px-2 py-1 rounded flex-shrink-0">
                   {brand.models.length} models
                 </span>
               </div>
