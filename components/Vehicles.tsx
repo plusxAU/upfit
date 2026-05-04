@@ -7,7 +7,7 @@ export default function Vehicles() {
       <p className="section-label">Supported vehicles</p>
 
       <div className="grid grid-cols-4 divide-x divide-y divide-white/[0.08] border border-white/[0.08] rounded-xl overflow-hidden">
-        {vehicles.map((brand) => (
+        {[...vehicles].sort((a, b) => a.name.localeCompare(b.name)).map((brand) => (
           <div key={brand.slug} className="bg-bg-2 p-5 hover:bg-bg-3 transition-colors">
             <Link href={`/vehicles/${brand.slug}`}>
               <p className="text-sm font-medium text-upfit-text mb-2 hover:text-accent transition-colors">

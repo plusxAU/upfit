@@ -30,7 +30,7 @@ export default function VehiclesPage() {
 
       <section className="px-10 py-16 border-b border-white/[0.08]">
         <div className="grid grid-cols-2 gap-4">
-          {vehicles.map((brand) => (
+          {[...vehicles].sort((a, b) => a.name.localeCompare(b.name)).map((brand) => (
             <Link
               key={brand.slug}
               href={`/vehicles/${brand.slug}`}
