@@ -372,10 +372,6 @@ export default function BookingFlow({
 
           <div className="flex flex-col gap-3 mb-7">
             {unitTiers.map((tier) => {
-              const price = getUnitPrice(
-                generation?.carplayFrom ?? 450,
-                tier.priceMultiplier
-              );
               const isSelected = state.unitId === tier.id;
               return (
                 <button
@@ -384,7 +380,7 @@ export default function BookingFlow({
                     update({
                       unitId: tier.id,
                       unitName: tier.name,
-                      unitPrice: price,
+                      unitPrice: tier.installedPrice,
                     })
                   }
                   className={`w-full text-left bg-bg-2 border rounded-xl p-5 flex items-center gap-4 transition-all cursor-pointer ${
@@ -403,22 +399,20 @@ export default function BookingFlow({
                     ) : (
                       <div className="h-4 mb-1.5" />
                     )}
-                    <p className="text-base font-medium text-upfit-text mb-1">
+                    <p className="text-base font-medium text-upfit-text mb-0.5">
                       {tier.name}
                     </p>
+                    <p className="text-xs text-upfit-faint mb-1">{tier.brand} · {tier.modelSku}</p>
                     <p className="text-xs text-upfit-muted leading-relaxed">
-                      {tier.screen} · {tier.features.join(" · ")}
+                      {tier.screen} · {tier.features.slice(0, 3).join(" · ")}
                     </p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p className="text-[10px] text-upfit-faint uppercase tracking-wider">
-                      From
-                    </p>
                     <p className="font-serif text-2xl text-upfit-text leading-tight">
-                      ${price}
+                      ${tier.installedPrice.toLocaleString()}
                     </p>
                     <p className="text-[10px] text-upfit-faint mt-0.5">
-                      unit + install
+                      {tier.installTimeMin}–{tier.installTimeMax} min
                     </p>
                   </div>
                   <div
