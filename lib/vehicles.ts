@@ -589,6 +589,8 @@ export const vehicles: VehicleBrand[] = [
   // Toyota LandCruiser 70 Series (separate from LandCruiser 200/300 already listed)
   // Added as a Prado entry under Toyota — note for installer: no factory screen, full replacement only
 ];
+
+export function getBrandBySlug(slug: string) {
   return vehicles.find((b) => b.slug === slug);
 }
 
