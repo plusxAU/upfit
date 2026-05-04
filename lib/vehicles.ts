@@ -69,10 +69,25 @@ export const vehicles: VehicleBrand[] = [
       },
       {
         slug: "landcruiser",
-        name: "LandCruiser",
+        name: "LandCruiser 200/300",
         generations: [
           { label: "300 series", years: "2021–2024", carplayFrom: 520, dashcamFrom: 290, revcamFrom: 230, complexity: "standard" },
           { label: "200 series", years: "2016–2020", carplayFrom: 520, dashcamFrom: 290, revcamFrom: 230, complexity: "standard" },
+        ],
+      },
+      {
+        slug: "landcruiser-70",
+        name: "LandCruiser 70 Series",
+        generations: [
+          { label: "All years", years: "1984–2025", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, complexity: "standard", notes: "No factory screen — full head unit replacement only. Single DIN to Double DIN conversion kit required. Very popular upgrade — enthusiast community." },
+        ],
+      },
+      {
+        slug: "prado",
+        name: "Prado",
+        generations: [
+          { label: "150 Series facelift", years: "2017–2024", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 220, complexity: "standard" },
+          { label: "150 Series", years: "2009–2016", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, complexity: "standard" },
         ],
       },
     ],
@@ -187,6 +202,15 @@ export const vehicles: VehicleBrand[] = [
         generations: [
           { label: "Current gen", years: "2022–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, complexity: "standard" },
           { label: "1st gen", years: "2018–2021", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, complexity: "standard" },
+        ],
+      },
+      {
+        slug: "pajero",
+        name: "Pajero",
+        generations: [
+          { label: "NX (4th gen)", years: "2014–2021", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 220, complexity: "standard", notes: "Premium Rockford Fosgate audio on some variants — confirm before booking." },
+          { label: "NW (3rd gen)", years: "2009–2014", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, complexity: "standard" },
+          { label: "NS/NT (2nd gen)", years: "2006–2009", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, complexity: "complex" },
         ],
       },
     ],
@@ -367,9 +391,204 @@ export const vehicles: VehicleBrand[] = [
       },
     ],
   },
+  // Holden
+  {
+    slug: "holden",
+    name: "Holden",
+    models: [
+      {
+        slug: "commodore-vf",
+        name: "Commodore VF",
+        generations: [
+          {
+            label: "VF Series 1 & 2",
+            years: "2013–2017",
+            carplayFrom: 450,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+            notes: "MyLink activation module available from $350 — keeps factory screen. Full replacement also available. Vehicles with Bose/premium audio require advanced harness — add $50–80.",
+          },
+        ],
+      },
+      {
+        slug: "commodore-ve",
+        name: "Commodore VE",
+        generations: [
+          {
+            label: "VE Series 2",
+            years: "2010–2013",
+            carplayFrom: 480,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+            notes: "Single zone vs dual zone climate control affects harness selection — confirm before booking.",
+          },
+          {
+            label: "VE Series 1",
+            years: "2006–2010",
+            carplayFrom: 480,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+            notes: "Single zone vs dual zone climate control affects harness selection — confirm before booking.",
+          },
+        ],
+      },
+      {
+        slug: "hsv",
+        name: "HSV (all models)",
+        generations: [
+          {
+            label: "VF-based HSV",
+            years: "2013–2017",
+            carplayFrom: 470,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+            notes: "Same platform as VF Commodore. Most have premium Bose audio — advanced harness required.",
+          },
+          {
+            label: "VE-based HSV",
+            years: "2006–2013",
+            carplayFrom: 490,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+            notes: "Premium audio system standard — advanced harness required.",
+          },
+        ],
+      },
+      {
+        slug: "colorado",
+        name: "Colorado",
+        generations: [
+          {
+            label: "RG Series",
+            years: "2012–2020",
+            carplayFrom: 470,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+        ],
+      },
+    ],
+  },
+  // Suzuki
+  {
+    slug: "suzuki",
+    name: "Suzuki",
+    models: [
+      {
+        slug: "jimny",
+        name: "Jimny",
+        generations: [
+          {
+            label: "Current gen (JB74)",
+            years: "2018–2025",
+            carplayFrom: 450,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+            notes: "Plug and play harness available. Both manual and digital AC variants supported. RHD Australian models only.",
+          },
+          {
+            label: "Previous gen (JB43)",
+            years: "2005–2017",
+            carplayFrom: 470,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+        ],
+      },
+      {
+        slug: "vitara",
+        name: "Vitara",
+        generations: [
+          {
+            label: "Current gen",
+            years: "2015–2025",
+            carplayFrom: 450,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+        ],
+      },
+      {
+        slug: "swift",
+        name: "Swift",
+        generations: [
+          {
+            label: "Current gen",
+            years: "2017–2025",
+            carplayFrom: 450,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+        ],
+      },
+    ],
+  },
+  // Mitsubishi Pajero (separate from Mitsubishi which already has Triton etc)
+  // Adding Pajero to existing Mitsubishi brand below via note — handled in code
+  // Isuzu
+  {
+    slug: "isuzu",
+    name: "Isuzu",
+    models: [
+      {
+        slug: "d-max",
+        name: "D-Max",
+        generations: [
+          {
+            label: "3rd gen",
+            years: "2020–2025",
+            carplayFrom: 470,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+          {
+            label: "2nd gen",
+            years: "2012–2019",
+            carplayFrom: 470,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+        ],
+      },
+      {
+        slug: "mu-x",
+        name: "MU-X",
+        generations: [
+          {
+            label: "2nd gen",
+            years: "2021–2025",
+            carplayFrom: 470,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+          {
+            label: "1st gen",
+            years: "2013–2020",
+            carplayFrom: 470,
+            dashcamFrom: 280,
+            revcamFrom: 220,
+            complexity: "standard" as const,
+          },
+        ],
+      },
+    ],
+  },
+  // Toyota LandCruiser 70 Series (separate from LandCruiser 200/300 already listed)
+  // Added as a Prado entry under Toyota — note for installer: no factory screen, full replacement only
 ];
-
-export function getBrandBySlug(slug: string) {
   return vehicles.find((b) => b.slug === slug);
 }
 
