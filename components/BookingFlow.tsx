@@ -24,13 +24,14 @@ type BookingState = {
   phone: string;
   email: string;
   notes: string;
+  agreedToTerms: boolean;
 };
 
 const initialState: BookingState = {
   make: "", model: "", year: "", unitId: "", unitName: "",
   unitPrice: 0, suburb: "", postcode: "", address: "",
   timePreference: "flexible", date: "", time: "",
-  name: "", phone: "", email: "", notes: "",
+  name: "", phone: "", email: "", notes: "", agreedToTerms: false,
 };
 
 const STEPS = ["Vehicle", "Unit", "Location", "Time", "Confirm"];
@@ -57,6 +58,7 @@ export default function BookingFlow({
 }) {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [state, setState] = useState<BookingState>({
     ...initialState,
     make: prefillMake,
@@ -134,6 +136,7 @@ export default function BookingFlow({
       { name: "time_preference", value: timePreferenceValue },
       { name: "notes", value: notesValue },
       { name: "address", value: state.address || "" },
+      { name: "terms_accepted", value: state.agreedToTerms ? "Yes - agreed at booking" : "No" },
     ];
 
     try {
@@ -157,7 +160,7 @@ export default function BookingFlow({
     2: !!state.unitId,
     3: !!state.suburb && !!state.postcode,
     4: true,
-    5: !!state.name && !!state.phone && !!state.email,
+    5: !!state.name && !!state.phone && !!state.email && state.agreedToTerms,
   };
 
   // Confirmation screen
@@ -672,6 +675,49 @@ export default function BookingFlow({
           >
             ← Back
           </button>
+
+          {/* Terms & Conditions + Privacy Policy checkbox */}
+          <label className="flex items-start gap-3 mb-4 cursor-pointer group">
+            <div className="relative flex-shrink-0 mt-0.5">
+              <input
+                type="checkbox"
+                checked={state.agreedToTerms}
+                onChange={(e) => update({ agreedToTerms: e.target.checked })}
+                className="sr-only"
+              />
+              <div className={`w-5 h-5 rounded border-[1.5px] flex items-center justify-center transition-all ${
+                state.agreedToTerms
+                  ? "bg-accent border-accent"
+                  : "border-white/[0.25] bg-bg-2 group-hover:border-accent/50"
+              }`}>
+                {state.agreedToTerms && (
+                  <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                    <path d="M1 4L3.5 6.5L9 1" stroke="#0f0f0d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </div>
+            </div>
+            <span className="text-xs text-upfit-muted leading-relaxed">
+              I have read and agree to UpFit&apos;s{" "}
+              <Link
+                href="/terms"
+                target="_blank"
+                className="text-accent hover:underline"
+              >
+                Terms &amp; Conditions
+              </Link>
+              {" "}and{" "}
+              <Link
+                href="/privacy"
+                target="_blank"
+                className="text-accent hover:underline"
+              >
+                Privacy Policy
+              </Link>
+              . I confirm I am the vehicle owner or authorised to approve work on the vehicle.
+            </span>
+          </label>
+
           <button
             onClick={handleSubmit}
             disabled={!canProceed[5]}

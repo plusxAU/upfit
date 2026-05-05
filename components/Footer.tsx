@@ -6,6 +6,7 @@ const links = [
   { label: "How it works", href: "/how-it-works" },
   { label: "Reviews", href: "/reviews" },
   { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
 ];
 
 export default function Footer() {
@@ -36,7 +37,7 @@ export default function Footer() {
           ))}
         </div>
         <p className="text-xs text-upfit-faint">
-          © {new Date().getFullYear()} UpFit · ABN XX XXX XXX XXX
+          © {new Date().getFullYear()} UpFit
         </p>
       </div>
 
@@ -65,7 +66,7 @@ export default function Footer() {
           ))}
         </div>
         <p className="text-xs text-upfit-muted">
-          © {new Date().getFullYear()} UpFit · ABN XX XXX XXX XXX
+          © {new Date().getFullYear()} UpFit
         </p>
       </div>
     </footer>
