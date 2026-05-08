@@ -3,14 +3,44 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Parking Sensor Installation Sydney — UpFit",
+  title: "Parking Sensor Installation Australia — UpFit",
   description:
-    "Professional front and rear parking sensor installation across Australia. Mobile service, we come to you. Fixed pricing from $220.",
+    "Professional front and rear parking sensor installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Mobile service — we come to you. Fixed pricing from $220.",
+  alternates: {
+    canonical: "https://upfit.au/services/parking-sensors",
+  },
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Parking Sensor Installation",
+  "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au", "telephone": "+61435508050" },
+  "areaServed": "Australia",
+  "description": "Professional front and rear ultrasonic parking sensor installation. Audible alert as you approach objects. Mobile service across Australia from $220.",
+  "offers": [
+    { "@type": "Offer", "name": "Rear sensors only", "price": "220", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "Front + rear sensors", "price": "320", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "Sensors + reverse camera", "price": "380", "priceCurrency": "AUD" },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Will parking sensors work on my car?", "acceptedAnswer": { "@type": "Answer", "text": "Parking sensors can be fitted to virtually any vehicle with a standard bumper. There are no make or model restrictions — unlike CarPlay, no harness compatibility check is needed." } },
+    { "@type": "Question", "name": "Does installation damage my bumper?", "acceptedAnswer": { "@type": "Answer", "text": "Small holes are drilled for each sensor. These are clean, precise holes — not cosmetically damaging. The sensors sit flush with the bumper surface." } },
+    { "@type": "Question", "name": "Can I add a visual display?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — a small LED or LCD display module can be added to show distance. Mention this when booking and we'll confirm pricing." } },
+    { "@type": "Question", "name": "Do you come to me for parking sensor installation?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — we come to your home, office or wherever the car is parked across Sydney, Melbourne, Brisbane, Perth and Adelaide." } },
+  ],
 };
 
 export default function ParkingSensorsPage() {
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Nav />
 
       <section className="px-6 md:px-10 py-16 md:py-20 border-b border-white/[0.08] max-w-3xl">
@@ -24,8 +54,9 @@ export default function ParkingSensorsPage() {
           <em className="text-accent not-italic">installation.</em>
         </h1>
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed mb-8 max-w-xl">
-          Front and rear ultrasonic parking sensors professionally fitted at
-          your door. Audible alert as you get close to objects. From $220.
+          Front and rear ultrasonic parking sensors professionally fitted at your door across
+          Sydney, Melbourne, Brisbane, Perth and Adelaide.
+          Audible alert as you get close to objects. From $220.
         </p>
         <Link
           href="/book?service=parking-sensors"
@@ -63,7 +94,7 @@ export default function ParkingSensorsPage() {
         <p className="section-label">What&apos;s involved</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { title: "Drilling required", body: "Small holes are drilled into your bumper for each sensor. This is standard for all parking sensor installations. The sensors are colour-matched where possible." },
+            { title: "Drilling required", body: "Small holes are drilled into your bumper for each sensor. Standard for all parking sensor installations. Sensors are colour-matched where possible." },
             { title: "Audible alert", body: "Sensors emit a beeping tone that increases in frequency as you get closer to an object. Optional display module available on request." },
             { title: "Professionally wired", body: "All wiring is run internally through the vehicle. No exposed cables. Rear sensors connect to your reversing light circuit and activate automatically." },
           ].map((item) => (
@@ -80,9 +111,9 @@ export default function ParkingSensorsPage() {
         <div className="space-y-5 max-w-2xl">
           {[
             { q: "Will parking sensors work on my car?", a: "Parking sensors can be fitted to virtually any vehicle with a standard bumper. There are no make or model restrictions — unlike CarPlay, no harness compatibility check is needed." },
-            { q: "Does installation damage my bumper?", a: "Small holes are drilled for each sensor. These are clean, precise holes — not cosmetically damaging. The sensors are designed to sit flush with the bumper surface." },
+            { q: "Does installation damage my bumper?", a: "Small holes are drilled for each sensor. These are clean, precise holes — not cosmetically damaging. The sensors sit flush with the bumper surface." },
             { q: "Can I add a visual display?", a: "Yes — a small LED or LCD display module can be added to show distance. Mention this when booking and we'll confirm pricing." },
-            { q: "Do you come to me?", a: "Yes — we come to your home, office or wherever the car is parked. You don't need to take the car anywhere." },
+            { q: "Do you come to me?", a: "Yes — we come to your home, office or wherever the car is parked across Sydney, Melbourne, Brisbane, Perth and Adelaide." },
           ].map((faq) => (
             <div key={faq.q} className="border-b border-white/[0.06] pb-5">
               <h3 className="text-sm font-medium text-upfit-text mb-1.5">{faq.q}</h3>

@@ -17,11 +17,13 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "UpFit — Apple CarPlay & Dashcam Installation Australia",
+  metadataBase: new URL("https://upfit.au"),
+  title: {
+    default: "UpFit — Apple CarPlay & Dashcam Installation Australia",
+    template: "%s | UpFit",
+  },
   description:
-    "Mobile Apple CarPlay, Android Auto, dashcam, reverse camera and parking sensor installation across Australia. Fixed pricing on supported vehicles. We come to you.",
-  keywords:
-    "Apple CarPlay installation Sydney, dashcam installation Australia, reverse camera installation, CarPlay retrofit, Android Auto installation",
+    "Mobile Apple CarPlay, Android Auto, dashcam, reverse camera and parking sensor installation across Australia. Fixed pricing, we come to you. Same-week availability.",
   icons: {
     icon: "/favicon.svg",
     apple: "/apple-touch-icon.svg",
@@ -29,11 +31,28 @@ export const metadata: Metadata = {
   openGraph: {
     title: "UpFit — Your car, upgraded.",
     description:
-      "Mobile auto electrical upgrades across Australia. Fixed pricing, same-week availability.",
+      "Mobile auto electrical upgrades across Australia. Fixed pricing, same-week availability. We come to you.",
     url: "https://upfit.au",
     siteName: "UpFit",
     locale: "en_AU",
     type: "website",
+    images: [
+      {
+        url: "/og-default.png",
+        width: 1200,
+        height: 630,
+        alt: "UpFit — Mobile CarPlay & dashcam installation across Australia",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "UpFit — Your car, upgraded.",
+    description: "Mobile CarPlay, dashcam & reverse camera installation. We come to you.",
+    images: ["/og-default.png"],
+  },
+  alternates: {
+    canonical: "https://upfit.au",
   },
 };
 
