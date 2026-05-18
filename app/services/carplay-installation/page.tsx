@@ -101,11 +101,16 @@ export default function CarPlayPage() {
                       {brand.name} {model.name}
                     </p>
                     <p className="text-xs text-upfit-muted">
-                      {model.generations.map((g) => g.years).join(" · ")}
+                      {model.generations.map((g) => `${g.yearFrom}–${g.yearTo}`).join(" · ")}
                     </p>
-                    <p className="text-xs text-accent mt-1.5">
-                      From ${Math.min(...model.generations.map((g) => g.carplayFrom))}
-                    </p>
+                    {(() => {
+                      const prices = model.generations.map((g) => g.pricing.installedBase ?? g.pricing.moduleInstalled).filter((p): p is number => p !== null);
+                      return prices.length > 0 ? (
+                        <p className="text-xs text-accent mt-1.5">From ${Math.min(...prices)}</p>
+                      ) : (
+                        <p className="text-xs text-upfit-muted mt-1.5">Quote required</p>
+                      );
+                    })()}
                   </Link>
                 ))}
               </div>

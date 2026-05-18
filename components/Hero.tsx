@@ -13,7 +13,7 @@ export default function Hero() {
 
   const brand = vehicles.find((b) => b.name === selectedMake);
   const model = brand?.models.find((m) => m.name === selectedModel);
-  const generation = model?.generations.find((g) => g.years === selectedYear);
+  const generation = model?.generations.find((g) => g.slug === selectedYear);
 
   function handleMakeChange(make: string) {
     setSelectedMake(make);
@@ -30,9 +30,10 @@ export default function Hero() {
 
   function handleYearSelect(year: string) {
     setSelectedYear(year);
-    const gen = model?.generations.find((g) => g.years === year);
+    const gen = model?.generations.find((g) => g.slug === year);
     if (gen) {
-      setFromPrice(gen.carplayFrom);
+      const price = gen.pricing.installedBase ?? gen.pricing.moduleInstalled;
+      if (price !== null) setFromPrice(price);
       setShowResult(true);
     }
   }
@@ -95,22 +96,22 @@ export default function Hero() {
             <div className="flex flex-wrap gap-2">
               {model.generations.map((gen) => (
                 <button
-                  key={gen.years}
-                  onClick={() => handleYearSelect(gen.years)}
+                  key={gen.slug}
+                  onClick={() => handleYearSelect(gen.slug)}
                   className={`px-4 py-2 rounded-full text-sm border transition-all cursor-pointer ${
-                    selectedYear === gen.years
+                    selectedYear === gen.slug
                       ? "border-accent text-accent bg-accent/[0.06]"
                       : "border-white/[0.14] text-upfit-muted hover:border-accent/40 hover:text-upfit-text"
                   }`}
                 >
-                  {gen.years}
+                  {gen.label}
                 </button>
               ))}
             </div>
           </div>
         )}
 
-        {showResult && generation && generation.complexity !== "quote" && (
+        {showResult && generation && !generation.configurator.requiresQuote && (
           <div className="flex items-center justify-between bg-bg-3 rounded-lg px-4 py-3 border border-white/[0.08]">
             <div>
               <p className="text-[10px] text-upfit-faint uppercase tracking-wider">
@@ -132,7 +133,7 @@ export default function Hero() {
           </div>
         )}
 
-        {showResult && generation?.complexity === "quote" && (
+        {showResult && generation?.configurator.requiresQuote && (
           <div className="flex items-center justify-between bg-bg-3 rounded-lg px-4 py-3 border border-white/[0.08]">
             <p className="text-sm text-upfit-muted">
               Your vehicle needs a custom quote — no problem.

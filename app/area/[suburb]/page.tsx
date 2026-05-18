@@ -2,7 +2,17 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { suburbData, getNearbySuburbs, getCityForSuburb } from "@/lib/vehicles";
+import { states } from "@/components/Suburbs";
+
+function getCityForSuburb(suburb: string): string {
+  return states.find((s) => s.suburbs.includes(suburb))?.city ?? "Australia";
+}
+
+function getNearbySuburbs(suburb: string, count = 6): string[] {
+  const state = states.find((s) => s.suburbs.includes(suburb));
+  if (!state) return [];
+  return state.suburbs.filter((s) => s !== suburb).slice(0, count);
+}
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ suburb: string }> };
@@ -45,10 +55,11 @@ function parseSuburbSlug(slug: string): { suburb: string; service: ServiceSlug }
     const prefix = `${serviceSlug}-`;
     if (slug.startsWith(prefix)) {
       const suburbSlug = slug.slice(prefix.length);
-      const entry = suburbData.find(
-        (s) => s.name.toLowerCase().replace(/\s+/g, "-") === suburbSlug
+      const allSuburbs = states.flatMap((s) => s.suburbs);
+      const suburbName = allSuburbs.find(
+        (s) => s.toLowerCase().replace(/\s+/g, "-") === suburbSlug
       );
-      if (entry) return { suburb: entry.name, service: serviceSlug };
+      if (suburbName) return { suburb: suburbName, service: serviceSlug };
     }
   }
   return null;
@@ -71,10 +82,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
   const params: { suburb: string }[] = [];
-  for (const entry of suburbData) {
-    const suburbSlug = entry.name.toLowerCase().replace(/\s+/g, "-");
-    for (const serviceSlug of Object.keys(serviceConfig)) {
-      params.push({ suburb: `${serviceSlug}-${suburbSlug}` });
+  for (const state of states) {
+    for (const suburb of state.suburbs) {
+      const suburbSlug = suburb.toLowerCase().replace(/\s+/g, "-");
+      for (const serviceSlug of Object.keys(serviceConfig)) {
+        params.push({ suburb: `${serviceSlug}-${suburbSlug}` });
+      }
     }
   }
   return params;

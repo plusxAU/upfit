@@ -1,9 +1,4 @@
 import Link from "next/link";
-import { suburbData } from "@/lib/vehicles";
-
-// ─── State data — single source of truth is lib/vehicles.ts ─────────────────
-// This is derived from suburbData so there's no duplication.
-// All pages that import { states } from here get the same data.
 
 export type StateEntry = {
   name: string;
@@ -19,35 +14,35 @@ export const states: StateEntry[] = [
     abbr: "NSW",
     slug: "nsw",
     city: "Sydney",
-    suburbs: suburbData.filter((s) => s.stateSlug === "nsw").map((s) => s.name),
+    suburbs: ["Parramatta","Chatswood","Bondi","Sutherland","Liverpool","Penrith","Hornsby","Manly","Newtown","Bankstown","Castle Hill","Cronulla","Hurstville","Macquarie Park","Strathfield","Ryde","Campbelltown","Blacktown","North Sydney","Baulkham Hills","Fairfield","Auburn","Kogarah","Miranda","Gordon","Pymble","Dee Why","Brookvale","Mosman","Leichhardt"],
   },
   {
     name: "Victoria",
     abbr: "VIC",
     slug: "vic",
     city: "Melbourne",
-    suburbs: suburbData.filter((s) => s.stateSlug === "vic").map((s) => s.name),
+    suburbs: ["Richmond","Footscray","St Kilda","Dandenong","Frankston","Ringwood","Box Hill","Essendon","Moonee Ponds","Werribee","Cranbourne","Berwick","Doncaster","Chadstone","Sunshine","Williamstown","Northcote","Fitzroy","South Yarra","Cheltenham"],
   },
   {
     name: "Queensland",
     abbr: "QLD",
     slug: "qld",
     city: "Brisbane",
-    suburbs: suburbData.filter((s) => s.stateSlug === "qld").map((s) => s.name),
+    suburbs: ["Fortitude Valley","Chermside","Carindale","Ipswich","Redcliffe","Logan","Strathpine","Springwood","Indooroopilly","Wynnum","Sunnybank","Nundah","Toowong","Eight Mile Plains","Stafford"],
   },
   {
     name: "Western Australia",
     abbr: "WA",
     slug: "wa",
     city: "Perth",
-    suburbs: suburbData.filter((s) => s.stateSlug === "wa").map((s) => s.name),
+    suburbs: ["Fremantle","Midland","Joondalup","Rockingham","Armadale","Cannington","Osborne Park","Morley","Karrinyup","Balcatta","Mandurah","Scarborough","Cottesloe","Subiaco","Victoria Park"],
   },
   {
     name: "South Australia",
     abbr: "SA",
     slug: "sa",
     city: "Adelaide",
-    suburbs: suburbData.filter((s) => s.stateSlug === "sa").map((s) => s.name),
+    suburbs: ["Glenelg","Norwood","Salisbury","Marion","Tea Tree Gully","Modbury","Elizabeth","Noarlunga","Unley","Prospect"],
   },
 ];
 
