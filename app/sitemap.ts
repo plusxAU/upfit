@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { vehicles, suburbData } from "@/lib/vehicles";
+import { vehicles } from "@/lib/vehicles";
 import { states } from "@/components/Suburbs";
 
 const BASE = "https://upfit.au";
@@ -72,15 +72,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   // ── Suburb × Service pages ───────────────────────────────────────────────────
-  for (const suburb of suburbData) {
-    const suburbSlug = suburb.name.toLowerCase().replace(/\s+/g, "-");
-    for (const service of SUBURB_SERVICES) {
-      urls.push({
-        url: `${BASE}/area/${service}-${suburbSlug}`,
-        lastModified: now,
-        changeFrequency: "monthly",
-        priority: 0.65,
-      });
+  for (const state of states) {
+    for (const suburb of state.suburbs) {
+      const suburbSlug = suburb.toLowerCase().replace(/\s+/g, "-");
+      for (const service of SUBURB_SERVICES) {
+        urls.push({
+          url: `${BASE}/area/${service}-${suburbSlug}`,
+          lastModified: now,
+          changeFrequency: "monthly",
+          priority: 0.65,
+        });
+      }
     }
   }
 

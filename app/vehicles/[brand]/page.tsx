@@ -84,22 +84,27 @@ export default async function BrandPage({ params }: Props) {
                 {brand.name} {model.name}
               </h2>
               <div className="space-y-3 mb-5">
-                {model.generations.map((gen) => (
-                  <div key={gen.years} className="flex items-center justify-between py-2 border-b border-white/[0.06] last:border-0 flex-wrap gap-2">
-                    <div>
-                      <span className="text-sm text-upfit-text">{gen.years}</span>
-                      {gen.label && (
-                        <span className="text-xs text-upfit-faint ml-2">({gen.label})</span>
-                      )}
+                {model.generations.map((gen) => {
+                  const carplayPrice = gen.pricing.installedBase ?? gen.pricing.moduleInstalled;
+                  const cameraPrice = gen.pricing.installedWithCamera;
+                  const sensorsPrice = gen.pricing.installedWithSensorsRear;
+                  return (
+                    <div key={gen.id} className="flex items-center justify-between py-2 border-b border-white/[0.06] last:border-0 flex-wrap gap-2">
+                      <span className="text-sm text-upfit-text">{gen.label}</span>
+                      <div className="flex flex-wrap gap-4 text-right">
+                        <span className="text-xs text-upfit-muted">CarPlay{" "}
+                          {carplayPrice ? <span className="text-accent font-medium">from ${carplayPrice}</span> : <span className="text-upfit-faint">Quote</span>}
+                        </span>
+                        <span className="text-xs text-upfit-muted">Camera{" "}
+                          {cameraPrice ? <span className="text-accent font-medium">from ${cameraPrice}</span> : <span className="text-upfit-faint">Quote</span>}
+                        </span>
+                        <span className="text-xs text-upfit-muted">Sensors{" "}
+                          {sensorsPrice ? <span className="text-accent font-medium">from ${sensorsPrice}</span> : <span className="text-upfit-faint">Quote</span>}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-4 text-right">
-                      <span className="text-xs text-upfit-muted">CarPlay <span className="text-accent font-medium">from ${gen.carplayFrom}</span></span>
-                      <span className="text-xs text-upfit-muted">Dashcam <span className="text-accent font-medium">from ${gen.dashcamFrom}</span></span>
-                      <span className="text-xs text-upfit-muted">Reverse cam <span className="text-accent font-medium">from ${gen.revcamFrom}</span></span>
-                      <span className="text-xs text-upfit-muted">Parking sensors <span className="text-accent font-medium">from ${gen.parkingFrom}</span></span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="flex gap-3 flex-wrap">
                 {ALL_SERVICES.map((service) => (

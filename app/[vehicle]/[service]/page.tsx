@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { vehicles } from "@/lib/vehicles";
 import type { Metadata } from "next";
-import type { Generation } from "@/lib/vehicles";
+import type { VehicleGeneration } from "@/lib/vehicles";
 
 type Props = {
   params: Promise<{ vehicle: string; service: string }>;
@@ -12,7 +12,7 @@ type Props = {
 
 type ServiceEntry = {
   label: string;
-  priceKey: keyof Pick<Generation, "carplayFrom" | "dashcamFrom" | "revcamFrom" | "parkingFrom">;
+  getPrice: (gen: VehicleGeneration) => number | null;
   unit: string;
   bookingKey: string;
 };
@@ -20,25 +20,25 @@ type ServiceEntry = {
 const serviceMap: Record<string, ServiceEntry> = {
   "carplay-installation": {
     label: "Apple CarPlay installation",
-    priceKey: "carplayFrom",
+    getPrice: (gen) => gen.pricing.installedBase ?? gen.pricing.moduleInstalled,
     unit: "CarPlay retrofit",
     bookingKey: "carplay",
   },
   "dashcam-installation": {
     label: "Dashcam installation",
-    priceKey: "dashcamFrom",
+    getPrice: () => null,
     unit: "Dashcam install",
     bookingKey: "dashcam",
   },
   "reverse-camera-installation": {
     label: "Reverse camera installation",
-    priceKey: "revcamFrom",
+    getPrice: (gen) => gen.pricing.installedWithCamera,
     unit: "Reverse camera",
     bookingKey: "revcam",
   },
   "parking-sensors": {
     label: "Parking sensor installation",
-    priceKey: "parkingFrom",
+    getPrice: (gen) => gen.pricing.installedWithSensorsRear,
     unit: "Parking sensors",
     bookingKey: "parking-sensors",
   },
@@ -62,11 +62,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = serviceMap[serviceSlug];
   if (!vehicle || !service) return {};
 
-  const minPrice = Math.min(...vehicle.model.generations.map((g) => g[service.priceKey] as number));
+  const prices = vehicle.model.generations.map((g) => service.getPrice(g)).filter((p): p is number => p !== null);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : null;
 
   return {
     title: `${vehicle.brand.name} ${vehicle.model.name} ${service.label} Australia — UpFit`,
-    description: `Professional ${service.label.toLowerCase()} for ${vehicle.brand.name} ${vehicle.model.name} across Sydney, Melbourne, Brisbane, Perth & Adelaide. Mobile service — we come to you. From $${minPrice}.`,
+    description: `Professional ${service.label.toLowerCase()} for ${vehicle.brand.name} ${vehicle.model.name} across Sydney, Melbourne, Brisbane, Perth & Adelaide. Mobile service — we come to you.${minPrice !== null ? ` From $${minPrice}.` : ""}`,
     alternates: {
       canonical: `https://upfit.au/${vehicleSlug}/${serviceSlug}`,
     },
@@ -93,7 +94,8 @@ export default async function VehicleServicePage({ params }: Props) {
   if (!vehicle || !service) notFound();
 
   const { brand, model } = vehicle;
-  const minPrice = Math.min(...model.generations.map((g) => g[service.priceKey] as number));
+  const prices = model.generations.map((g) => service.getPrice(g)).filter((p): p is number => p !== null);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : null;
 
   const schema = {
     "@context": "https://schema.org",
@@ -107,12 +109,10 @@ export default async function VehicleServicePage({ params }: Props) {
       "email": "team@upfit.au",
     },
     "areaServed": CITIES.map((city) => ({ "@type": "City", "name": city })),
-    "description": `Professional ${service.label.toLowerCase()} for ${brand.name} ${model.name} across Australia. Mobile service — we come to you. From $${minPrice}.`,
-    "offers": {
-      "@type": "Offer",
-      "price": String(minPrice),
-      "priceCurrency": "AUD",
-    },
+    "description": `Professional ${service.label.toLowerCase()} for ${brand.name} ${model.name} across Australia. Mobile service — we come to you.${minPrice !== null ? ` From $${minPrice}.` : ""}`,
+    ...(minPrice !== null && {
+      "offers": { "@type": "Offer", "price": String(minPrice), "priceCurrency": "AUD" },
+    }),
   };
 
   const faqSchema = {
@@ -189,7 +189,9 @@ export default async function VehicleServicePage({ params }: Props) {
           Sydney, Melbourne, Brisbane, Perth and Adelaide.
           We come to your home or office — fixed pricing, no surprises.
         </p>
-        <p className="text-accent font-serif text-2xl mb-8">From ${minPrice}</p>
+        {minPrice !== null && (
+          <p className="text-accent font-serif text-2xl mb-8">From ${minPrice}</p>
+        )}
         <div className="flex flex-wrap gap-3">
           <Link
             href={`/book?make=${encodeURIComponent(brand.name)}&model=${encodeURIComponent(model.name)}&service=${serviceSlug}`}
@@ -228,37 +230,39 @@ export default async function VehicleServicePage({ params }: Props) {
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
         <p className="section-label">By year range</p>
         <div className="space-y-6">
-          {model.generations.map((gen) => (
-            <div key={gen.years} className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
-              <div className="flex items-start justify-between mb-3">
-                <div>
+          {model.generations.map((gen) => {
+            const genPrice = service.getPrice(gen);
+            return (
+              <div key={gen.id} className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
+                <div className="flex items-start justify-between mb-3">
                   <h3 className="text-base font-medium text-upfit-text">
-                    {brand.name} {model.name} {gen.years}
+                    {brand.name} {model.name} — {gen.label}
                   </h3>
-                  {gen.label && (
-                    <p className="text-xs text-upfit-muted mt-0.5">{gen.label}</p>
-                  )}
+                  <div className="text-right flex-shrink-0 ml-4">
+                    {genPrice !== null ? (
+                      <>
+                        <p className="text-[10px] text-upfit-faint uppercase tracking-wider">From</p>
+                        <p className="font-serif text-2xl text-upfit-text">${genPrice}</p>
+                      </>
+                    ) : (
+                      <p className="text-sm text-upfit-muted">Quote</p>
+                    )}
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-[10px] text-upfit-faint uppercase tracking-wider">From</p>
-                  <p className="font-serif text-2xl text-upfit-text">
-                    ${gen[service.priceKey] as number}
+                {gen.content.caveat && (
+                  <p className="text-xs text-upfit-muted mb-3 bg-bg-3 rounded-lg px-3 py-2 inline-block">
+                    Note: {gen.content.caveat}
                   </p>
-                </div>
+                )}
+                <Link
+                  href={`/book?make=${encodeURIComponent(brand.name)}&model=${encodeURIComponent(model.name)}&gen=${encodeURIComponent(gen.slug)}&service=${serviceSlug}`}
+                  className="text-sm text-accent font-medium hover:text-accent-dark transition-colors"
+                >
+                  Book this install →
+                </Link>
               </div>
-              {gen.notes && (
-                <p className="text-xs text-upfit-muted mb-3 bg-bg-3 rounded-lg px-3 py-2 inline-block">
-                  Note: {gen.notes}
-                </p>
-              )}
-              <Link
-                href={`/book?make=${encodeURIComponent(brand.name)}&model=${encodeURIComponent(model.name)}&year=${encodeURIComponent(gen.years)}&service=${serviceSlug}`}
-                className="text-sm text-accent font-medium hover:text-accent-dark transition-colors"
-              >
-                Book this install →
-              </Link>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

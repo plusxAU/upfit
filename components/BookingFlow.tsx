@@ -68,7 +68,7 @@ export default function BookingFlow({
 
   const brand = vehicles.find((b) => b.name === state.make);
   const model = brand?.models.find((m) => m.name === state.model);
-  const generation = model?.generations.find((g) => g.years === state.year);
+  const generation = model?.generations.find((g) => g.slug === state.year);
 
   function update(patch: Partial<BookingState>) {
     setState((s) => ({ ...s, ...patch }));
@@ -312,16 +312,16 @@ export default function BookingFlow({
               <div className="flex flex-wrap gap-2">
                 {model.generations.map((gen) => (
                   <button
-                    key={gen.years}
-                    onClick={() => update({ year: gen.years, unitId: "" })}
+                    key={gen.slug}
+                    onClick={() => update({ year: gen.slug, unitId: "" })}
                     className={`px-4 py-2 rounded-full text-sm border transition-all cursor-pointer ${
-                      state.year === gen.years
+                      state.year === gen.slug
                         ? "border-accent text-accent bg-accent/[0.06]"
                         : "border-white/[0.14] text-upfit-muted hover:border-accent/40"
                     }`}
                   >
-                    {gen.years}
-                    {gen.complexity === "complex" && (
+                    {gen.label}
+                    {gen.content.difficulty === "hard" && (
                       <span className="ml-1.5 text-[10px] text-upfit-faint">
                         (complex)
                       </span>
@@ -332,7 +332,7 @@ export default function BookingFlow({
             </div>
           )}
 
-          {generation?.complexity === "quote" && (
+          {generation?.configurator.requiresQuote && (
             <div className="bg-bg-2 border border-white/[0.08] rounded-lg p-4 mb-6 text-sm text-upfit-muted">
               This vehicle needs a custom quote.{" "}
               <Link href="/quote" className="text-accent">
@@ -344,7 +344,7 @@ export default function BookingFlow({
           <button
             onClick={() => goTo(2)}
             disabled={
-              !canProceed[1] || generation?.complexity === "quote"
+              !canProceed[1] || generation?.configurator.requiresQuote
             }
             className="w-full bg-accent text-bg font-medium text-sm py-3.5 rounded-lg hover:bg-accent-dark transition-colors cursor-pointer border-0 disabled:bg-upfit-faint disabled:text-bg-3 disabled:cursor-not-allowed"
           >

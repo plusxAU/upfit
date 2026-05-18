@@ -1,466 +1,772 @@
-export type Generation = {
+// ============================================================
+// UpFit Vehicle Database
+// ============================================================
+
+export type Confidence = "high" | "medium" | "low" | "api-only";
+export type Difficulty = "easy" | "medium" | "hard";
+export type RecommendedPath = "module" | "replacement" | "adapter" | "quote";
+
+export type VehicleGeneration = {
+  id: string;
+  slug: string;
   label: string;
-  years: string;
-  carplayFrom: number;
-  dashcamFrom: number;
-  revcamFrom: number;
-  parkingFrom: number;
-  complexity: "standard" | "complex" | "quote";
-  notes?: string;
+  yearFrom: number;
+  yearTo: number;
+  factory: {
+    hasScreen: boolean;
+    screenDescription: string | null;
+    hasCarPlay: boolean;
+    hasWirelessCarPlay: boolean;
+    hasCamera: boolean;
+    hasParkingSensors: boolean;
+    hasNav: boolean;
+    navSystemName: string | null;
+    hasPremiumAudio: boolean;
+    premiumAudioBrand: string | null;
+    has360Camera: boolean;
+  };
+  configurator: {
+    moduleAvailable: boolean;
+    moduleRecommended: boolean;
+    cameraRetentionAvailable: boolean;
+    showCameraOption: boolean;
+    showSensorsOption: boolean;
+    requiresQuote: boolean;
+    quoteReason: string | null;
+  };
+  pricing: {
+    installedBase: number | null;
+    installedWithCamera: number | null;
+    installedWithSensorsRear: number | null;
+    installedWithSensorsFrontRear: number | null;
+    moduleInstalled: number | null;
+    diyBase: number | null;
+    diyWithCamera: number | null;
+  };
+  aerpro: {
+    fasciaPartNumber: string | null;
+    harnessPartNumber: string | null;
+    swcInterface: string | null;
+    antennaPatchLead: string | null;
+    cameraKitPartNumber: string | null;
+    vehicleSelectorId: string | null;
+    productUrl: string | null;
+    confidence: Confidence;
+  };
+  content: {
+    installTimeMin: number;
+    installTimeMax: number;
+    difficulty: Difficulty;
+    recommendedPath: RecommendedPath;
+    recommendedPathReason: string;
+    whatIsLost: string[];
+    whatIsRetained: string[];
+    caveat: string | null;
+    enthusiastNote: string | null;
+    audioUpgradeNote: string | null;
+  };
 };
 
 export type VehicleModel = {
+  id: string;
   slug: string;
   name: string;
-  generations: Generation[];
+  generations: VehicleGeneration[];
 };
 
 export type VehicleBrand = {
+  id: string;
   slug: string;
   name: string;
   models: VehicleModel[];
 };
 
-export const vehicles: VehicleBrand[] = [
-  {
-    slug: "toyota",
-    name: "Toyota",
-    models: [
-      {
-        slug: "hilux",
-        name: "HiLux",
-        generations: [
-          { label: "Current gen", years: "2021–2024", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2016–2020", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Older gen", years: "2012–2015", carplayFrom: 520, dashcamFrom: 290, revcamFrom: 240, parkingFrom: 240, complexity: "complex" as const, notes: "Additional wiring required" },
-        ],
-      },
-      {
-        slug: "rav4",
-        name: "RAV4",
-        generations: [
-          { label: "5th gen", years: "2019–2024", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "4th gen", years: "2013–2018", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-          { label: "3rd gen", years: "2006–2012", carplayFrom: 530, dashcamFrom: 290, revcamFrom: 240, parkingFrom: 240, complexity: "complex" as const },
-        ],
-      },
-      {
-        slug: "camry",
-        name: "Camry",
-        generations: [
-          { label: "Current gen", years: "2018–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2012–2017", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "corolla",
-        name: "Corolla",
-        generations: [
-          { label: "Current gen", years: "2019–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2014–2018", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "kluger",
-        name: "Kluger",
-        generations: [
-          { label: "Current gen", years: "2021–2024", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2014–2020", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "landcruiser",
-        name: "LandCruiser 200/300",
-        generations: [
-          { label: "300 series", years: "2021–2024", carplayFrom: 520, dashcamFrom: 290, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-          { label: "200 series", years: "2016–2020", carplayFrom: 520, dashcamFrom: 290, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "landcruiser-70",
-        name: "LandCruiser 70 Series",
-        generations: [
-          { label: "All years", years: "1984–2025", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const, notes: "No factory screen — full head unit replacement only. Single DIN to Double DIN conversion kit required." },
-        ],
-      },
-      {
-        slug: "prado",
-        name: "Prado",
-        generations: [
-          { label: "150 Series facelift", years: "2017–2024", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "150 Series", years: "2009–2016", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "ford",
-    name: "Ford",
-    models: [
-      {
-        slug: "ranger",
-        name: "Ranger",
-        generations: [
-          { label: "Next gen", years: "2022–2024", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2015–2021", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Older gen", years: "2011–2014", carplayFrom: 520, dashcamFrom: 290, revcamFrom: 240, parkingFrom: 240, complexity: "complex" as const },
-        ],
-      },
-      {
-        slug: "everest",
-        name: "Everest",
-        generations: [
-          { label: "Current gen", years: "2022–2024", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2015–2021", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "focus",
-        name: "Focus",
-        generations: [
-          { label: "Current gen", years: "2019–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2012–2018", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "escape",
-        name: "Escape",
-        generations: [
-          { label: "Current gen", years: "2020–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2013–2019", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "mazda",
-    name: "Mazda",
-    models: [
-      {
-        slug: "cx-5",
-        name: "CX-5",
-        generations: [
-          { label: "2nd gen", years: "2017–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "1st gen", years: "2012–2016", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "cx-3",
-        name: "CX-3",
-        generations: [
-          { label: "Current gen", years: "2015–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "mazda3",
-        name: "Mazda3",
-        generations: [
-          { label: "Current gen", years: "2019–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2014–2018", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "bt-50",
-        name: "BT-50",
-        generations: [
-          { label: "Current gen", years: "2020–2024", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2011–2019", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "mitsubishi",
-    name: "Mitsubishi",
-    models: [
-      {
-        slug: "triton",
-        name: "Triton",
-        generations: [
-          { label: "Current gen", years: "2023–2024", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2015–2022", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "outlander",
-        name: "Outlander",
-        generations: [
-          { label: "Current gen", years: "2022–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2013–2021", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "asx",
-        name: "ASX",
-        generations: [
-          { label: "Current gen", years: "2023–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2010–2022", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "eclipse-cross",
-        name: "Eclipse Cross",
-        generations: [
-          { label: "Current gen", years: "2021–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "1st gen", years: "2017–2020", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "pajero",
-        name: "Pajero",
-        generations: [
-          { label: "NX series", years: "2014–2021", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "nissan",
-    name: "Nissan",
-    models: [
-      {
-        slug: "navara",
-        name: "Navara",
-        generations: [
-          { label: "Current gen", years: "2015–2024", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "x-trail",
-        name: "X-Trail",
-        generations: [
-          { label: "Current gen", years: "2022–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2014–2021", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "patrol",
-        name: "Patrol",
-        generations: [
-          { label: "Y62 series", years: "2012–2024", carplayFrom: 520, dashcamFrom: 290, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "subaru",
-    name: "Subaru",
-    models: [
-      {
-        slug: "forester",
-        name: "Forester",
-        generations: [
-          { label: "Current gen", years: "2019–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2013–2018", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "outback",
-        name: "Outback",
-        generations: [
-          { label: "Current gen", years: "2020–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2015–2019", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "xv",
-        name: "XV / Crosstrek",
-        generations: [
-          { label: "Current gen", years: "2017–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "1st gen", years: "2013–2020", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "honda",
-    name: "Honda",
-    models: [
-      {
-        slug: "cr-v",
-        name: "CR-V",
-        generations: [
-          { label: "Current gen", years: "2022–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2017–2021", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "hr-v",
-        name: "HR-V",
-        generations: [
-          { label: "Current gen", years: "2021–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2015–2020", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "civic",
-        name: "Civic",
-        generations: [
-          { label: "Current gen", years: "2021–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2016–2020", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "volkswagen",
-    name: "Volkswagen",
-    models: [
-      {
-        slug: "golf",
-        name: "Golf",
-        generations: [
-          { label: "Mk8", years: "2020–2024", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Mk7/7.5", years: "2013–2019", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "complex" as const, notes: "MQB platform — CAN-bus retention required" },
-        ],
-      },
-      {
-        slug: "tiguan",
-        name: "Tiguan",
-        generations: [
-          { label: "2nd gen", years: "2016–2024", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "complex" as const, notes: "MQB platform — CAN-bus retention required" },
-        ],
-      },
-      {
-        slug: "amarok",
-        name: "Amarok",
-        generations: [
-          { label: "2nd gen", years: "2022–2024", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "1st gen", years: "2011–2022", carplayFrom: 490, dashcamFrom: 280, revcamFrom: 230, parkingFrom: 230, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "kia",
-    name: "Kia",
-    models: [
-      {
-        slug: "sportage",
-        name: "Sportage",
-        generations: [
-          { label: "Current gen", years: "2021–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2016–2021", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "cerato",
-        name: "Cerato",
-        generations: [
-          { label: "Current gen", years: "2018–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "seltos",
-        name: "Seltos",
-        generations: [
-          { label: "Current gen", years: "2019–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "hyundai",
-    name: "Hyundai",
-    models: [
-      {
-        slug: "i30",
-        name: "i30",
-        generations: [
-          { label: "Current gen", years: "2017–2024", carplayFrom: 450, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "tucson",
-        name: "Tucson",
-        generations: [
-          { label: "Current gen", years: "2021–2024", carplayFrom: 460, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-          { label: "Previous gen", years: "2015–2020", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "santa-fe",
-        name: "Santa Fe",
-        generations: [
-          { label: "Current gen", years: "2018–2024", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "holden",
-    name: "Holden",
-    models: [
-      {
-        slug: "commodore-vf",
-        name: "Commodore VF",
-        generations: [
-          { label: "VF Series II", years: "2015–2017", carplayFrom: 350, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const, notes: "MyLink module activation — keeps factory screen" },
-          { label: "VF Series I", years: "2013–2015", carplayFrom: 470, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-      {
-        slug: "colorado",
-        name: "Colorado",
-        generations: [
-          { label: "RG series", years: "2012–2020", carplayFrom: 480, dashcamFrom: 280, revcamFrom: 220, parkingFrom: 220, complexity: "standard" as const },
-        ],
-      },
-    ],
-  },
-];
+export function getGeneration(
+  brand: VehicleBrand,
+  modelSlug: string,
+  generationSlug: string
+): VehicleGeneration | undefined {
+  const model = brand.models.find((m) => m.slug === modelSlug);
+  return model?.generations.find((g) => g.slug === generationSlug);
+}
 
-export function getBrandBySlug(slug: string) {
+export function getBrandBySlug(slug: string): VehicleBrand | undefined {
   return vehicles.find((b) => b.slug === slug);
 }
 
-export function getModelBySlug(brandSlug: string, modelSlug: string) {
-  const brand = getBrandBySlug(brandSlug);
-  return brand?.models.find((m) => m.slug === modelSlug);
+export function getModelBySlug(
+  brandSlug: string,
+  modelSlug: string
+): VehicleModel | undefined {
+  return getBrandBySlug(brandSlug)?.models.find((m) => m.slug === modelSlug);
 }
 
-// ─── Suburb & city data ──────────────────────────────────────────────────────
-
-export type SuburbEntry = {
-  name: string;
-  city: string;
-  state: string;
-  stateSlug: string;
-};
-
-export const suburbData: SuburbEntry[] = [
-  // Sydney — NSW
-  ...["Parramatta","Chatswood","Bondi","Sutherland","Liverpool","Penrith","Hornsby","Manly","Newtown","Bankstown","Castle Hill","Cronulla","Hurstville","Macquarie Park","Strathfield","Ryde","Campbelltown","Blacktown","North Sydney","Baulkham Hills","Fairfield","Auburn","Kogarah","Miranda","Gordon","Pymble","Dee Why","Brookvale","Mosman","Leichhardt"].map(name => ({ name, city: "Sydney", state: "New South Wales", stateSlug: "nsw" })),
-  // Melbourne — VIC
-  ...["Richmond","Footscray","St Kilda","Dandenong","Frankston","Ringwood","Box Hill","Essendon","Moonee Ponds","Werribee","Cranbourne","Berwick","Doncaster","Chadstone","Sunshine","Williamstown","Northcote","Fitzroy","South Yarra","Cheltenham"].map(name => ({ name, city: "Melbourne", state: "Victoria", stateSlug: "vic" })),
-  // Brisbane — QLD
-  ...["Fortitude Valley","Chermside","Carindale","Ipswich","Redcliffe","Logan","Strathpine","Springwood","Indooroopilly","Wynnum","Sunnybank","Nundah","Toowong","Eight Mile Plains","Stafford"].map(name => ({ name, city: "Brisbane", state: "Queensland", stateSlug: "qld" })),
-  // Perth — WA
-  ...["Fremantle","Midland","Joondalup","Rockingham","Armadale","Cannington","Osborne Park","Morley","Karrinyup","Balcatta","Mandurah","Scarborough","Cottesloe","Subiaco","Victoria Park"].map(name => ({ name, city: "Perth", state: "Western Australia", stateSlug: "wa" })),
-  // Adelaide — SA
-  ...["Glenelg","Norwood","Salisbury","Marion","Tea Tree Gully","Modbury","Elizabeth","Noarlunga","Unley","Prospect"].map(name => ({ name, city: "Adelaide", state: "South Australia", stateSlug: "sa" })),
+export const vehicles: VehicleBrand[] = [
+  {
+    id: "toyota", slug: "toyota", name: "Toyota",
+    models: [
+      {
+        id: "toyota-hilux", slug: "hilux", name: "HiLux",
+        generations: [
+          {
+            id: "toyota-hilux-n80-2015-2020", slug: "2015-2020", label: "N80 (2015–2020)",
+            yearFrom: 2015, yearTo: 2020,
+            factory: { hasScreen: true, screenDescription: "6.1\" or 7\" factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1099, installedWithCamera: 1319, installedWithSensorsRear: 1319, installedWithSensorsFrontRear: 1419, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP8241K", harnessPartNumber: "APP8", swcInterface: "Infodapter", antennaPatchLead: "APP2", cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp8241k", confidence: "high" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "replacement", recommendedPathReason: "No factory screen that can be upgraded via module — full head unit replacement is the only path for CarPlay on the pre-2021 HiLux.", whatIsLost: ["Factory navigation (replaced by Google Maps and Waze via CarPlay — significantly better)", "Factory USB branding"], whatIsRetained: ["Steering wheel controls", "Antenna reception", "All factory wiring — no cutting required"], caveat: "Confirm whether the vehicle has a factory reverse camera before booking. Camera-equipped variants need a different harness.", enthusiastNote: "The HiLux is one of the most straightforward installs in the fleet. Clean fitment, plug-and-play harness, looks factory when done. Popular with tradies who want navigation and hands-free without the dealer price.", audioUpgradeNote: "The Kenwood DMX7522S and Pioneer DMH-Z5350BT both deliver significantly better audio output than the factory HiLux unit." },
+          },
+          {
+            id: "toyota-hilux-n80-2021-2024", slug: "2021-2024", label: "N80 facelift (2021–2024)",
+            yearFrom: 2021, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "8\" factory touchscreen with wired CarPlay", hasCarPlay: true, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: 249, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "high" },
+            content: { installTimeMin: 15, installTimeMax: 30, difficulty: "easy", recommendedPath: "adapter", recommendedPathReason: "The 2021+ HiLux already has wired CarPlay built in. A wireless adapter is all that's needed to cut the cable.", whatIsLost: [], whatIsRetained: ["Factory screen", "Factory camera", "All factory functions", "Steering wheel controls"], caveat: "Confirm the vehicle has factory wired CarPlay before booking. Some base-grade SR variants may not have it.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "toyota-rav4", slug: "rav4", name: "RAV4",
+        generations: [
+          {
+            id: "toyota-rav4-xa40-2013-2018", slug: "2013-2018", label: "XA40 (2013–2018)",
+            yearFrom: 2013, yearTo: 2018,
+            factory: { hasScreen: true, screenDescription: "7\" factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Exact Aerpro fascia kit varies by trim and year — we confirm the right kit before quoting a fixed price." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Fascia kit varies by trim level and year. We confirm parts before quoting.", whatIsLost: ["Factory navigation if equipped", "Factory backup camera display if equipped"], whatIsRetained: ["Steering wheel controls", "Antenna reception"], caveat: "Trim and year affect which fascia kit is required. Send us your VIN or a photo of your current head unit when requesting a quote.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+          {
+            id: "toyota-rav4-xa50-2019-2024", slug: "2019-2024", label: "XA50 (2019–2024)",
+            yearFrom: 2019, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "8\" or 9\" factory touchscreen with wired CarPlay", hasCarPlay: true, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: 249, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "high" },
+            content: { installTimeMin: 15, installTimeMax: 30, difficulty: "easy", recommendedPath: "adapter", recommendedPathReason: "The 2019+ RAV4 already has factory wired CarPlay. A wireless adapter cuts the cable with no dashboard removal.", whatIsLost: [], whatIsRetained: ["Factory screen", "Factory camera", "All factory functions"], caveat: "Confirm factory CarPlay is present — some base GX variants may not have it.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "toyota-landcruiser-200", slug: "landcruiser-200", name: "LandCruiser 200",
+        generations: [
+          {
+            id: "toyota-lc200-2007-2011", slug: "2007-2011", label: "Early (2007–2011)",
+            yearFrom: 2007, yearTo: 2011,
+            factory: { hasScreen: true, screenDescription: "Factory navigation screen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: true, hasNav: true, navSystemName: null, hasPremiumAudio: true, premiumAudioBrand: "JBL", has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: false, requiresQuote: true, quoteReason: "Hard install — Sahara variant exclusion, factory amp and camera retention requires confirmation before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "AKTO17", harnessPartNumber: "APP8", swcInterface: "Infodapter", antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/akto17", confidence: "medium" },
+            content: { installTimeMin: 150, installTimeMax: 240, difficulty: "hard", recommendedPath: "quote", recommendedPathReason: "Complex install requiring factory amp and camera retention verification. Does not suit Sahara variant.", whatIsLost: ["Factory navigation (replaced by Google Maps/Waze)", "JBL premium audio requires amp retention harness — additional cost"], whatIsRetained: ["Reverse camera (via compatible kit)", "Parking sensor alerts"], caveat: "Does NOT suit Sahara variant. Verify factory amp, camera, and trim before booking. Hard job — quote only.", enthusiastNote: "The 200 Series is a complex install but a popular one. Owners who've done it consistently say the result is worth it.", audioUpgradeNote: "JBL amp retention requires a specific harness. Without it you lose significant audio quality." },
+          },
+        ],
+      },
+      {
+        id: "toyota-landcruiser-70", slug: "landcruiser-70", name: "LandCruiser 70 Series",
+        generations: [
+          {
+            id: "toyota-lc70-all", slug: "all-years", label: "All years (1984–2024)",
+            yearFrom: 1984, yearTo: 2024,
+            factory: { hasScreen: false, screenDescription: null, hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Single DIN to Double DIN conversion required — dimensions and dash configuration vary by year and body style." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "No factory screen — full head unit installation with Single DIN to Double DIN conversion.", whatIsLost: [], whatIsRetained: ["All factory wiring — no cutting required"], caveat: "Single DIN factory opening requires a conversion kit. Body style affects dashboard configuration.", enthusiastNote: "The 70 Series is one of the most requested installs — owners love the vehicle but hate staring at a radio from 2003.", audioUpgradeNote: "The 70 Series factory speakers are basic. A head unit upgrade pairs well with a speaker upgrade." },
+          },
+        ],
+      },
+      {
+        id: "toyota-prado", slug: "prado", name: "Prado 150",
+        generations: [
+          {
+            id: "toyota-prado-150-2010-2017", slug: "2010-2017", label: "150 Series (2010–2017)",
+            yearFrom: 2010, yearTo: 2017,
+            factory: { hasScreen: true, screenDescription: "Factory navigation screen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: true, hasNav: true, navSystemName: null, hasPremiumAudio: true, premiumAudioBrand: "JBL", has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: false, requiresQuote: true, quoteReason: "Trim levels vary significantly. JBL audio and camera retention require confirmation before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 150, installTimeMax: 240, difficulty: "hard", recommendedPath: "quote", recommendedPathReason: "Trim variation and JBL audio system require parts confirmation before a fixed price can be offered.", whatIsLost: ["Factory navigation (replaced by Google Maps/Waze)", "JBL integration requires amp harness"], whatIsRetained: ["Reverse camera (via compatible kit)", "Parking sensor alerts"], caveat: "Prado trims vary significantly between GX, GXL, VX and Kakadu. Always quote.", enthusiastNote: null, audioUpgradeNote: "JBL amp retention harness is essential. Without it, audio quality drops significantly." },
+          },
+        ],
+      },
+      {
+        id: "toyota-camry", slug: "camry", name: "Camry",
+        generations: [
+          {
+            id: "toyota-camry-xv50-2012-2017", slug: "2012-2017", label: "XV50 (2012–2017)",
+            yearFrom: 2012, yearTo: 2017,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Fascia kit varies by trim — confirm before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Confirm fascia kit before pricing.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls", "Antenna reception"], caveat: "Verify fascia and camera retention before booking.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "toyota-corolla", slug: "corolla", name: "Corolla",
+        generations: [
+          {
+            id: "toyota-corolla-e170-2014-2019", slug: "2014-2019", label: "E170 (2014–2019)",
+            yearFrom: 2014, yearTo: 2019,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Hatch and sedan have different fascia kits — confirm body style." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Body style affects fascia kit selection.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls"], caveat: "Specify hatch or sedan when requesting a quote.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "toyota-kluger", slug: "kluger", name: "Kluger",
+        generations: [
+          {
+            id: "toyota-kluger-xu50-2014-2020", slug: "2014-2020", label: "XU50 (2014–2020)",
+            yearFrom: 2014, yearTo: 2020,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: true, quoteReason: "Fascia and camera retention — confirm trim before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Camera retention and trim variation require confirmation.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Factory camera (retained via kit)", "Steering wheel controls"], caveat: "Confirm GX vs GXL vs Grande trim when quoting.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "ford", slug: "ford", name: "Ford",
+    models: [
+      {
+        id: "ford-ranger", slug: "ranger", name: "Ranger",
+        generations: [
+          {
+            id: "ford-ranger-px2-sync3-2015-2018", slug: "2015-2018-sync3", label: "PX2 with SYNC3 (2015–2018)",
+            yearFrom: 2015, yearTo: 2018,
+            factory: { hasScreen: true, screenDescription: "8\" SYNC3 touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: "SYNC3", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1099, installedWithCamera: null, installedWithSensorsRear: 1319, installedWithSensorsFrontRear: 1419, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP9129CT", harnessPartNumber: "Included in kit", swcInterface: "Infodapter (included)", antennaPatchLead: "Universal SWC patch lead", cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp9129ct", confidence: "high" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "replacement", recommendedPathReason: "SYNC3 Ranger has a good factory screen but no CarPlay. Full head unit replacement is the cleanest path.", whatIsLost: ["SYNC3 interface and Ford-specific features", "Factory navigation (replaced by Google Maps/Waze — better in every way)"], whatIsRetained: ["Factory reverse camera (retained via FP9129CT kit)", "Steering wheel controls (via Infodapter)", "Climate display (retained via interface)", "All factory wiring"], caveat: "SYNC3 models have an 8\" screen. Base XL models do NOT have SYNC3 — different kit required. Confirm your screen type before booking.", enthusiastNote: "The PX2 Ranger is one of Australia's most popular vehicles and one of our most common installs.", audioUpgradeNote: "The factory Ranger audio is adequate but not impressive. The Kenwood DMX7522S delivers noticeably better sound." },
+          },
+          {
+            id: "ford-ranger-px2-non-sync3-2015-2018", slug: "2015-2018-base", label: "PX2 base (no SYNC3, 2015–2018)",
+            yearFrom: 2015, yearTo: 2018,
+            factory: { hasScreen: false, screenDescription: null, hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1099, installedWithCamera: 1319, installedWithSensorsRear: 1319, installedWithSensorsFrontRear: 1419, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP9129K", harnessPartNumber: "Included in kit", swcInterface: "Infodapter (included)", antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp9129k", confidence: "medium" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "replacement", recommendedPathReason: "No factory screen — full head unit installation with the FP9129K kit.", whatIsLost: [], whatIsRetained: ["USB/AUX retention", "Steering wheel controls", "All factory wiring"], caveat: "Different dashboard configurations within the same year range can need different kits.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "ford-everest", slug: "everest", name: "Everest",
+        generations: [
+          {
+            id: "ford-everest-ua-2015-2021", slug: "2015-2021", label: "UA (2015–2021)",
+            yearFrom: 2015, yearTo: 2021,
+            factory: { hasScreen: true, screenDescription: "8\" SYNC3 touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: true, hasNav: false, navSystemName: "SYNC3", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: false, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1099, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP9129CT", harnessPartNumber: "Included in kit", swcInterface: "Infodapter (included)", antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp9129ct", confidence: "medium" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "replacement", recommendedPathReason: "Same SYNC3 platform as the PX2 Ranger — same kit, same result.", whatIsLost: ["SYNC3 interface", "Factory navigation (replaced by Google Maps/Waze)"], whatIsRetained: ["Factory reverse camera", "Steering wheel controls", "Climate display"], caveat: "Confirm SYNC3 screen type before booking. Base Ambiente variant may have a different setup.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "holden", slug: "holden", name: "Holden",
+    models: [
+      {
+        id: "holden-commodore-vf", slug: "commodore-vf", name: "Commodore VF",
+        generations: [
+          {
+            id: "holden-commodore-vf1-2013-2015", slug: "2013-2015", label: "VF Series 1 (2013–2015)",
+            yearFrom: 2013, yearTo: 2015,
+            factory: { hasScreen: true, screenDescription: "8\" MyLink touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: "MyLink", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1549, installedWithCamera: 1769, installedWithSensorsRear: 1769, installedWithSensorsFrontRear: 1869, moduleInstalled: 1299, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP9353K", harnessPartNumber: "Included in kit", swcInterface: "Infodapter (included)", antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp9353k", confidence: "medium" },
+            content: { installTimeMin: 60, installTimeMax: 90, difficulty: "medium", recommendedPath: "module", recommendedPathReason: "The GetCarTech MyLink module adds wireless CarPlay to your existing 8\" screen without any dashboard removal.", whatIsLost: [], whatIsRetained: ["Factory MyLink screen", "All factory functions", "Steering wheel controls", "Factory audio system", "Holden connected services"], caveat: "VF Series 1 uses Bluetooth/AUX audio path — confirm before booking. SS, Calais V and HSV variants with Bose/premium audio require advanced harness if choosing full replacement (+$70).", enthusiastNote: "VF Commodore owners are passionate about keeping the factory look. The module path is the right choice for 90% of VF owners.", audioUpgradeNote: null },
+          },
+          {
+            id: "holden-commodore-vf2-2015-2017", slug: "2015-2017", label: "VF Series 2 (2015–2017)",
+            yearFrom: 2015, yearTo: 2017,
+            factory: { hasScreen: true, screenDescription: "8\" MyLink touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: "MyLink", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1549, installedWithCamera: 1769, installedWithSensorsRear: 1769, installedWithSensorsFrontRear: 1869, moduleInstalled: 1299, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP9353K", harnessPartNumber: "Included in kit", swcInterface: "Infodapter (included)", antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp9353k", confidence: "medium" },
+            content: { installTimeMin: 60, installTimeMax: 90, difficulty: "medium", recommendedPath: "module", recommendedPathReason: "Same recommendation as VF1 — the module path keeps the factory MyLink screen.", whatIsLost: [], whatIsRetained: ["Factory MyLink screen", "All factory functions", "Steering wheel controls", "USB/iPod audio path (via included decoder)"], caveat: "VF Series 2 uses USB/iPod audio path — kit includes USB audio decoder, different from VF1.", enthusiastNote: "Same recommendation as VF1 — go the module path.", audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "holden-hsv", slug: "hsv", name: "HSV (all models)",
+        generations: [
+          {
+            id: "holden-hsv-vf-2013-2017", slug: "2013-2017", label: "VF-based HSV (2013–2017)",
+            yearFrom: 2013, yearTo: 2017,
+            factory: { hasScreen: true, screenDescription: "8\" MyLink touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: "MyLink", hasPremiumAudio: true, premiumAudioBrand: "Bose", has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1619, installedWithCamera: 1839, installedWithSensorsRear: 1839, installedWithSensorsFrontRear: 1939, moduleInstalled: 1369, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP9353K", harnessPartNumber: "Advanced Bose harness required", swcInterface: "Infodapter (included)", antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp9353k", confidence: "medium" },
+            content: { installTimeMin: 75, installTimeMax: 105, difficulty: "medium", recommendedPath: "module", recommendedPathReason: "Module path keeps the factory screen and avoids Bose integration complexity.", whatIsLost: [], whatIsRetained: ["Factory MyLink screen", "Bose audio system (module path only)", "All factory functions", "Steering wheel controls"], caveat: "All HSV models have Bose/premium audio. Full head unit replacement requires an advanced Bose harness — add $70. Module path avoids this entirely.", enthusiastNote: "HSV owners are particularly attached to keeping things factory — and rightly so.", audioUpgradeNote: "If you go the full replacement route, make sure the advanced Bose harness is included." },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "suzuki", slug: "suzuki", name: "Suzuki",
+    models: [
+      {
+        id: "suzuki-jimny", slug: "jimny", name: "Jimny",
+        generations: [
+          {
+            id: "suzuki-jimny-jb74-2018-2025", slug: "2018-2025", label: "JB74 (2018–2025)",
+            yearFrom: 2018, yearTo: 2025,
+            factory: { hasScreen: false, screenDescription: null, hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1099, installedWithCamera: 1319, installedWithSensorsRear: 1319, installedWithSensorsFrontRear: 1419, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP8396K", harnessPartNumber: "APP8", swcInterface: "Infodapter", antennaPatchLead: "APP2", cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/fp8396k", confidence: "high" },
+            content: { installTimeMin: 60, installTimeMax: 90, difficulty: "easy", recommendedPath: "replacement", recommendedPathReason: "No factory screen — full head unit installation. Straightforward plug-and-play install using the FP8396K kit.", whatIsLost: [], whatIsRetained: ["Steering wheel controls", "All factory wiring — no cutting", "Both manual AC and digital AC variants supported"], caveat: "Both manual air conditioning and digital air conditioning variants are supported. Confirm your AC type when booking.", enthusiastNote: "The JB74 Jimny community is one of the most active in Australia. CarPlay is consistently one of the top modifications.", audioUpgradeNote: "The Jimny factory speakers are small and limited. Consider pairing with an aftermarket speaker upgrade." },
+          },
+          {
+            id: "suzuki-jimny-jb43-2005-2017", slug: "2005-2017", label: "JB43 (2005–2017)",
+            yearFrom: 2005, yearTo: 2017,
+            factory: { hasScreen: false, screenDescription: null, hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Different fascia kit required from JB74 — we confirm the right kit for your year before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 75, installTimeMax: 105, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Different dashboard configuration from JB74 — requires a different fascia kit.", whatIsLost: [], whatIsRetained: ["Steering wheel controls", "All factory wiring"], caveat: "JB43 uses different fascia kit to JB74. Always request a quote — never book at JB74 pricing.", enthusiastNote: "The JB43 is the older generation but equally loved.", audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "suzuki-vitara", slug: "vitara", name: "Vitara",
+        generations: [
+          {
+            id: "suzuki-vitara-2015-2025", slug: "2015-2025", label: "Current gen (2015–2025)",
+            yearFrom: 2015, yearTo: 2025,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Confirm parts before quoting.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "mitsubishi", slug: "mitsubishi", name: "Mitsubishi",
+    models: [
+      {
+        id: "mitsubishi-triton", slug: "triton", name: "Triton",
+        generations: [
+          {
+            id: "mitsubishi-triton-mq-mr-2015-2024", slug: "2015-2024", label: "MQ/MR (2015–2024)",
+            yearFrom: 2015, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1099, installedWithCamera: 1319, installedWithSensorsRear: 1319, installedWithSensorsFrontRear: 1419, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "AKMB26", harnessPartNumber: "ISO harness (order separately)", swcInterface: "Infodapter", antennaPatchLead: null, cameraKitPartNumber: "AM8349K (camera bundle)", vehicleSelectorId: null, productUrl: "https://aerpro.com/akmb26", confidence: "high" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "replacement", recommendedPathReason: "Straightforward head unit replacement using the AKMB26 kit.", whatIsLost: ["Factory navigation if equipped", "Factory USB branding"], whatIsRetained: ["Steering wheel controls", "All factory wiring"], caveat: "ISO harness NOT included in the AKMB26 kit — ordered separately. Confirm GLX vs GLS vs GSR trim and whether factory camera is present.", enthusiastNote: "The Triton is one of the most straightforward installs we do.", audioUpgradeNote: "Factory Triton audio is basic. The head unit upgrade alone makes a noticeable difference." },
+          },
+        ],
+      },
+      {
+        id: "mitsubishi-outlander", slug: "outlander", name: "Outlander",
+        generations: [
+          {
+            id: "mitsubishi-outlander-zl-2018-2021", slug: "2018-2021", label: "ZL (2018–2021)",
+            yearFrom: 2018, yearTo: 2021,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: true, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: false, requiresQuote: true, quoteReason: "Camera and sensor retention require parts confirmation." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Camera and sensor retention need confirmation.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Factory camera (via compatible kit)", "Parking sensor alerts", "Steering wheel controls"], caveat: "Camera and parking sensor retention require specific harness — quote only until confirmed.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "mitsubishi-pajero", slug: "pajero", name: "Pajero",
+        generations: [
+          {
+            id: "mitsubishi-pajero-nx-2014-2021", slug: "2014-2021", label: "NX (2014–2021)",
+            yearFrom: 2014, yearTo: 2021,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: true, hasNav: true, navSystemName: null, hasPremiumAudio: true, premiumAudioBrand: "Rockford Fosgate", has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: false, requiresQuote: true, quoteReason: "Rockford Fosgate audio on some variants requires specific harness — confirm before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Premium audio and camera retention require confirmation.", whatIsLost: ["Factory navigation (replaced by Google Maps/Waze)", "Rockford Fosgate integration requires amp harness"], whatIsRetained: ["Factory camera (via kit)", "Parking sensor alerts"], caveat: "Confirm whether your Pajero has Rockford Fosgate audio before quoting.", enthusiastNote: null, audioUpgradeNote: "Rockford Fosgate amp harness essential if equipped." },
+          },
+        ],
+      },
+      {
+        id: "mitsubishi-asx", slug: "asx", name: "ASX",
+        generations: [
+          {
+            id: "mitsubishi-asx-2019-2025", slug: "2019-2025", label: "Current gen (2019–2025)",
+            yearFrom: 2019, yearTo: 2025,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Confirm parts before quoting.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "nissan", slug: "nissan", name: "Nissan",
+    models: [
+      {
+        id: "nissan-navara", slug: "navara", name: "Navara",
+        generations: [
+          {
+            id: "nissan-navara-d23-2015-2024", slug: "2015-2024", label: "D23 NP300 (2015–2024)",
+            yearFrom: 2015, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Confirm fascia parts before quoting.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "nissan-xtrail", slug: "x-trail", name: "X-Trail",
+        generations: [
+          {
+            id: "nissan-xtrail-t32-2014-2020-nonav", slug: "2014-2020-no-nav", label: "T32 without navigation (2014–2020)",
+            yearFrom: 2014, yearTo: 2020,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen without navigation", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "360 camera and Bose variants require separate kits — confirm before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "AKNI5", harnessPartNumber: "APP091", swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://connect.aerpro.com/vehicles/nissan/nissan-x-trail-2014-t32", confidence: "medium" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Must separate 360 camera from non-360 and Bose from non-Bose before pricing.", whatIsLost: [], whatIsRetained: ["Steering wheel controls"], caveat: "Confirm: does the vehicle have 360 camera? Does it have Bose audio? Both affect which kit is required.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+          {
+            id: "nissan-xtrail-t32-2021-2022-360", slug: "2021-2022-360", label: "T32 facelift with 360 camera (2021–2022)",
+            yearFrom: 2021, yearTo: 2022,
+            factory: { hasScreen: true, screenDescription: "Factory navigation with 360 camera", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: true, hasNav: true, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: true },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: false, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: 1649, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "AMANI17", harnessPartNumber: "Included in kit", swcInterface: "Included", antennaPatchLead: null, cameraKitPartNumber: "Included — 360 retained", vehicleSelectorId: null, productUrl: "https://aerpro.com/amani17", confidence: "high" },
+            content: { installTimeMin: 150, installTimeMax: 240, difficulty: "hard", recommendedPath: "replacement", recommendedPathReason: "The AMANI17 is a vehicle-specific kit that retains the 360 camera system while adding CarPlay.", whatIsLost: ["Factory navigation (replaced by Google Maps/Waze)"], whatIsRetained: ["360 degree camera system (fully retained via AMANI17 kit)", "Parking sensor alerts", "Steering wheel controls"], caveat: "Suits non-amplified (non-Bose) variants only. Bose X-Trail requires a separate amp harness.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "nissan-patrol", slug: "patrol", name: "Patrol",
+        generations: [
+          {
+            id: "nissan-patrol-y62-2013-2024", slug: "2013-2024", label: "Y62 (2013–2024)",
+            yearFrom: 2013, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "Factory navigation touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: true, hasNav: true, navSystemName: null, hasPremiumAudio: true, premiumAudioBrand: "Bose", has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: false, requiresQuote: true, quoteReason: "Bose audio and camera retention require specific harness — confirm before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 150, installTimeMax: 240, difficulty: "hard", recommendedPath: "quote", recommendedPathReason: "Bose amp and camera retention require confirmation. Hard job — quote only.", whatIsLost: ["Factory navigation (replaced by Google Maps/Waze)", "Bose integration requires amp harness"], whatIsRetained: ["Factory camera (via kit)", "Parking sensor alerts"], caveat: "Y62 Patrol is a complex install. Bose harness essential. Always quote — never fixed price.", enthusiastNote: "The Patrol community is passionate and these owners spend money on quality.", audioUpgradeNote: "Bose amp harness is non-negotiable." },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "mazda", slug: "mazda", name: "Mazda",
+    models: [
+      {
+        id: "mazda-cx5", slug: "cx-5", name: "CX-5",
+        generations: [
+          {
+            id: "mazda-cx5-ke-2012-2017", slug: "2012-2017", label: "KE (2012–2017)",
+            yearFrom: 2012, yearTo: 2017,
+            factory: { hasScreen: true, screenDescription: "MZD Connect touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: "MZD Connect", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Bose vs non-Bose and factory camera presence both affect kit selection." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: "FP9813 or FP8379", harnessPartNumber: "APP072", swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: "https://aerpro.com/vehicles/mazda/mazda-cx5-2012-2014", confidence: "medium" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Bose and camera presence determine which kit is correct.", whatIsLost: ["MZD Connect interface", "Factory navigation (replaced by Google Maps/Waze)"], whatIsRetained: ["Steering wheel controls"], caveat: "Confirm Bose vs non-Bose and whether factory camera is present when requesting a quote.", enthusiastNote: null, audioUpgradeNote: "Bose harness required if equipped." },
+          },
+          {
+            id: "mazda-cx5-kf-2017-2024", slug: "2017-2024", label: "KF (2017–2024)",
+            yearFrom: 2017, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "MZD Connect with wired CarPlay on some trims", hasCarPlay: true, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: "MZD Connect", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: 249, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "medium" },
+            content: { installTimeMin: 15, installTimeMax: 30, difficulty: "easy", recommendedPath: "adapter", recommendedPathReason: "KF CX-5 has wired CarPlay on most trims — wireless adapter is all that's needed.", whatIsLost: [], whatIsRetained: ["Factory screen", "Factory camera", "MZD Connect interface", "All factory functions"], caveat: "Confirm factory CarPlay is present — base Maxx Sport trim may not have it.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "mazda-cx3", slug: "cx-3", name: "CX-3",
+        generations: [
+          {
+            id: "mazda-cx3-2015-2024", slug: "2015-2024", label: "Current gen (2015–2024)",
+            yearFrom: 2015, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "MZD Connect touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: "MZD Connect", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Confirm parts before quoting.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "mazda-mazda3", slug: "mazda3", name: "Mazda3",
+        generations: [
+          {
+            id: "mazda-mazda3-bp-2019-2024", slug: "2019-2024", label: "BP (2019–2024)",
+            yearFrom: 2019, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "8.8\" or 10.25\" with wired CarPlay on some trims", hasCarPlay: true, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: "MZD Connect", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: 249, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "medium" },
+            content: { installTimeMin: 15, installTimeMax: 30, difficulty: "easy", recommendedPath: "adapter", recommendedPathReason: "Most BP Mazda3 trims have wired CarPlay — wireless adapter is the clean path.", whatIsLost: [], whatIsRetained: ["Factory screen", "Factory camera", "All factory functions"], caveat: "Confirm factory CarPlay is present on your trim.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "subaru", slug: "subaru", name: "Subaru",
+    models: [
+      {
+        id: "subaru-forester", slug: "forester", name: "Forester",
+        generations: [
+          {
+            id: "subaru-forester-sj-2013-2018", slug: "2013-2018", label: "SJ (2013–2018)",
+            yearFrom: 2013, yearTo: 2018,
+            factory: { hasScreen: true, screenDescription: "Factory Starlink touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: "Starlink", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Parts confirmation required.", whatIsLost: ["Starlink interface", "Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls"], caveat: "Confirm trim and whether factory camera is present.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "subaru-outback", slug: "outback", name: "Outback",
+        generations: [
+          {
+            id: "subaru-outback-bs-2015-2019", slug: "2015-2019", label: "BS (2015–2019)",
+            yearFrom: 2015, yearTo: 2019,
+            factory: { hasScreen: true, screenDescription: "Factory Starlink touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: true, navSystemName: "Starlink", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: true, quoteReason: "Camera retention and nav system integration require confirmation." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Camera retention needs confirmation before quoting.", whatIsLost: ["Factory navigation (replaced by Google Maps/Waze)", "Starlink interface"], whatIsRetained: ["Factory camera (via compatible kit)", "Steering wheel controls"], caveat: "Camera retention requires specific harness — quote only until confirmed.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "subaru-xv", slug: "xv", name: "XV",
+        generations: [
+          {
+            id: "subaru-xv-gt-2017-2023", slug: "2017-2023", label: "GT (2017–2023)",
+            yearFrom: 2017, yearTo: 2023,
+            factory: { hasScreen: true, screenDescription: "Factory Starlink touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: "Starlink", hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Camera retention requires confirmation.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Factory camera (via kit)", "Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "honda", slug: "honda", name: "Honda",
+    models: [
+      {
+        id: "honda-crv", slug: "cr-v", name: "CR-V",
+        generations: [
+          {
+            id: "honda-crv-rm-2012-2016", slug: "2012-2016", label: "RM (2012–2016)",
+            yearFrom: 2012, yearTo: 2016,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Fascia and camera retention require confirmation.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls"], caveat: "Verify fascia and camera retention before booking.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "honda-hrv", slug: "hr-v", name: "HR-V",
+        generations: [
+          {
+            id: "honda-hrv-ru-2015-2021", slug: "2015-2021", label: "RU (2015–2021)",
+            yearFrom: 2015, yearTo: 2021,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Confirm parts before quoting.", whatIsLost: [], whatIsRetained: ["Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "hyundai", slug: "hyundai", name: "Hyundai",
+    models: [
+      {
+        id: "hyundai-i30", slug: "i30", name: "i30",
+        generations: [
+          {
+            id: "hyundai-i30-pd-2017-2024", slug: "2017-2024", label: "PD (2017–2024)",
+            yearFrom: 2017, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 120, difficulty: "easy", recommendedPath: "quote", recommendedPathReason: "Confirm parts before quoting.", whatIsLost: [], whatIsRetained: ["Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "hyundai-tucson", slug: "tucson", name: "Tucson",
+        generations: [
+          {
+            id: "hyundai-tucson-tl-2015-2020", slug: "2015-2020", label: "TL (2015–2020)",
+            yearFrom: 2015, yearTo: 2020,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: true, quoteReason: "Camera retention requires parts confirmation." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Camera retention requires confirmation.", whatIsLost: [], whatIsRetained: ["Factory camera (via compatible kit)", "Steering wheel controls"], caveat: "Confirm camera retention kit availability before booking.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "kia", slug: "kia", name: "Kia",
+    models: [
+      {
+        id: "kia-sportage", slug: "sportage", name: "Sportage",
+        generations: [
+          {
+            id: "kia-sportage-ql-2016-2021", slug: "2016-2021", label: "QL (2016–2021)",
+            yearFrom: 2016, yearTo: 2021,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: true, quoteReason: "Confirm factory CarPlay and camera retention before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Confirm factory CarPlay and camera retention.", whatIsLost: [], whatIsRetained: ["Factory camera (via kit)", "Steering wheel controls"], caveat: "Some QL Sportage trims have factory wired CarPlay — confirm before booking.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "kia-seltos", slug: "seltos", name: "Seltos",
+        generations: [
+          {
+            id: "kia-seltos-sp2-2019-2024", slug: "2019-2024", label: "SP2 (2019–2024)",
+            yearFrom: 2019, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen with wired CarPlay on most trims", hasCarPlay: true, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: true, moduleRecommended: true, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: false, quoteReason: null },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: 249, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "medium" },
+            content: { installTimeMin: 15, installTimeMax: 30, difficulty: "easy", recommendedPath: "adapter", recommendedPathReason: "Seltos has factory wired CarPlay — wireless adapter is the clean upgrade.", whatIsLost: [], whatIsRetained: ["Factory screen", "Factory camera", "All factory functions"], caveat: "Confirm factory CarPlay on your trim — base S grade may not have it.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "volkswagen", slug: "volkswagen", name: "Volkswagen",
+    models: [
+      {
+        id: "volkswagen-amarok", slug: "amarok", name: "Amarok",
+        generations: [
+          {
+            id: "vw-amarok-2h-2011-2022", slug: "2011-2022", label: "2H (2011–2022)",
+            yearFrom: 2011, yearTo: 2022,
+            factory: { hasScreen: true, screenDescription: "Factory radio/touchscreen varies by trim", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "VW radio generation varies — requires photo and VIN check before quoting." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "VW radio generation and CANBUS configuration require verification before quoting.", whatIsLost: ["Factory radio interface", "Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls (via CANBUS decoder)"], caveat: "VW CANBUS integration is more complex than Japanese vehicles. Always quote.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "volkswagen-tiguan", slug: "tiguan", name: "Tiguan",
+        generations: [
+          {
+            id: "vw-tiguan-5n-2008-2016", slug: "2008-2016", label: "5N (2008–2016)",
+            yearFrom: 2008, yearTo: 2016,
+            factory: { hasScreen: true, screenDescription: "Factory RCD/RNS radio system", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: false, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: false, showCameraOption: true, showSensorsOption: true, requiresQuote: true, quoteReason: "VW radio system requires specific CANBUS decoder — quote only." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 120, installTimeMax: 180, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "VW CANBUS requires specific decoder — quote only.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Steering wheel controls (via CANBUS decoder)"], caveat: "VW CANBUS integration required. Always quote.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "isuzu", slug: "isuzu", name: "Isuzu",
+    models: [
+      {
+        id: "isuzu-dmax", slug: "d-max", name: "D-Max",
+        generations: [
+          {
+            id: "isuzu-dmax-tf-2020-2024", slug: "2020-2024", label: "TF (2020–2024)",
+            yearFrom: 2020, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "Factory 9\" touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required — high-priority vehicle to add to confirmed list." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Parts confirmation required — prioritise with Aerpro trade account.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Factory camera (if retention kit available)", "Steering wheel controls"], caveat: "High-volume target vehicle. Parts confirmation with Aerpro is a priority.", enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+      {
+        id: "isuzu-mux", slug: "mu-x", name: "MU-X",
+        generations: [
+          {
+            id: "isuzu-mux-ls-2021-2024", slug: "2021-2024", label: "LS (2021–2024)",
+            yearFrom: 2021, yearTo: 2024,
+            factory: { hasScreen: true, screenDescription: "Factory touchscreen", hasCarPlay: false, hasWirelessCarPlay: false, hasCamera: true, hasParkingSensors: false, hasNav: false, navSystemName: null, hasPremiumAudio: false, premiumAudioBrand: null, has360Camera: false },
+            configurator: { moduleAvailable: false, moduleRecommended: false, cameraRetentionAvailable: true, showCameraOption: false, showSensorsOption: true, requiresQuote: true, quoteReason: "Parts confirmation required." },
+            pricing: { installedBase: null, installedWithCamera: null, installedWithSensorsRear: null, installedWithSensorsFrontRear: null, moduleInstalled: null, diyBase: null, diyWithCamera: null },
+            aerpro: { fasciaPartNumber: null, harnessPartNumber: null, swcInterface: null, antennaPatchLead: null, cameraKitPartNumber: null, vehicleSelectorId: null, productUrl: null, confidence: "low" },
+            content: { installTimeMin: 90, installTimeMax: 150, difficulty: "medium", recommendedPath: "quote", recommendedPathReason: "Parts confirmation required.", whatIsLost: ["Factory navigation if equipped"], whatIsRetained: ["Factory camera (if retention kit available)", "Steering wheel controls"], caveat: null, enthusiastNote: null, audioUpgradeNote: null },
+          },
+        ],
+      },
+    ],
+  },
 ];
 
-// Flat list kept for generateStaticParams compatibility
-export const suburbs = suburbData.map(s => s.name);
-
-export function getSuburbEntry(name: string): SuburbEntry | undefined {
-  return suburbData.find(s => s.name.toLowerCase() === name.toLowerCase());
-}
-
-export function getCityForSuburb(name: string): string {
-  return getSuburbEntry(name)?.city ?? "Australia";
-}
-
-export function getSuburbsByCity(city: string): SuburbEntry[] {
-  return suburbData.filter(s => s.city === city);
-}
-
-export function getNearbySuburbs(suburbName: string, count = 6): string[] {
-  const entry = getSuburbEntry(suburbName);
-  if (!entry) return [];
-  return suburbData
-    .filter(s => s.city === entry.city && s.name !== suburbName)
-    .slice(0, count)
-    .map(s => s.name);
-}
+export const suburbs = [
+  "Parramatta", "Chatswood", "Bondi", "Sutherland", "Liverpool",
+  "Penrith", "Hornsby", "Manly", "Newtown", "Bankstown",
+  "Castle Hill", "Cronulla", "Hurstville", "Macquarie Park",
+  "Strathfield", "Ryde", "Campbelltown", "Blacktown", "North Sydney",
+  "Baulkham Hills", "Fairfield", "Auburn", "Kogarah", "Miranda",
+  "Gordon", "Pymble", "Dee Why", "Brookvale", "Mosman", "Leichhardt",
+  "Richmond", "Footscray", "St Kilda", "Dandenong", "Frankston",
+  "Ringwood", "Box Hill", "Essendon", "Moonee Ponds", "Werribee",
+  "Cranbourne", "Berwick", "Doncaster", "Chadstone", "Sunshine",
+  "Williamstown", "Northcote", "Fitzroy", "South Yarra", "Cheltenham",
+  "Fortitude Valley", "Chermside", "Carindale", "Ipswich", "Redcliffe",
+  "Logan", "Strathpine", "Springwood", "Indooroopilly", "Wynnum",
+  "Sunnybank", "Nundah", "Toowong", "Eight Mile Plains", "Stafford",
+  "Fremantle", "Midland", "Joondalup", "Rockingham", "Armadale",
+  "Cannington", "Osborne Park", "Morley", "Karrinyup", "Balcatta",
+  "Mandurah", "Scarborough", "Cottesloe", "Subiaco", "Victoria Park",
+  "Glenelg", "Norwood", "Salisbury", "Marion", "Tea Tree Gully",
+  "Modbury", "Elizabeth", "Noarlunga", "Unley", "Prospect",
+];
