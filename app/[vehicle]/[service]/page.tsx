@@ -2,11 +2,11 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { vehicles } from "@/lib/vehicles";
+import { vehicles, getBrandBySlug, getModelBySlug } from "@/lib/vehicles";
 import type { Metadata } from "next";
 import type { VehicleGeneration } from "@/lib/vehicles";
 import GenerationAccordion from "@/components/GenerationAccordion";
-import { getModelMinPrice } from "@/lib/configurator";
+import { getModelMinPrice, formatPrice } from "@/lib/configurator";
 
 type Props = {
   params: Promise<{ vehicle: string; service: string }>;
@@ -47,12 +47,13 @@ const serviceMap: Record<string, ServiceEntry> = {
   },
 };
 
-function parseVehicleSlug(slug: string) {
+function parseVehicleSlug(vehicleSlug: string) {
   for (const brand of vehicles) {
-    for (const model of brand.models) {
-      const expected = `${brand.slug}-${model.slug}`;
-      if (slug === expected) return { brand, model };
-    }
+    if (!vehicleSlug.startsWith(brand.slug + "-")) continue;
+    const modelSlug = vehicleSlug.slice(brand.slug.length + 1);
+    const brand_ = getBrandBySlug(brand.slug);
+    const model = getModelBySlug(brand.slug, modelSlug);
+    if (brand_ && model) return { brand: brand_, model };
   }
   return null;
 }
@@ -99,8 +100,7 @@ export default async function VehicleServicePage({ params, searchParams }: Props
   const { brand, model } = vehicle;
   const minPrice = getModelMinPrice(model.generations);
 
-  // Determine which generation drawer to open by default.
-  // Priority: URL gen param (matched by id or slug) → first non-quote gen → first gen.
+  // Priority: URL gen param → first non-quote gen → first gen
   const initialOpenId =
     model.generations.find((g) => g.id === genParam || g.slug === genParam)?.id ??
     model.generations.find((g) => !g.configurator.requiresQuote)?.id ??
@@ -200,7 +200,7 @@ export default async function VehicleServicePage({ params, searchParams }: Props
           We come to your home or office — fixed pricing, no surprises.
         </p>
         <p className="text-accent font-serif text-2xl mb-8">
-          {minPrice !== null ? `From $${minPrice.toLocaleString()}` : "Custom quote"}
+          {formatPrice(minPrice)}
         </p>
       </section>
 
