@@ -3,17 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { vehicles } from "@/lib/vehicles";
+import { getConfiguratorOptions } from "@/lib/configurator";
 
 export default function Hero() {
   const [selectedMake, setSelectedMake] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [showResult, setShowResult] = useState(false);
-  const [fromPrice, setFromPrice] = useState(0);
 
   const brand = vehicles.find((b) => b.name === selectedMake);
   const model = brand?.models.find((m) => m.name === selectedModel);
   const generation = model?.generations.find((g) => g.slug === selectedYear);
+  const opts = generation ? getConfiguratorOptions(generation) : null;
 
   function handleMakeChange(make: string) {
     setSelectedMake(make);
@@ -28,15 +29,15 @@ export default function Hero() {
     setShowResult(false);
   }
 
-  function handleYearSelect(year: string) {
-    setSelectedYear(year);
-    const gen = model?.generations.find((g) => g.slug === year);
-    if (gen) {
-      const price = gen.pricing.installedBase ?? gen.pricing.moduleInstalled;
-      if (price !== null) setFromPrice(price);
-      setShowResult(true);
-    }
+  function handleYearSelect(slug: string) {
+    setSelectedYear(slug);
+    setShowResult(true);
   }
+
+  const vehicleSlug = brand && model ? `${brand.slug}-${model.slug}` : "";
+  const bookingUrl = vehicleSlug
+    ? `/${vehicleSlug}/carplay-installation?gen=${encodeURIComponent(selectedYear)}`
+    : "/book";
 
   return (
     <section className="px-6 md:px-10 pt-10 md:pt-20 pb-0 w-full max-w-4xl overflow-hidden">
@@ -111,21 +112,21 @@ export default function Hero() {
           </div>
         )}
 
-        {showResult && generation && !generation.configurator.requiresQuote && (
+        {showResult && opts && !opts.requiresQuote && (
           <div className="flex items-center justify-between bg-bg-3 rounded-lg px-4 py-3 border border-white/[0.08]">
             <div>
               <p className="text-[10px] text-upfit-faint uppercase tracking-wider">
                 From
               </p>
               <p className="font-serif text-3xl text-upfit-text leading-tight">
-                ${fromPrice}
+                {opts.basePrice !== null ? `$${opts.basePrice}` : "Quote"}
               </p>
               <p className="text-xs text-upfit-muted mt-1">
                 {selectedMake} {selectedModel} · unit + installation · GST incl.
               </p>
             </div>
             <Link
-              href={`/book?make=${encodeURIComponent(selectedMake)}&model=${encodeURIComponent(selectedModel)}&year=${encodeURIComponent(selectedYear)}`}
+              href={bookingUrl}
               className="bg-accent text-bg text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-accent-dark transition-colors whitespace-nowrap"
             >
               Book this install →
@@ -133,7 +134,7 @@ export default function Hero() {
           </div>
         )}
 
-        {showResult && generation?.configurator.requiresQuote && (
+        {showResult && opts?.requiresQuote && (
           <div className="flex items-center justify-between bg-bg-3 rounded-lg px-4 py-3 border border-white/[0.08]">
             <p className="text-sm text-upfit-muted">
               Your vehicle needs a custom quote — no problem.

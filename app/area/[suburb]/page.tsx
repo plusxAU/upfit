@@ -4,6 +4,8 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { states } from "@/components/Suburbs";
 
+const allSuburbs = states.flatMap((s) => s.suburbs);
+
 function getCityForSuburb(suburb: string): string {
   return states.find((s) => s.suburbs.includes(suburb))?.city ?? "Australia";
 }
@@ -55,11 +57,10 @@ function parseSuburbSlug(slug: string): { suburb: string; service: ServiceSlug }
     const prefix = `${serviceSlug}-`;
     if (slug.startsWith(prefix)) {
       const suburbSlug = slug.slice(prefix.length);
-      const allSuburbs = states.flatMap((s) => s.suburbs);
-      const suburbName = allSuburbs.find(
+      const name = allSuburbs.find(
         (s) => s.toLowerCase().replace(/\s+/g, "-") === suburbSlug
       );
-      if (suburbName) return { suburb: suburbName, service: serviceSlug };
+      if (name) return { suburb: name, service: serviceSlug };
     }
   }
   return null;
@@ -82,12 +83,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
   const params: { suburb: string }[] = [];
-  for (const state of states) {
-    for (const suburb of state.suburbs) {
-      const suburbSlug = suburb.toLowerCase().replace(/\s+/g, "-");
-      for (const serviceSlug of Object.keys(serviceConfig)) {
-        params.push({ suburb: `${serviceSlug}-${suburbSlug}` });
-      }
+  for (const suburb of allSuburbs) {
+    const suburbSlug = suburb.toLowerCase().replace(/\s+/g, "-");
+    for (const serviceSlug of Object.keys(serviceConfig)) {
+      params.push({ suburb: `${serviceSlug}-${suburbSlug}` });
     }
   }
   return params;

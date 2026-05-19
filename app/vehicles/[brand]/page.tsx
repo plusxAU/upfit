@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { vehicles } from "@/lib/vehicles";
 import type { Metadata } from "next";
+import { getConfiguratorOptions, formatPrice } from "@/lib/configurator";
 
 type Props = { params: Promise<{ brand: string }> };
 
@@ -85,21 +86,35 @@ export default async function BrandPage({ params }: Props) {
               </h2>
               <div className="space-y-3 mb-5">
                 {model.generations.map((gen) => {
-                  const carplayPrice = gen.pricing.installedBase ?? gen.pricing.moduleInstalled;
-                  const cameraPrice = gen.pricing.installedWithCamera;
-                  const sensorsPrice = gen.pricing.installedWithSensorsRear;
+                  const opts = getConfiguratorOptions(gen);
+                  const quoteUrl = `/quote?make=${encodeURIComponent(brand.name)}&model=${encodeURIComponent(model.name)}&gen=${encodeURIComponent(gen.id)}&service=carplay-installation`;
                   return (
                     <div key={gen.id} className="flex items-center justify-between py-2 border-b border-white/[0.06] last:border-0 flex-wrap gap-2">
                       <span className="text-sm text-upfit-text">{gen.label}</span>
                       <div className="flex flex-wrap gap-4 text-right">
-                        <span className="text-xs text-upfit-muted">CarPlay{" "}
-                          {carplayPrice ? <span className="text-accent font-medium">from ${carplayPrice}</span> : <span className="text-upfit-faint">Quote</span>}
+                        <span className="text-xs text-upfit-muted">
+                          CarPlay{" "}
+                          {opts.basePrice !== null ? (
+                            <span className="text-accent font-medium">{formatPrice(opts.basePrice, "from $")}</span>
+                          ) : (
+                            <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
+                          )}
                         </span>
-                        <span className="text-xs text-upfit-muted">Camera{" "}
-                          {cameraPrice ? <span className="text-accent font-medium">from ${cameraPrice}</span> : <span className="text-upfit-faint">Quote</span>}
+                        <span className="text-xs text-upfit-muted">
+                          Camera{" "}
+                          {gen.pricing.installedWithCamera !== null ? (
+                            <span className="text-accent font-medium">from ${gen.pricing.installedWithCamera}</span>
+                          ) : (
+                            <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
+                          )}
                         </span>
-                        <span className="text-xs text-upfit-muted">Sensors{" "}
-                          {sensorsPrice ? <span className="text-accent font-medium">from ${sensorsPrice}</span> : <span className="text-upfit-faint">Quote</span>}
+                        <span className="text-xs text-upfit-muted">
+                          Sensors{" "}
+                          {gen.pricing.installedWithSensorsRear !== null ? (
+                            <span className="text-accent font-medium">from ${gen.pricing.installedWithSensorsRear}</span>
+                          ) : (
+                            <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
+                          )}
                         </span>
                       </div>
                     </div>
