@@ -115,12 +115,20 @@ export default function Hero() {
         {showResult && opts && !opts.requiresQuote && (
           <div className="flex items-center justify-between bg-bg-3 rounded-lg px-4 py-3 border border-white/[0.08]">
             <div>
-              <p className="text-[10px] text-upfit-faint uppercase tracking-wider">
-                From
-              </p>
-              <p className="font-serif text-3xl text-upfit-text leading-tight">
-                {opts.basePrice !== null ? `$${opts.basePrice}` : "Quote"}
-              </p>
+              {opts.basePrice !== null ? (
+                <>
+                  <p className="text-[10px] text-upfit-faint uppercase tracking-wider">
+                    From
+                  </p>
+                  <p className="font-serif text-3xl text-upfit-text leading-tight">
+                    ${opts.basePrice.toLocaleString()}
+                  </p>
+                </>
+              ) : (
+                <p className="font-serif text-xl text-upfit-muted leading-tight">
+                  Custom quote
+                </p>
+              )}
               <p className="text-xs text-upfit-muted mt-1">
                 {selectedMake} {selectedModel} · unit + installation · GST incl.
               </p>

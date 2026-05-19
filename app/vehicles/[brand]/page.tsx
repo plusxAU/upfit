@@ -84,53 +84,65 @@ export default async function BrandPage({ params }: Props) {
               <h2 className="text-xl font-medium text-upfit-text mb-4">
                 {brand.name} {model.name}
               </h2>
-              <div className="space-y-3 mb-5">
+              <div className="space-y-4">
                 {model.generations.map((gen) => {
                   const opts = getConfiguratorOptions(gen);
                   const quoteUrl = `/quote?make=${encodeURIComponent(brand.name)}&model=${encodeURIComponent(model.name)}&gen=${encodeURIComponent(gen.id)}&service=carplay-installation`;
                   return (
-                    <div key={gen.id} className="flex items-center justify-between py-2 border-b border-white/[0.06] last:border-0 flex-wrap gap-2">
-                      <span className="text-sm text-upfit-text">{gen.label}</span>
-                      <div className="flex flex-wrap gap-4 text-right">
-                        <span className="text-xs text-upfit-muted">
-                          CarPlay{" "}
-                          {opts.basePrice !== null ? (
-                            <span className="text-accent font-medium">{formatPrice(opts.basePrice, "from $")}</span>
-                          ) : (
-                            <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
-                          )}
-                        </span>
-                        <span className="text-xs text-upfit-muted">
-                          Camera{" "}
-                          {gen.pricing.installedWithCamera !== null ? (
-                            <span className="text-accent font-medium">from ${gen.pricing.installedWithCamera}</span>
-                          ) : (
-                            <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
-                          )}
-                        </span>
-                        <span className="text-xs text-upfit-muted">
-                          Sensors{" "}
-                          {gen.pricing.installedWithSensorsRear !== null ? (
-                            <span className="text-accent font-medium">from ${gen.pricing.installedWithSensorsRear}</span>
-                          ) : (
-                            <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
-                          )}
-                        </span>
+                    <div key={gen.id} className="border-b border-white/[0.06] last:border-0 pb-4 last:pb-0">
+                      <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                        <span className="text-sm text-upfit-text">{gen.label}</span>
+                        <div className="flex flex-wrap gap-4 text-right">
+                          <span className="text-xs text-upfit-muted">
+                            CarPlay{" "}
+                            {opts.basePrice !== null ? (
+                              <span className="text-accent font-medium">{formatPrice(opts.basePrice, "from ")}</span>
+                            ) : (
+                              <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
+                            )}
+                          </span>
+                          <span className="text-xs text-upfit-muted">
+                            Camera{" "}
+                            {gen.pricing.installedWithCamera !== null ? (
+                              <span className="text-accent font-medium">from ${gen.pricing.installedWithCamera}</span>
+                            ) : (
+                              <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
+                            )}
+                          </span>
+                          <span className="text-xs text-upfit-muted">
+                            Sensors{" "}
+                            {gen.pricing.installedWithSensorsRear !== null ? (
+                              <span className="text-accent font-medium">from ${gen.pricing.installedWithSensorsRear}</span>
+                            ) : (
+                              <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Service pills — or single quote link for quote-only generations */}
+                      <div className="flex gap-2 flex-wrap">
+                        {opts.requiresQuote ? (
+                          <Link
+                            href={quoteUrl}
+                            className="text-xs text-accent border border-accent/30 px-3 py-1.5 rounded-full hover:bg-accent/[0.06] transition-all"
+                          >
+                            Get a quote →
+                          </Link>
+                        ) : (
+                          ALL_SERVICES.map((service) => (
+                            <Link
+                              key={service.slug}
+                              href={`/${brand.slug}-${model.slug}/${service.slug}?gen=${encodeURIComponent(gen.id)}`}
+                              className="text-xs text-upfit-muted border border-white/[0.08] px-3 py-1.5 rounded-full hover:border-accent/40 hover:text-accent transition-all"
+                            >
+                              {service.label} →
+                            </Link>
+                          ))
+                        )}
                       </div>
                     </div>
                   );
                 })}
-              </div>
-              <div className="flex gap-3 flex-wrap">
-                {ALL_SERVICES.map((service) => (
-                  <Link
-                    key={service.slug}
-                    href={`/${brand.slug}-${model.slug}/${service.slug}`}
-                    className="text-xs text-upfit-muted border border-white/[0.08] px-3 py-1.5 rounded-full hover:border-accent/40 hover:text-accent transition-all"
-                  >
-                    {service.label} →
-                  </Link>
-                ))}
               </div>
             </div>
           ))}

@@ -5,11 +5,12 @@ import Link from "next/link";
 import { vehicles } from "@/lib/vehicles";
 import type { Metadata } from "next";
 import type { VehicleGeneration } from "@/lib/vehicles";
-import Configurator from "@/components/Configurator";
+import GenerationAccordion from "@/components/GenerationAccordion";
 import { getModelMinPrice, formatPrice } from "@/lib/configurator";
 
 type Props = {
   params: Promise<{ vehicle: string; service: string }>;
+  searchParams: Promise<{ gen?: string }>;
 };
 
 type ServiceEntry = {
@@ -87,8 +88,9 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default async function VehicleServicePage({ params }: Props) {
+export default async function VehicleServicePage({ params, searchParams }: Props) {
   const { vehicle: vehicleSlug, service: serviceSlug } = await params;
+  const { gen: genParam = "" } = await searchParams;
   const vehicle = parseVehicleSlug(vehicleSlug);
   const service = serviceMap[serviceSlug];
 
@@ -96,6 +98,14 @@ export default async function VehicleServicePage({ params }: Props) {
 
   const { brand, model } = vehicle;
   const minPrice = getModelMinPrice(model.generations);
+
+  // Determine which generation drawer to open by default.
+  // Priority: URL gen param (matched by id or slug) → first non-quote gen → first gen.
+  const initialOpenId =
+    model.generations.find((g) => g.id === genParam || g.slug === genParam)?.id ??
+    model.generations.find((g) => !g.configurator.requiresQuote)?.id ??
+    model.generations[0]?.id ??
+    "";
 
   const schema = {
     "@context": "https://schema.org",
@@ -218,25 +228,16 @@ export default async function VehicleServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Generation sections */}
+      {/* Generation accordion */}
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
         <p className="section-label">By year range</p>
-        <div className="space-y-8">
-          {model.generations.map((gen) => (
-            <div key={gen.id}>
-              <h3 className="text-base font-medium text-upfit-text mb-4">
-                {brand.name} {model.name} — {gen.label}
-              </h3>
-              <Configurator
-                generation={gen}
-                make={brand.name}
-                model={model.name}
-                service={serviceSlug}
-                mode="page"
-              />
-            </div>
-          ))}
-        </div>
+        <GenerationAccordion
+          generations={model.generations}
+          make={brand.name}
+          model={model.name}
+          service={serviceSlug}
+          initialOpenId={initialOpenId}
+        />
       </section>
 
       {/* Available cities */}
