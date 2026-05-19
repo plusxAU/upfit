@@ -48,9 +48,7 @@ export default function GenerationAccordion({
       {generations.map((gen) => {
         const opts = getConfiguratorOptions(gen);
         const isOpen = openId === gen.id;
-        const priceLabel = opts.requiresQuote
-          ? "Quote"
-          : formatPrice(opts.basePrice);
+        const priceLabel = formatPrice(opts.basePrice, "");
 
         return (
           <div

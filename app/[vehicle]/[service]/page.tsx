@@ -6,7 +6,7 @@ import { vehicles } from "@/lib/vehicles";
 import type { Metadata } from "next";
 import type { VehicleGeneration } from "@/lib/vehicles";
 import GenerationAccordion from "@/components/GenerationAccordion";
-import { getModelMinPrice, formatPrice } from "@/lib/configurator";
+import { getModelMinPrice } from "@/lib/configurator";
 
 type Props = {
   params: Promise<{ vehicle: string; service: string }>;
@@ -200,14 +200,8 @@ export default async function VehicleServicePage({ params, searchParams }: Props
           We come to your home or office — fixed pricing, no surprises.
         </p>
         <p className="text-accent font-serif text-2xl mb-8">
-          {formatPrice(minPrice)}
+          {minPrice !== null ? `From $${minPrice.toLocaleString()}` : "Custom quote"}
         </p>
-        <Link
-          href="/quote"
-          className="inline-flex items-center gap-2 border border-white/[0.15] text-upfit-muted font-medium px-6 py-3 rounded-lg hover:border-white/[0.3] transition-colors text-sm"
-        >
-          Request a quote
-        </Link>
       </section>
 
       {/* Trust bar */}
