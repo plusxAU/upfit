@@ -166,7 +166,8 @@ export function getConfiguratorOptions(
     if (showWirelessAdapterOnly) return pricing.moduleInstalled;
     if (showModuleFirst) return pricing.moduleInstalled;
     if (configurator.requiresQuote) return null;
-    return pricing.installedBase;
+    // Head unit path: use the cheapest unit in the catalogue, not installedBase
+    return Math.min(...HEAD_UNIT_OPTIONS.map((u) => u.price));
   })();
 
   return {
