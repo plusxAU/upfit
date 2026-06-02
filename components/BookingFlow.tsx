@@ -114,6 +114,7 @@ export default function BookingFlow({
   const [cardComplete, setCardComplete] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [callbackSubmitted, setCallbackSubmitted] = useState(false);
 
   const brand = vehicles.find((b) => b.name === state.make);
   const model = brand?.models.find((m) => m.name === state.model);
@@ -162,6 +163,10 @@ export default function BookingFlow({
 
   const contactFieldsFilled =
     !!state.name && !!state.phone && !!state.email;
+
+  const canCallback =
+    !!state.name && !!state.phone && !!state.email &&
+    !!state.suburb && !!state.postcode;
 
   const canProceed: Record<number, boolean> = {
     1: !!state.make && !!state.model && !!state.year,
@@ -287,6 +292,77 @@ export default function BookingFlow({
       setPaymentError("Something went wrong. Please try again.");
       setIsProcessing(false);
     }
+  }
+
+  async function handleCallbackSubmit() {
+    setIsProcessing(true);
+    try {
+      const nameParts = state.name.trim().split(" ");
+      const firstname = nameParts[0] || "";
+      const lastname = nameParts.slice(1).join(" ") || "";
+
+      const serviceTypeValue = state.packageString
+        ? `${state.packageString} · Total: $${totalPrice}`
+        : `CarPlay & Android Auto · ${state.unitName} · $${totalPrice}`;
+
+      const notesValue = [
+        state.notes || "",
+        state.timePreference === "schedule" && state.date
+          ? `Preferred time: ${state.date} · ${state.time}`
+          : "",
+      ]
+        .filter(Boolean)
+        .join(" | ");
+
+      const fields = [
+        { name: "firstname", value: firstname },
+        { name: "lastname", value: lastname },
+        { name: "email", value: state.email },
+        { name: "phone", value: state.phone },
+        { name: "city", value: state.suburb },
+        { name: "zip", value: state.postcode },
+        { name: "vehicle_make", value: state.make },
+        { name: "vehicle_model", value: state.model },
+        { name: "vehicle_year", value: generation?.label ?? state.year },
+        { name: "service_type", value: serviceTypeValue },
+        { name: "time_preference", value: "questions_first" },
+        { name: "notes", value: notesValue },
+        { name: "address", value: state.address || "" },
+        { name: "payment_status", value: "callback_requested" },
+      ];
+
+      await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fields, pageUri: window.location.href }),
+      });
+
+      setCallbackSubmitted(true);
+    } catch (err) {
+      console.error("Callback submission error:", err);
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
+  // Callback confirmation screen
+  if (callbackSubmitted) {
+    return (
+      <div className="max-w-xl mx-auto text-center py-12">
+        <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center mx-auto mb-6">
+          <span className="text-accent text-xl">✓</span>
+        </div>
+        <h2 className="font-serif text-3xl font-normal mb-3">
+          Callback requested
+        </h2>
+        <p className="text-upfit-muted text-base leading-relaxed mb-8">
+          Got it — we&apos;ll call you within 2 hours to discuss your job and answer any questions before you commit to anything.
+        </p>
+        <p className="text-xs text-upfit-faint">
+          We&apos;ll reach you on {state.phone}.
+        </p>
+      </div>
+    );
   }
 
   // Confirmation screen
@@ -852,6 +928,18 @@ export default function BookingFlow({
           <p className="text-xs text-upfit-faint mt-3 text-center leading-relaxed">
             Secure payment by Stripe. Balance of ${balanceAmount.toLocaleString()} charged on completion.
           </p>
+
+          {/* Callback exit ramp */}
+          <div className="mt-8 pt-6 border-t border-white/[0.08] text-center">
+            <p className="text-xs text-upfit-muted mb-3">Not ready to pay yet?</p>
+            <button
+              onClick={handleCallbackSubmit}
+              disabled={!canCallback || isProcessing}
+              className="text-sm text-accent hover:underline disabled:text-upfit-faint disabled:no-underline disabled:cursor-not-allowed bg-transparent border-0 cursor-pointer"
+            >
+              {isProcessing ? "Submitting…" : "Request a callback instead →"}
+            </button>
+          </div>
         </div>
       )}
     </div>
