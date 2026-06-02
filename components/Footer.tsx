@@ -18,8 +18,8 @@ export default function Footer() {
           Up<span className="text-accent">Fit</span>
         </Link>
         <div className="flex flex-col gap-1.5">
-          <a href="tel:0435508050" className="text-xs text-upfit-muted hover:text-accent transition-colors">
-            0435 508 050
+          <a href="tel:1300877342" className="text-xs text-upfit-muted hover:text-accent transition-colors">
+            1300 877 342
           </a>
           <a href="mailto:team@upfit.au" className="text-xs text-upfit-muted hover:text-accent transition-colors">
             team@upfit.au
@@ -47,8 +47,8 @@ export default function Footer() {
           <Link href="/" className="font-serif text-base text-upfit-muted">
             Up<span className="text-accent">Fit</span>
           </Link>
-          <a href="tel:0435508050" className="text-xs text-upfit-muted hover:text-accent transition-colors">
-            0435 508 050
+          <a href="tel:1300877342" className="text-xs text-upfit-muted hover:text-accent transition-colors">
+            1300 877 342
           </a>
           <a href="mailto:team@upfit.au" className="text-xs text-upfit-muted hover:text-accent transition-colors">
             team@upfit.au
