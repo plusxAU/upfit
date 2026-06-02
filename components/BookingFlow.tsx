@@ -286,6 +286,36 @@ export default function BookingFlow({
         console.error("HubSpot submission error:", err);
       }
 
+      const timeLabel =
+        state.timePreference === "flexible"
+          ? "ASAP"
+          : state.timePreference === "callback"
+          ? "questions_first"
+          : `${state.date} · ${state.time}`;
+
+      try {
+        await fetch("/api/email/booking-confirmation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customerName: state.name,
+            customerEmail: state.email,
+            vehicle: `${state.make} ${state.model}${generation ? ` · ${generation.label}` : ""}`,
+            packageName: state.unitName,
+            addOns: state.addOns.map((a) => a.label),
+            totalPrice: totalPrice.toLocaleString(),
+            depositAmount: depositAmount.toLocaleString(),
+            balanceAmount: balanceAmount.toLocaleString(),
+            location: `${state.suburb} ${state.postcode}`,
+            timePreference: timeLabel,
+            address: state.address || null,
+            notes: state.notes || null,
+          }),
+        });
+      } catch (err) {
+        console.error("Confirmation email error:", err);
+      }
+
       setSubmitted(true);
     } catch (err) {
       console.error("Payment error:", err);
