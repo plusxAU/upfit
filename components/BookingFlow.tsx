@@ -270,11 +270,7 @@ export default function BookingFlow({
         { name: "notes", value: notesValue },
         { name: "address", value: state.address || "" },
         { name: "terms_accepted", value: state.agreedToTerms ? "Yes - agreed at booking" : "No" },
-        // Stripe fields — create these properties manually in HubSpot first
         { name: "stripe_customer_id", value: customerId },
-        { name: "deposit_amount", value: String(depositAmount) },
-        { name: "balance_amount", value: String(balanceAmount) },
-        { name: "payment_status", value: "deposit_paid" },
       ];
 
       try {
@@ -371,7 +367,6 @@ export default function BookingFlow({
         { name: "time_preference", value: "questions_first" },
         { name: "notes", value: notesValue },
         { name: "address", value: state.address || "" },
-        { name: "payment_status", value: "callback_requested" },
       ];
 
       await fetch("/api/booking", {
