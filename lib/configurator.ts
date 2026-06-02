@@ -84,13 +84,13 @@ export const ADD_ON_CAMERA: AddOn = {
 export const ADD_ON_SENSORS_REAR: AddOn = {
   id: "sensors-rear",
   label: "Parking sensors (rear)",
-  price: 220,
+  price: 325,
 };
 
 export const ADD_ON_SENSORS_FRONT_REAR: AddOn = {
   id: "sensors-front-rear",
   label: "Parking sensors (front + rear)",
-  price: 320,
+  price: 390,
 };
 
 // ── Unit catalogue ────────────────────────────────────────────

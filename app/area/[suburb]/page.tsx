@@ -44,7 +44,7 @@ const serviceConfig = {
   "parking-sensors": {
     label: "Parking sensor installation",
     short: "Parking sensors",
-    fromPrice: 220,
+    fromPrice: 325,
     description: "Front and rear parking sensor installation",
     serviceSlug: "parking-sensors",
   },
