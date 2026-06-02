@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { vehicles } from "@/lib/vehicles";
@@ -94,11 +95,11 @@ export default function BookingFlow({
 }) {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
 
   const parsed = parseBookingParams(searchParams);
 
   const [step, setStep] = useState(parsed.startAtStep);
-  const [submitted, setSubmitted] = useState(false);
   const [state, setState] = useState<BookingState>({
     ...initialState,
     make: parsed.make,
@@ -316,7 +317,19 @@ export default function BookingFlow({
         console.error("Confirmation email error:", err);
       }
 
-      setSubmitted(true);
+      const confirmationParams = new URLSearchParams({
+        name: state.name,
+        vehicle: `${state.make} ${state.model}${generation ? ` · ${generation.label}` : ""}`,
+        pkg: state.unitName,
+        addons: state.addOns.map((a) => a.label).join(","),
+        total: String(totalPrice),
+        deposit: String(depositAmount),
+        balance: String(balanceAmount),
+        location: `${state.suburb} ${state.postcode}`,
+        time: timeLabel,
+        intentId: paymentIntent.id,
+      });
+      router.push(`/booking/confirmation?${confirmationParams.toString()}`);
     } catch (err) {
       console.error("Payment error:", err);
       setPaymentError("Something went wrong. Please try again.");
@@ -390,69 +403,6 @@ export default function BookingFlow({
         </p>
         <p className="text-xs text-upfit-faint">
           We&apos;ll reach you on {state.phone}.
-        </p>
-      </div>
-    );
-  }
-
-  // Confirmation screen
-  if (submitted) {
-    return (
-      <div className="max-w-xl mx-auto text-center py-12">
-        <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center mx-auto mb-6">
-          <span className="text-accent text-xl">✓</span>
-        </div>
-        <h2 className="font-serif text-3xl font-normal mb-3">
-          Booking confirmed
-        </h2>
-        <p className="text-upfit-muted text-base leading-relaxed mb-2">
-          Thanks {state.name.split(" ")[0]}. Your ${depositAmount} deposit has been charged and we&apos;ll confirm your{" "}
-          {state.make} {state.model} installation within 2 hours.
-        </p>
-        <p className="text-upfit-muted text-sm mb-8">
-          We&apos;ll call or text {state.phone} to lock in a time. A receipt has been sent to {state.email}.
-        </p>
-        <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-5 text-left mb-6">
-          <p className="text-xs text-upfit-muted uppercase tracking-wider mb-3">
-            Booking summary
-          </p>
-          {[
-            {
-              label: "Vehicle",
-              value: `${state.make} ${state.model}${generation ? ` · ${generation.label}` : ""}`,
-            },
-            { label: "Package", value: state.unitName },
-            {
-              label: "Add-ons",
-              value: state.addOns.length > 0 ? state.addOns.map((a) => a.label).join(", ") : "None",
-            },
-            { label: "Total", value: `$${totalPrice.toLocaleString()} incl. GST` },
-            { label: "Deposit charged", value: `$${depositAmount.toLocaleString()}` },
-            { label: "Balance on completion", value: `$${balanceAmount.toLocaleString()}` },
-            { label: "Location", value: `${state.suburb} ${state.postcode}` },
-            {
-              label: "Time preference",
-              value:
-                state.timePreference === "flexible"
-                  ? "ASAP — we'll contact you to confirm"
-                  : state.timePreference === "callback"
-                  ? "Questions first — requesting callback"
-                  : `${state.date} · ${state.time}`,
-            },
-          ].map((row) => (
-            <div
-              key={row.label}
-              className="flex justify-between py-2.5 border-b border-white/[0.06] last:border-0"
-            >
-              <span className="text-xs text-upfit-muted">{row.label}</span>
-              <span className="text-xs text-upfit-text font-medium text-right max-w-[60%]">
-                {row.value}
-              </span>
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-upfit-faint">
-          Questions? Call or text us and we&apos;ll respond immediately.
         </p>
       </div>
     );

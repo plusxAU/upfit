@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
@@ -21,7 +22,8 @@ const CARD_ELEMENT_OPTIONS = {
 function Form() {
   const stripe = useStripe();
   const elements = useElements();
-  const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
+  const router = useRouter();
+  const [status, setStatus] = useState<"idle" | "processing" | "error">("idle");
   const [message, setMessage] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -64,8 +66,20 @@ function Form() {
       }
 
       if (paymentIntent?.status === "succeeded") {
-        setStatus("success");
-        setMessage(`Payment succeeded — intent ID: ${paymentIntent.id}`);
+        const params = new URLSearchParams({
+          name: "Test User",
+          vehicle: "Test Vehicle · 2024",
+          pkg: "Test Package",
+          addons: "",
+          total: "2",
+          deposit: "1",
+          balance: "1",
+          location: "Test Suburb 2000",
+          time: "ASAP",
+          intentId: paymentIntent.id,
+        });
+        router.push(`/booking/confirmation?${params.toString()}`);
+        return;
       } else {
         setStatus("error");
         setMessage("Payment did not complete.");
@@ -101,7 +115,7 @@ function Form() {
 
       {message && (
         <p style={{
-          color: status === "success" ? "#e8f44a" : "#e8f44a",
+          color: "#e8f44a",
           fontSize: 13,
           marginBottom: 16,
           textAlign: "center",
@@ -110,25 +124,23 @@ function Form() {
         </p>
       )}
 
-      {status !== "success" && (
-        <button
-          type="submit"
-          disabled={status === "processing" || !stripe}
-          style={{
-            width: "100%",
-            background: status === "processing" ? "#444" : "#e8f44a",
-            color: "#0f0f0d",
-            border: 0,
-            borderRadius: 8,
-            padding: "12px 0",
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: status === "processing" ? "not-allowed" : "pointer",
-          }}
-        >
-          {status === "processing" ? "Processing…" : "Charge $1.00 deposit"}
-        </button>
-      )}
+      <button
+        type="submit"
+        disabled={status === "processing" || !stripe}
+        style={{
+          width: "100%",
+          background: status === "processing" ? "#444" : "#e8f44a",
+          color: "#0f0f0d",
+          border: 0,
+          borderRadius: 8,
+          padding: "12px 0",
+          fontSize: 14,
+          fontWeight: 600,
+          cursor: status === "processing" ? "not-allowed" : "pointer",
+        }}
+      >
+        {status === "processing" ? "Processing…" : "Charge $1.00 deposit"}
+      </button>
     </form>
   );
 }

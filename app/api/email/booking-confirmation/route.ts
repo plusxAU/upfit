@@ -138,6 +138,7 @@ export async function POST(req: NextRequest) {
 
     const { error } = await resend.emails.send({
       from: "UpFit Bookings <bookings@upfit.au>",
+      replyTo: "team@upfit.au",
       to: customerEmail,
       subject: `Booking confirmed — ${vehicle} install`,
       html,
