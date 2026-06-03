@@ -11,9 +11,9 @@ const config: Config = {
       colors: {
         bg: {
           DEFAULT: "#0f0f0d",
-          2: "#161614",
-          3: "#1e1e1b",
-          4: "#222220",
+          2: "#1c1c19",
+          3: "#232320",
+          4: "#2a2a27",
         },
         accent: {
           DEFAULT: "#e8f44a",
@@ -21,7 +21,7 @@ const config: Config = {
         },
         upfit: {
           text: "#f0ede6",
-          muted: "#888880",
+          muted: "#a8a8a0",
           faint: "#444440",
           border: "rgba(255,255,255,0.08)",
           border2: "rgba(255,255,255,0.14)",
