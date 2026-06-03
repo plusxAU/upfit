@@ -15,7 +15,7 @@ export default function InstallersPage() {
       <Nav />
 
       {/* 1 — Hero */}
-      <section className="px-6 md:px-10 py-16 md:py-24 border-b border-white/[0.08] max-w-3xl">
+      <section className="px-6 md:px-10 py-16 md:py-24 border-b border-white/[0.08] max-w-3xl mx-auto">
         <div className="flex items-center gap-2 text-xs text-upfit-muted uppercase tracking-widest mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-accent" />
           Installer partnership · Australia-wide
@@ -34,7 +34,7 @@ export default function InstallersPage() {
       {/* 2 — Calculator */}
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
         <p className="section-label">The maths</p>
-        <div className="max-w-3xl">
+        <div className="max-w-3xl mx-auto">
           <InstallerCalculator />
         </div>
       </section>
@@ -42,7 +42,7 @@ export default function InstallersPage() {
       {/* 3 — How it works */}
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
         <p className="section-label">How it works</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
           {[
             {
               step: "01",

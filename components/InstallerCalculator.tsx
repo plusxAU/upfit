@@ -115,7 +115,7 @@ export default function InstallerCalculator() {
         <p className="text-sm text-upfit-muted leading-relaxed">
           Every quote you send takes time. Many don&apos;t convert. Adjust the sliders to match your current workload.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+        <div className="grid grid-cols-1 gap-y-6">
           <Slider
             label="Jobs per week"
             sublabel="installs you actually get paid for, per week"
