@@ -52,19 +52,20 @@ function Row({ label, value }: { label: string; value: string }) {
 export default function InstallerCalculator() {
   const [jobsPerWeek, setJobsPerWeek] = useState(8);
   const [installTime, setInstallTime] = useState(1.5);
-  const [chargePerJob, setChargePerJob] = useState(200);
+  const [hourlyRate, setHourlyRate] = useState(120);
   const [quotingTime, setQuotingTime] = useState(1);
   const [conversionRate, setConversionRate] = useState(40);
   const [travelTime, setTravelTime] = useState(0.5);
 
   const conv = conversionRate / 100;
+  const jobFee = hourlyRate * installTime;
   const unpaidQuotingPerJob = ((1 - conv) / conv) * quotingTime;
   const effectiveHoursPerJob = installTime + travelTime + unpaidQuotingPerJob;
-  const effectiveRate = chargePerJob / effectiveHoursPerJob;
+  const effectiveRate = jobFee / effectiveHoursPerJob;
 
   const installTravelHrsWeek = (installTime + travelTime) * jobsPerWeek;
   const unpaidQuotingHrsWeek = unpaidQuotingPerJob * jobsPerWeek;
-  const yourWeeklyIncome = chargePerJob * jobsPerWeek;
+  const yourWeeklyIncome = jobFee * jobsPerWeek;
 
   const upfitRate = 100;
   const upfitWeeklyIncome = jobsPerWeek * (installTime + travelTime) * upfitRate;
@@ -89,19 +90,19 @@ export default function InstallerCalculator() {
           width: 18px;
           height: 18px;
           border-radius: 50%;
-          background: #e8f44a;
+          background: #f0ede6;
           cursor: pointer;
-          box-shadow: 0 0 0 3px rgba(232,244,74,0.15);
+          box-shadow: 0 0 0 2px rgba(240,237,230,0.2);
           transition: box-shadow 0.15s;
         }
         .installer-slider::-webkit-slider-thumb:hover {
-          box-shadow: 0 0 0 5px rgba(232,244,74,0.25);
+          box-shadow: 0 0 0 4px rgba(240,237,230,0.15);
         }
         .installer-slider::-moz-range-thumb {
           width: 18px;
           height: 18px;
           border-radius: 50%;
-          background: #e8f44a;
+          background: #f0ede6;
           cursor: pointer;
           border: none;
         }
@@ -131,11 +132,11 @@ export default function InstallerCalculator() {
             format={(v) => `${v} hrs`}
           />
           <Slider
-            label="Charge per job"
-            sublabel="labour only"
-            min={80} max={400} step={10} value={chargePerJob}
-            onChange={setChargePerJob}
-            format={(v) => `$${v}`}
+            label="Hourly rate"
+            sublabel="what you charge per install hour, labour only"
+            min={50} max={250} step={5} value={hourlyRate}
+            onChange={setHourlyRate}
+            format={(v) => `$${v}/hr`}
           />
           <Slider
             label="Quoting time"
