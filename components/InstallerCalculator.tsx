@@ -20,7 +20,7 @@ function Slider({ label, sublabel, min, max, step, value, onChange, format }: Sl
       <div className="flex items-baseline justify-between mb-1.5">
         <div>
           <span className="text-sm font-medium text-upfit-text">{label}</span>
-          <span className="text-xs text-upfit-faint ml-2">{sublabel}</span>
+          <span className="text-xs text-upfit-muted ml-2">{sublabel}</span>
         </div>
         <span className="text-sm font-medium text-accent tabular-nums">{format(value)}</span>
       </div>
@@ -118,14 +118,14 @@ export default function InstallerCalculator() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
           <Slider
             label="Jobs per week"
-            sublabel="installs you actually get paid for"
+            sublabel="installs you actually get paid for, per week"
             min={3} max={20} step={1} value={jobsPerWeek}
             onChange={setJobsPerWeek}
             format={(v) => `${v} jobs`}
           />
           <Slider
             label="Install time"
-            sublabel="hands on the car"
+            sublabel="hands on the car, per job"
             min={0.5} max={4} step={0.5} value={installTime}
             onChange={setInstallTime}
             format={(v) => `${v} hrs`}
@@ -139,7 +139,7 @@ export default function InstallerCalculator() {
           />
           <Slider
             label="Quoting time"
-            sublabel="research, back-and-forth, write-up"
+            sublabel="research, back-and-forth, write-up — per quote"
             min={0.25} max={3} step={0.25} value={quotingTime}
             onChange={setQuotingTime}
             format={(v) => `${v} hrs`}
@@ -153,7 +153,7 @@ export default function InstallerCalculator() {
           />
           <Slider
             label="Travel time per job"
-            sublabel="avg round trip to customer"
+            sublabel="avg round trip to customer, per job"
             min={0} max={2} step={0.25} value={travelTime}
             onChange={setTravelTime}
             format={(v) => v === 0 ? "0 hrs" : `${v} hrs`}
@@ -167,11 +167,11 @@ export default function InstallerCalculator() {
         {/* Your jobs */}
         <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
           <p className="text-xs text-upfit-muted uppercase tracking-widest mb-4">Your jobs</p>
-          <p className="text-xs text-upfit-faint mb-1">Effective rate</p>
+          <p className="text-xs text-upfit-muted mb-1">Effective rate</p>
           <p className="font-serif text-4xl text-upfit-text mb-1">
             ${Math.round(effectiveRate)}<span className="text-lg text-upfit-muted font-sans">/hr</span>
           </p>
-          <p className="text-xs text-upfit-faint mb-5">after quoting overhead</p>
+          <p className="text-xs text-upfit-muted mb-5">after quoting overhead</p>
           <div className="border-t border-white/[0.06] pt-4">
             <Row label="Install + travel" value={`${installTravelHrsWeek.toFixed(1)} hrs/wk`} />
             <Row label="Unpaid quoting" value={`${unpaidQuotingHrsWeek.toFixed(1)} hrs/wk`} />
