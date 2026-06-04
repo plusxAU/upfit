@@ -34,6 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/reviews`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/book`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/quote`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/installers`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     // One-off vehicle pages
     { url: `${BASE}/holden-commodore-carplay`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/suzuki-jimny-carplay`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
