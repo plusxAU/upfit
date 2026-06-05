@@ -44,7 +44,6 @@ export default function InstallerCalculator() {
   // Left column — your own jobs
   const [advertisedRate, setAdvertisedRate] = useState(120);
   const [jobHrs, setJobHrs] = useState(1.5);
-  const [hardwareMargin, setHardwareMargin] = useState(0);
   const [quotingHrs, setQuotingHrs] = useState(1);
   const [enquiries, setEnquiries] = useState(8);
   const [conversionRate, setConversionRate] = useState(40);
@@ -58,7 +57,7 @@ export default function InstallerCalculator() {
   const conv = conversionRate / 100;
   const completedJobs = enquiries * conv;
   const unpaidQuotingHrsWeek = enquiries * quotingHrs;
-  const totalWeeklyRevenue = completedJobs * (advertisedRate * jobHrs + hardwareMargin);
+  const totalWeeklyRevenue = completedJobs * (advertisedRate * jobHrs);
   const totalWeeklyHrs = completedJobs * jobHrs + unpaidQuotingHrsWeek;
   const effectiveRate = totalWeeklyHrs > 0 ? totalWeeklyRevenue / totalWeeklyHrs : 0;
 
@@ -166,13 +165,6 @@ export default function InstallerCalculator() {
             format={(v) => `${v} hrs`}
           />
           <Slider
-            label="Average product margin per job"
-            sublabel="optional"
-            min={0} max={300} step={10} value={hardwareMargin}
-            onChange={setHardwareMargin}
-            format={(v) => v === 0 ? "$0" : `$${v}`}
-          />
-          <Slider
             label="Quoting + admin time per enquiry"
             min={0.25} max={3} step={0.25} value={quotingHrs}
             onChange={setQuotingHrs}
@@ -261,22 +253,17 @@ export default function InstallerCalculator() {
           </div>
         </div>
 
-        {/* Output 2 + 3 — Weekly numbers */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-5">
-            <p className="text-xs text-upfit-muted mb-1">Unpaid hours per week on own work</p>
-            <p className="font-serif text-2xl text-upfit-text">
-              {unpaidQuotingHrsWeek.toFixed(1)} <span className="text-base text-upfit-muted font-sans">hrs</span>
-            </p>
-            <p className="text-xs text-upfit-muted mt-1">spent on enquiries that don&apos;t all convert</p>
-          </div>
-          <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-5">
-            <p className="text-xs text-upfit-muted mb-1">Extra weekly earnings from UpFit jobs</p>
-            <p className="font-serif text-2xl text-accent">
-              ${Math.round(weeklyUplift).toLocaleString()}
-            </p>
-            <p className="text-xs text-upfit-muted mt-1">from {upfitJobs} confirmed jobs, zero quoting</p>
-          </div>
+        {/* Output 2 — Weekly uplift consequence */}
+        <div className="px-1">
+          <p className="text-sm text-upfit-muted">
+            Adding{" "}
+            <span className="text-upfit-text font-medium">{upfitJobs} UpFit jobs</span>{" "}
+            this week:{" "}
+            <span className="text-accent font-medium">+${Math.round(weeklyUplift).toLocaleString()}</span>
+          </p>
+          <p className="text-xs text-upfit-muted mt-1">
+            With {unpaidQuotingHrsWeek.toFixed(1)} fewer hours spent on selling.
+          </p>
         </div>
 
         {/* Output 4 — Dynamic insight */}
