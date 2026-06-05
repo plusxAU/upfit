@@ -252,8 +252,8 @@ export default function InstallersPage() {
           <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-6 max-w-sm">
             <div className="flex items-center justify-between mb-5">
               <span className="text-xs text-upfit-muted uppercase tracking-widest">Job #1042</span>
-              <span className="text-xs bg-accent/10 text-accent px-2 py-0.5 rounded-full border border-accent/20">
-                New
+              <span className="text-xs bg-white/[0.06] text-upfit-muted px-2 py-0.5 rounded-full border border-white/[0.08]">
+                Example
               </span>
             </div>
             <div className="space-y-3 mb-6">
@@ -261,7 +261,6 @@ export default function InstallersPage() {
                 ["Vehicle", "2018 Suzuki Jimny JB74"],
                 ["Service", "Apple CarPlay installation"],
                 ["Location", "Parramatta NSW 2150"],
-                ["Est. time", "1.5 hours"],
                 ["Parts", "Supplied by UpFit — delivered to customer address"],
               ].map(([label, value]) => (
                 <div key={label} className="flex flex-col gap-0.5">
@@ -274,13 +273,13 @@ export default function InstallersPage() {
                 <span className="font-serif text-2xl text-accent">$150</span>
               </div>
             </div>
-            <div className="flex gap-3">
-              <button className="btn-primary flex-1 justify-center text-xs py-2">
+            <div className="flex gap-3 opacity-40 pointer-events-none select-none">
+              <div className="flex-1 text-center text-xs py-2 rounded-lg bg-accent text-bg font-medium">
                 Accept job
-              </button>
-              <button className="flex-1 justify-center text-xs py-2 rounded-lg border border-white/[0.1] text-upfit-muted hover:text-upfit-text transition-colors bg-bg-3">
+              </div>
+              <div className="flex-1 text-center text-xs py-2 rounded-lg border border-white/[0.1] text-upfit-muted bg-bg-3">
                 View details
-              </button>
+              </div>
             </div>
           </div>
           <p className="text-xs text-upfit-muted mt-5">
@@ -316,28 +315,14 @@ export default function InstallersPage() {
                       {row.label}
                     </td>
                     <td className="py-3 pr-4 align-top">
-                      {row.highlightInstall ? (
-                        <span className="text-xs font-semibold text-accent">{row.own}</span>
-                      ) : (
-                        <span className="text-xs text-upfit-text">{row.own}</span>
-                      )}
+                      <span className={`text-xs leading-relaxed ${row.highlightInstall ? "font-semibold text-upfit-text" : "text-upfit-muted"}`}>
+                        {row.own}
+                      </span>
                     </td>
                     <td className="py-3 align-top">
-                      {row.highlightInstall ? (
-                        <span
-                          className="text-xs font-semibold px-2 py-0.5 rounded"
-                          style={{ background: "#EAF3DE", color: "#27500A" }}
-                        >
-                          {row.upfit}
-                        </span>
-                      ) : (
-                        <span
-                          className="text-xs px-2 py-0.5 rounded leading-relaxed"
-                          style={{ background: "#EAF3DE", color: "#27500A" }}
-                        >
-                          {row.upfit}
-                        </span>
-                      )}
+                      <span className={`text-xs leading-relaxed ${row.highlightInstall ? "font-semibold text-accent" : "text-accent"}`}>
+                        {row.upfit}
+                      </span>
                     </td>
                   </tr>
                 ))}
