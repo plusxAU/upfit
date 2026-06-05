@@ -42,10 +42,6 @@ const newFaq = [
     a: "No. UpFit sells the installation to the customer, supplies the parts, and pays you a fixed install payout to complete the work. There is no fee deducted from your payout.",
   },
   {
-    q: "What about hardware margin — I usually make money on parts too?",
-    a: "On your own jobs, absolutely — keep doing that. UpFit jobs work differently: UpFit supplies the product, handles the quote, and pays you a fixed install payout. You're not buying or selling parts. The calculator above shows how UpFit compares to your real effective hourly earnings once all unpaid time is factored in.",
-  },
-  {
     q: "Can I keep doing my own jobs?",
     a: "Yes — UpFit works around your existing schedule. Accept the jobs that fit. Decline the ones that don't. Most installers use UpFit to fill quiet days with confirmed work, not replace their existing customer base.",
   },
