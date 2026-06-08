@@ -328,7 +328,59 @@ export default function InstallersPage() {
         </div>
       </section>
 
-      {/* 7 — FAQ */}
+      {/* 7 — What we look for */}
+      <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
+        <p className="section-label">Requirements</p>
+        <div className="max-w-3xl mx-auto">
+          <h2 className="font-serif text-3xl md:text-4xl font-normal text-upfit-text mb-3">
+            What we look for
+          </h2>
+          <p className="text-upfit-muted text-sm leading-relaxed mb-8">
+            UpFit installers are vetted independent contractors. Here&apos;s what you need to work with us.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
+              <h3 className="font-medium text-upfit-text text-sm mb-2">Public liability insurance</h3>
+              <p className="text-sm text-upfit-muted leading-relaxed mb-3">
+                Minimum $5M cover. If you don&apos;t have it yet, BizCover and AUZi both offer affordable
+                policies for mobile tradespeople — typically under $100/month.
+              </p>
+              <a
+                href="https://www.bizcover.com.au"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-accent hover:underline"
+              >
+                Get a quote at BizCover →
+              </a>
+            </div>
+            <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
+              <h3 className="font-medium text-upfit-text text-sm mb-2">Valid ABN</h3>
+              <p className="text-sm text-upfit-muted leading-relaxed">
+                You operate as an independent contractor. Free to register at{" "}
+                <a
+                  href="https://www.abr.gov.au"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:underline"
+                >
+                  abr.gov.au
+                </a>{" "}
+                if you don&apos;t have one.
+              </p>
+            </div>
+            <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
+              <h3 className="font-medium text-upfit-text text-sm mb-2">Relevant installation experience</h3>
+              <p className="text-sm text-upfit-muted leading-relaxed">
+                Car audio, auto electrical, or accessory installation. We match jobs to your experience —
+                you&apos;ll only see work that suits your skills.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8 — FAQ */}
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
         <p className="section-label">Common questions</p>
         <div className="max-w-3xl mx-auto space-y-4">
@@ -341,7 +393,7 @@ export default function InstallersPage() {
         </div>
       </section>
 
-      {/* 8 — CTA */}
+      {/* 9 — CTA */}
       <section id="apply" className="px-6 md:px-10 py-20 border-b border-white/[0.08]">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4">
