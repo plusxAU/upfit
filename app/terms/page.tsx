@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms & Conditions — UpFit",
   description: "UpFit customer terms and conditions. Read before booking.",
-  robots: "noindex",
 };
 
 export default function TermsPage() {
@@ -17,8 +16,7 @@ export default function TermsPage() {
           Terms &amp; Conditions
         </h1>
         <p className="text-xs text-upfit-muted mb-10">
-          Last updated: 05/05/2026 &nbsp;·&nbsp; Operated by: [UpFit entity
-          name] ABN [XXX]
+          Last updated: 12/06/2026 &nbsp;·&nbsp; Operated by: Brent Della Valle ABN 86 599 618 749
         </p>
 
         <div className="space-y-10 text-sm text-upfit-muted leading-relaxed">
@@ -32,19 +30,15 @@ export default function TermsPage() {
             {
               title: "1. About UpFit",
               content: (
-                <>
-                  <p>
-                    UpFit is a booking platform that connects customers with
-                    independent, vetted auto electrical installers. UpFit
-                    facilitates the booking, payment, and coordination of
-                    installation services. The installation service itself is
-                    performed by an independent contractor — not by UpFit.
-                  </p>
-                  <p className="mt-3">
-                    UpFit is not a party to the installation service agreement
-                    between you and the attending installer.
-                  </p>
-                </>
+                <p>
+                  UpFit is the principal party in your booking. You contract
+                  with UpFit for a fully installed outcome — including supply of
+                  hardware and installation. Installation services are performed
+                  by UpFit&apos;s network of vetted independent installers
+                  operating under agreement with UpFit. UpFit manages the
+                  customer relationship, booking, payment, and all
+                  post-installation support on your behalf.
+                </p>
               ),
             },
             {
@@ -55,24 +49,33 @@ export default function TermsPage() {
                     2.1 Independent Installers
                   </h3>
                   <p>
-                    The installer attending your job is an independent
-                    contractor operating their own business. All workmanship
-                    warranties and liability for installation quality rest with
-                    the attending installer. UpFit requires all installers to
-                    hold current public liability insurance of a minimum
-                    $5,000,000 prior to performing any work through the
-                    platform.
+                    Installation services are performed by independent
+                    contractors operating under agreement with UpFit. UpFit
+                    vets all installers and requires them to hold current public
+                    liability insurance of a minimum $5,000,000. You do not need
+                    to contact the installer directly — UpFit is your single
+                    point of contact before, during, and after your job.
                   </p>
                   <h3 className="font-medium text-upfit-text mb-2 mt-5">
                     2.2 Workmanship
                   </h3>
                   <p>
                     If you are dissatisfied with the quality of installation
-                    work performed, please notify UpFit within 48 hours of job
-                    completion. UpFit will facilitate communication between you
-                    and the installer to resolve the issue. Where a workmanship
-                    defect is confirmed, the attending installer is responsible
-                    for rectification.
+                    work, please notify UpFit within 48 hours of job completion
+                    at{" "}
+                    <a
+                      href="mailto:team@upfit.au"
+                      className="text-accent hover:underline"
+                    >
+                      team@upfit.au
+                    </a>
+                    . UpFit will assess the issue and coordinate rectification
+                    with the attending installer on your behalf. Where a
+                    workmanship defect is confirmed, rectification will be
+                    arranged at no additional cost to you. UpFit acts as your
+                    single point of contact throughout the resolution process.
+                    Financial liability for rectification rests with the
+                    attending installer.
                   </p>
                   <h3 className="font-medium text-upfit-text mb-2 mt-5">
                     2.3 Vehicle Access
@@ -269,7 +272,7 @@ export default function TermsPage() {
               content: (
                 <div className="space-y-1">
                   <p className="font-medium text-upfit-text">UpFit</p>
-                  <p>[Entity name] ABN [XXX]</p>
+                  <p>Brent Della Valle ABN 86 599 618 749</p>
                   <p>
                     Email:{" "}
                     <a
