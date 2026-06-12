@@ -10,7 +10,7 @@ import { vehicles } from "@/lib/vehicles";
 export const metadata = {
   title: "Dashcam Installation Australia — UpFit",
   description:
-    "Professional front and rear dashcam installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Hardwired, clean install, parking mode capable. From $280.",
+    "Professional front and rear dashcam installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Hardwired, clean install, parking mode capable. From $349.",
   alternates: {
     canonical: "https://upfit.au/services/dashcam-installation",
   },
@@ -23,7 +23,7 @@ const serviceSchema = {
   "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au", "telephone": "+61435508050" },
   "areaServed": "Australia",
   "description": "Professional front and rear dashcam installation. Hardwired to fuse box, parking mode capable, clean factory-finish routing. Mobile service across Australia.",
-  "offers": { "@type": "Offer", "price": "280", "priceCurrency": "AUD" },
+  "offers": { "@type": "Offer", "price": "349", "priceCurrency": "AUD" },
 };
 
 const faqSchema = {
@@ -56,7 +56,7 @@ export default function DashcamPage() {
         </h1>
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed mb-8 max-w-xl">
           Front and rear dashcam professionally fitted and hardwired across Sydney, Melbourne, Brisbane, Perth and Adelaide.
-          No loose cables, no mess. Done in under an hour. From $280.
+          No loose cables, no mess. Done in under an hour. From $349.
         </p>
         <Link href="/book?service=dashcam" className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors">
           Book dashcam install →

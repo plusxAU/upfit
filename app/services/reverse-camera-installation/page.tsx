@@ -6,7 +6,7 @@ import { vehicles } from "@/lib/vehicles";
 export const metadata = {
   title: "Reverse Camera Installation Australia — UpFit",
   description:
-    "Professional reverse camera installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Wired to your existing or new display. Mobile service from $220.",
+    "Professional reverse camera installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Wired to your existing or new display. Mobile service from $320.",
   alternates: {
     canonical: "https://upfit.au/services/reverse-camera-installation",
   },
@@ -19,7 +19,7 @@ const serviceSchema = {
   "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au", "telephone": "+61435508050" },
   "areaServed": "Australia",
   "description": "Professional reverse camera installation. Wired to existing display or new head unit. Activates automatically in reverse. Mobile service across Australia.",
-  "offers": { "@type": "Offer", "price": "220", "priceCurrency": "AUD" },
+  "offers": { "@type": "Offer", "price": "320", "priceCurrency": "AUD" },
 };
 
 const faqSchema = {
@@ -53,7 +53,7 @@ export default function RevcamPage() {
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed mb-8 max-w-xl">
           Wired reverse camera integrated with your existing display or a new screen — across
           Sydney, Melbourne, Brisbane, Perth and Adelaide.
-          Crystal clear image, professional install. From $220.
+          Crystal clear image, professional install. From $320.
         </p>
         <Link href="/book?service=revcam" className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors">
           Check your vehicle →

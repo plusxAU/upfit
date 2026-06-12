@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata = {
   title: "Parking Sensor Installation Australia — UpFit",
   description:
-    "Professional front and rear parking sensor installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Mobile service — we come to you. Fixed pricing from $325.",
+    "Professional front and rear parking sensor installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Mobile service — we come to you. Fixed pricing from $620.",
   alternates: {
     canonical: "https://upfit.au/services/parking-sensors",
   },
@@ -17,11 +17,11 @@ const serviceSchema = {
   "name": "Parking Sensor Installation",
   "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au", "telephone": "+61435508050" },
   "areaServed": "Australia",
-  "description": "Professional front and rear ultrasonic parking sensor installation. Audible alert as you approach objects. Mobile service across Australia from $325.",
+  "description": "Professional front and rear ultrasonic parking sensor installation. Audible alert as you approach objects. Mobile service across Australia from $620.",
   "offers": [
-    { "@type": "Offer", "name": "Rear sensors only", "price": "325", "priceCurrency": "AUD" },
-    { "@type": "Offer", "name": "Front + rear sensors", "price": "390", "priceCurrency": "AUD" },
-    { "@type": "Offer", "name": "Sensors + reverse camera", "price": "450", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "Rear sensors only", "price": "620", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "Front + rear sensors", "price": "1099", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "Sensors + reverse camera", "price": "940", "priceCurrency": "AUD" },
   ],
 };
 
@@ -56,7 +56,7 @@ export default function ParkingSensorsPage() {
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed mb-8 max-w-xl">
           Front and rear ultrasonic parking sensors professionally fitted at your door across
           Sydney, Melbourne, Brisbane, Perth and Adelaide.
-          Audible alert as you get close to objects. From $325.
+          Audible alert as you get close to objects. From $620.
         </p>
         <Link
           href="/book?service=parking-sensors"
@@ -70,9 +70,9 @@ export default function ParkingSensorsPage() {
         <p className="section-label">Options</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { title: "Rear sensors", desc: "4-sensor rear kit. Audible beeper alerts as you reverse.", price: 325, time: "~1 hour" },
-            { title: "Front + rear sensors", desc: "8-sensor full kit. Audible alerts front and rear.", price: 390, time: "~1.5 hours" },
-            { title: "Sensors + reverse camera", desc: "Best combo — visual and audible parking assistance.", price: 450, time: "~1.5 hours" },
+            { title: "Rear sensors", desc: "4-sensor rear kit. Audible beeper alerts as you reverse.", price: 620, time: "~1 hour" },
+            { title: "Front + rear sensors", desc: "8-sensor full kit. Audible alerts front and rear.", price: 1099, time: "~1.5 hours" },
+            { title: "Sensors + reverse camera", desc: "Best combo — visual and audible parking assistance.", price: 940, time: "~1.5 hours" },
           ].map((option) => (
             <div key={option.title} className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
               <h3 className="font-medium text-upfit-text mb-2">{option.title}</h3>

@@ -78,19 +78,22 @@ export type ConfiguratorSelection = {
 export const ADD_ON_CAMERA: AddOn = {
   id: "camera",
   label: "Reverse camera",
-  price: 220,
+  price: 320,
 };
 
+// NOTE: Sensors add-on prices now match standalone service prices ($620 rear, $1,099 front+rear).
+// When bundled with a head unit install the total will be head unit price + these amounts.
+// Flag for review if combined totals need a bundled discount.
 export const ADD_ON_SENSORS_REAR: AddOn = {
   id: "sensors-rear",
   label: "Parking sensors (rear)",
-  price: 325,
+  price: 620,
 };
 
 export const ADD_ON_SENSORS_FRONT_REAR: AddOn = {
   id: "sensors-front-rear",
   label: "Parking sensors (front + rear)",
-  price: 390,
+  price: 1099,
 };
 
 // ── Unit catalogue ────────────────────────────────────────────

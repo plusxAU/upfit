@@ -26,7 +26,7 @@ const services = [
     title: "Dashcam installation",
     description:
       "Front and rear dashcam hardwired and fitted cleanly. No loose cables. Done in under an hour.",
-    fromPrice: 280,
+    fromPrice: 349,
     priceNote: "Front + rear cameras + installation · GST incl.",
     href: "/services/dashcam-installation",
     time: "~1 hour",
@@ -36,7 +36,7 @@ const services = [
     title: "Reverse camera",
     description:
       "Wired reverse camera integrated with your existing or new display. Crystal clear image, triggers on reverse.",
-    fromPrice: 220,
+    fromPrice: 320,
     priceNote: "Camera + installation · GST incl.",
     href: "/services/reverse-camera-installation",
     time: "~45 minutes",
@@ -46,7 +46,7 @@ const services = [
     title: "Parking sensors",
     description:
       "Front and/or rear ultrasonic parking sensors with audible alert. Natural bundle with reverse camera.",
-    fromPrice: 220,
+    fromPrice: 620,
     priceNote: "Sensors + installation · GST incl. · drilling required",
     href: "/services/parking-sensors",
     time: "1–1.5 hours",
