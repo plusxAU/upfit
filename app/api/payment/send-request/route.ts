@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: "https://upfit.au?payment=success",
+      success_url: "https://upfit.au/payment-success",
       cancel_url: "https://upfit.au",
     });
 
@@ -184,9 +184,16 @@ function buildDepositEmail({
             </td>
           </tr>
           <tr>
-            <td style="padding:0 0 40px 0;">
+            <td style="padding:0 0 16px 0;">
               <p style="margin:0;font-size:13px;color:#888884;line-height:1.6;">
                 Your card is saved securely. The remaining balance is charged automatically once your installation is confirmed complete &mdash; you won&rsquo;t need to do anything on the day.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 0 40px 0;">
+              <p style="margin:0;font-size:13px;color:#888884;line-height:1.6;">
+                Please ensure your card has sufficient funds available at the time of your installation. The remaining balance of $${balanceAmount} will be charged automatically when your installer confirms the job is complete &mdash; you won&rsquo;t need to do anything on the day.
               </p>
             </td>
           </tr>

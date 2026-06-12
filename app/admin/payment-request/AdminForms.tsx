@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const inputStyle: React.CSSProperties = {
   display: "block",
@@ -13,6 +13,13 @@ const inputStyle: React.CSSProperties = {
   fontSize: "14px",
   outline: "none",
   fontFamily: "inherit",
+};
+
+const textareaStyle: React.CSSProperties = {
+  ...inputStyle,
+  minHeight: "120px",
+  resize: "vertical" as const,
+  lineHeight: "1.6",
 };
 
 const btnStyle: React.CSSProperties = {
@@ -129,25 +136,63 @@ function ChargeBalanceSection() {
   const [form, setForm] = useState({
     customerId: "",
     balanceAmount: "",
+    depositAmount: "",
     jobDescription: "",
+    includedItems: "",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [successMsg, setSuccessMsg] = useState("");
   const [error, setError] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  function handleAddItem() {
+    setForm((s) => ({
+      ...s,
+      includedItems: s.includedItems
+        ? s.includedItems.endsWith("\n")
+          ? s.includedItems
+          : s.includedItems + "\n"
+        : "",
+    }));
+    // Focus textarea at end
+    requestAnimationFrame(() => {
+      const el = textareaRef.current;
+      if (el) {
+        el.focus();
+        el.setSelectionRange(el.value.length, el.value.length);
+      }
+    });
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const confirmed = window.confirm(
+      `You are about to charge $${form.balanceAmount} to the customer's saved card. This cannot be undone. Confirm?`
+    );
+    if (!confirmed) return;
+
     setStatus("loading");
     setError("");
     try {
+      const items = form.includedItems
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      const body: Record<string, unknown> = {
+        customerId: form.customerId,
+        balanceAmount: Number(form.balanceAmount),
+        jobDescription: form.jobDescription,
+        includedItems: items,
+      };
+      if (form.depositAmount) {
+        body.depositAmount = Number(form.depositAmount);
+      }
+
       const res = await fetch("/api/payment/charge-balance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customerId: form.customerId,
-          balanceAmount: Number(form.balanceAmount),
-          jobDescription: form.jobDescription,
-        }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Charge failed");
@@ -167,7 +212,7 @@ function ChargeBalanceSection() {
         Mark job complete + charge balance
       </h2>
       <p style={{ color: "#888880", fontSize: "13px", marginBottom: "20px" }}>
-        Charges the saved card on file for the remaining balance and sends a receipt.
+        Charges the saved card on file for the remaining balance and sends a tax invoice.
       </p>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <input
@@ -188,15 +233,62 @@ function ChargeBalanceSection() {
         />
         <input
           style={inputStyle}
+          type="number"
+          placeholder="Deposit already charged ($) — optional, used for invoice total"
+          min={0}
+          value={form.depositAmount}
+          onChange={(e) => setForm((s) => ({ ...s, depositAmount: e.target.value }))}
+        />
+        <input
+          style={inputStyle}
           placeholder="Job description"
           required
           value={form.jobDescription}
           onChange={(e) => setForm((s) => ({ ...s, jobDescription: e.target.value }))}
         />
+        <div>
+          <label
+            style={{
+              display: "block",
+              color: "#666660",
+              fontSize: "11px",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              marginBottom: "6px",
+            }}
+          >
+            What&apos;s included (one item per line) — optional
+          </label>
+          <textarea
+            ref={textareaRef}
+            style={textareaStyle}
+            placeholder={
+              "Kenwood DMX7522S head unit\nAxxess AXHN-2 LaneWatch retention interface\nPAC SWI-CP2 steering wheel control interface\nAerpro fascia kit and harnesses\nInstallation labour"
+            }
+            value={form.includedItems}
+            onChange={(e) => setForm((s) => ({ ...s, includedItems: e.target.value }))}
+          />
+          <button
+            type="button"
+            onClick={handleAddItem}
+            style={{
+              marginTop: "6px",
+              background: "transparent",
+              border: "1px solid rgba(255,255,255,0.14)",
+              color: "#888880",
+              fontSize: "12px",
+              padding: "6px 12px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            + Add item
+          </button>
+        </div>
         <button
           type="submit"
           disabled={status === "loading"}
-          style={{ ...btnStyle, opacity: status === "loading" ? 0.6 : 1 }}
+          style={{ ...btnStyle, opacity: status === "loading" ? 0.6 : 1, marginTop: "4px" }}
         >
           {status === "loading" ? "Charging…" : "Charge balance →"}
         </button>
