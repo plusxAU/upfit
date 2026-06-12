@@ -10,7 +10,7 @@ import { vehicles } from "@/lib/vehicles";
 export const metadata = {
   title: "Dashcam Installation Australia — UpFit",
   description:
-    "Professional front and rear dashcam installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Hardwired, clean install, parking mode capable. From $349.",
+    "Professional dashcam installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Hardwired, clean install, parking mode capable. Front only from $349, front + rear from $449.",
   alternates: {
     canonical: "https://upfit.au/services/dashcam-installation",
   },
@@ -23,7 +23,10 @@ const serviceSchema = {
   "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au", "telephone": "+61435508050" },
   "areaServed": "Australia",
   "description": "Professional front and rear dashcam installation. Hardwired to fuse box, parking mode capable, clean factory-finish routing. Mobile service across Australia.",
-  "offers": { "@type": "Offer", "price": "349", "priceCurrency": "AUD" },
+  "offers": [
+    { "@type": "Offer", "name": "Front only", "price": "349", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "Front + rear", "price": "449", "priceCurrency": "AUD" },
+  ],
 };
 
 const faqSchema = {
@@ -31,7 +34,7 @@ const faqSchema = {
   "@type": "FAQPage",
   "mainEntity": [
     { "@type": "Question", "name": "Do you supply the dashcam or do I bring my own?", "acceptedAnswer": { "@type": "Answer", "text": "We supply everything — camera, mounting hardware, cables, and installation. The price includes both the unit and the install." } },
-    { "@type": "Question", "name": "How long does dashcam installation take?", "acceptedAnswer": { "@type": "Answer", "text": "A front and rear dashcam install typically takes under an hour. We come to your home, office or wherever the car is parked." } },
+    { "@type": "Question", "name": "How long does dashcam installation take?", "acceptedAnswer": { "@type": "Answer", "text": "A front-only dashcam install takes around 45 minutes. A front and rear install typically takes 1–1.5 hours once rear cable routing is factored in. We come to your home, office or wherever the car is parked." } },
     { "@type": "Question", "name": "Will the wiring be visible?", "acceptedAnswer": { "@type": "Answer", "text": "No. We route all cables through the headliner and pillars. The finished result looks clean and factory." } },
     { "@type": "Question", "name": "Do you install dashcams on any vehicle?", "acceptedAnswer": { "@type": "Answer", "text": "Dashcam installation is compatible with virtually any vehicle. Unlike CarPlay, there are no make or model restrictions." } },
   ],
@@ -55,12 +58,35 @@ export default function DashcamPage() {
           <em className="text-accent not-italic">at your door.</em>
         </h1>
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed mb-8 max-w-xl">
-          Front and rear dashcam professionally fitted and hardwired across Sydney, Melbourne, Brisbane, Perth and Adelaide.
-          No loose cables, no mess. Done in under an hour. From $349.
+          Dashcam professionally fitted and hardwired across Sydney, Melbourne, Brisbane, Perth and Adelaide.
+          No loose cables, no mess. Typically completed in 1–1.5 hours depending on configuration. Front only from $349, front + rear from $449.
         </p>
         <Link href="/book?service=dashcam" className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors">
           Book dashcam install →
         </Link>
+      </section>
+
+      <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
+        <p className="section-label">Options</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+          {[
+            { title: "Front only", desc: "Single camera hardwired and routed through the headliner. Covers the road ahead.", price: 349, time: "~45 minutes" },
+            { title: "Front + rear", desc: "Both cameras hardwired. Rear cable routed through the body — full coverage front and back.", price: 449, time: "~1.5 hours" },
+          ].map((option) => (
+            <div key={option.title} className="bg-bg-2 border border-white/[0.08] rounded-xl p-6">
+              <h3 className="font-medium text-upfit-text mb-2">{option.title}</h3>
+              <p className="text-sm text-upfit-muted leading-relaxed mb-4">{option.desc}</p>
+              <p className="font-serif text-3xl text-accent mb-1">From ${option.price}</p>
+              <p className="text-xs text-upfit-faint mb-4">Camera + installation · GST incl. · {option.time}</p>
+              <Link
+                href="/book?service=dashcam"
+                className="text-sm text-accent border border-accent/25 px-4 py-2 rounded-md hover:bg-accent/[0.08] transition-all inline-block"
+              >
+                Book now →
+              </Link>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
@@ -96,7 +122,7 @@ export default function DashcamPage() {
         <div className="space-y-5 max-w-2xl">
           {[
             { q: "Do you supply the dashcam or do I bring my own?", a: "We supply everything — camera, mounting hardware, cables, and installation. The price includes both the unit and the install." },
-            { q: "How long does installation take?", a: "A front and rear dashcam install typically takes under an hour. We come to your home, office or wherever the car is parked." },
+            { q: "How long does installation take?", a: "A front-only install takes around 45 minutes. A front and rear install typically takes 1–1.5 hours once rear cable routing is factored in. We come to your home, office or wherever the car is parked." },
             { q: "Will the wiring be visible?", a: "No. We route all cables through the headliner and pillars. The finished result looks clean and factory." },
             { q: "Do you install dashcams on any vehicle?", a: "Dashcam installation is compatible with virtually any vehicle. Unlike CarPlay, there are no make or model restrictions." },
           ].map((faq) => (
