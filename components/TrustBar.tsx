@@ -1,6 +1,6 @@
 const stats = [
   { number: "340+", label: "Installs completed" },
-  { number: "5.0★", label: "Google rating" },
+  { number: "5.0★", label: "Rating" },
   { number: "Same week", label: "Typical availability" },
 ];
 
