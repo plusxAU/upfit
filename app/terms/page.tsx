@@ -16,7 +16,7 @@ export default function TermsPage() {
           Terms &amp; Conditions
         </h1>
         <p className="text-xs text-upfit-muted mb-10">
-          Last updated: 12/06/2026 &nbsp;·&nbsp; Operated by: Brent Della Valle ABN 86 599 618 749
+          Last updated: 17/06/2026 &nbsp;·&nbsp; Operated by: UpFit Australia Pty Ltd ACN 699 128 606 ABN 79 699 128 606
         </p>
 
         <div className="space-y-10 text-sm text-upfit-muted leading-relaxed">
@@ -272,7 +272,7 @@ export default function TermsPage() {
               content: (
                 <div className="space-y-1">
                   <p className="font-medium text-upfit-text">UpFit</p>
-                  <p>Brent Della Valle ABN 86 599 618 749</p>
+                  <p>UpFit Australia Pty Ltd ACN 699 128 606 ABN 79 699 128 606</p>
                   <p>
                     Email:{" "}
                     <a

@@ -224,8 +224,9 @@ function buildTaxInvoiceEmail({
                   <td style="vertical-align:top;width:50%;">
                     <p style="margin:0 0 4px 0;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#666660;">From</p>
                     <p style="margin:0;font-size:13px;color:#f0ede6;font-weight:500;line-height:1.7;">UpFit</p>
-                    <p style="margin:0;font-size:12px;color:#888884;line-height:1.7;">Brent Della Valle</p>
-                    <p style="margin:0;font-size:12px;color:#888884;line-height:1.7;">ABN 86 599 618 749</p>
+                    <p style="margin:0;font-size:12px;color:#888884;line-height:1.7;">UpFit Australia Pty Ltd</p>
+                    <p style="margin:0;font-size:12px;color:#888884;line-height:1.7;">ACN 699 128 606 · ABN 79 699 128 606</p>
+                    <p style="margin:0;font-size:12px;color:#888884;line-height:1.7;">GST registered from 17 June 2026</p>
                     <p style="margin:0;font-size:12px;color:#888884;line-height:1.7;">
                       <a href="mailto:team@upfit.au" style="color:#888884;text-decoration:none;">team@upfit.au</a>
                     </p>
