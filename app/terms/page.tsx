@@ -101,9 +101,9 @@ export default function TermsPage() {
                   <p>
                     Where hardware is supplied as part of your booking (head
                     units, dashcams, cameras, sensors), it is sourced from
-                    authorised Australian distributors of recognised brands
-                    including Kenwood, Pioneer, and Aerpro. The specific unit
-                    to be installed will be confirmed in your booking details.
+                    authorised Australian distributors of recognised brands.
+                    The specific unit to be installed will be confirmed in
+                    your booking details.
                   </p>
                   <h3 className="font-medium text-upfit-text mb-2 mt-5">
                     3.2 Manufacturer Warranty
