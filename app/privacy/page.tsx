@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 export const metadata = {
   title: "Privacy Policy — UpFit",
   description: "UpFit Australia Pty Ltd privacy policy — how we collect, use and protect your personal information.",
+  robots: { index: false },
 };
 
 export default function PrivacyPage() {
