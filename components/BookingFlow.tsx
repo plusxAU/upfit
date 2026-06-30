@@ -295,6 +295,7 @@ export default function BookingFlow({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            paymentIntentId: paymentIntent.id,
             customerName: state.name,
             customerEmail: state.email,
             vehicle: `${state.make} ${state.model}${generation ? ` · ${generation.label}` : ""}`,

@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY!);
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
   try {
     const {
+      paymentIntentId,
       customerName,
       customerEmail,
       vehicle,
@@ -19,6 +22,15 @@ export async function POST(req: NextRequest) {
       address,
       notes,
     } = await req.json();
+
+    if (!paymentIntentId) {
+      return NextResponse.json({ success: false, error: "Missing payment reference" }, { status: 400 });
+    }
+
+    const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    if (intent.status !== "succeeded") {
+      return NextResponse.json({ success: false, error: "Payment not completed" }, { status: 402 });
+    }
 
     const firstName = customerName.split(" ")[0] || customerName;
 
