@@ -1,74 +1,97 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { ReviewCard } from "@/components/Reviews";
+import redis from "@/lib/redis";
 
 export const metadata = {
   title: "Customer Reviews — UpFit",
   description:
-    "Real reviews from UpFit customers across Sydney. Apple CarPlay, dashcam and reverse camera installations.",
+    "Real reviews from UpFit customers across Australia. Apple CarPlay, dashcam and reverse camera installations.",
 };
 
-const reviews = [
-  { stars: 5, text: "Booked Sunday night, installed Monday morning in my driveway. 90 minutes and looks completely factory-fitted. Couldn't be happier.", name: "James T.", suburb: "Chatswood", vehicle: "Toyota RAV4", service: "CarPlay" },
-  { stars: 5, text: "Finally got CarPlay in my HiLux. Had no idea this was even possible. Incredibly clean install, no rattles, no loose wires. Worth every cent.", name: "Sarah M.", suburb: "Parramatta", vehicle: "Toyota HiLux", service: "CarPlay" },
-  { stars: 5, text: "Dashcam front and rear done in under an hour at my office car park. Pricing was exactly as listed — no surprises. Booking the wife's Mazda next.", name: "Dave K.", suburb: "Sutherland", vehicle: "Ford Ranger", service: "Dashcam" },
-  { stars: 5, text: "CarPlay in my Mazda CX-5. Installer was on time, professional, and the result looks OEM. Already recommended to three friends.", name: "Priya L.", suburb: "Bondi", vehicle: "Mazda CX-5", service: "CarPlay" },
-  { stars: 5, text: "Reverse camera and dashcam combo done while I was at work. Came back to a perfectly installed setup. The parking camera image is crystal clear.", name: "Michael R.", suburb: "Castle Hill", vehicle: "Hyundai Tucson", service: "Dashcam + Reverse cam" },
-  { stars: 5, text: "Booked for my Ranger and couldn't be more impressed. Wireless CarPlay works perfectly. Installer knew the Ranger inside out.", name: "Tom B.", suburb: "Penrith", vehicle: "Ford Ranger", service: "CarPlay" },
-  { stars: 5, text: "Third time using UpFit now — did my car, my wife's CX-3, and now my mum's Corolla. Consistent quality every time.", name: "Alex W.", suburb: "Hornsby", vehicle: "Toyota Corolla", service: "CarPlay" },
-  { stars: 5, text: "The wireless CarPlay on my Kluger is incredible. No more plugging in cables. The screen quality is way better than I expected for the price.", name: "Jen S.", suburb: "Macquarie Park", vehicle: "Toyota Kluger", service: "CarPlay" },
-  { stars: 5, text: "Reverse cam installed in my Navara while parked at Westfield. Seamless. Image quality is brilliant and the installer was done in 40 minutes.", name: "Chris P.", suburb: "Bankstown", vehicle: "Nissan Navara", service: "Reverse cam" },
-];
+const PER_PAGE = 9;
 
-export default function ReviewsPage() {
+async function getPublishedReviews(page: number) {
+  const offset = (page - 1) * PER_PAGE;
+  const total = await redis.zcard("reviews:published");
+  const jobIds = await redis.zrevrange("reviews:published", offset, offset + PER_PAGE - 1);
+  const records = await Promise.all(jobIds.map((id) => redis.hgetall(`review:${id}`)));
+  const reviews = records
+    .filter((r) => r && r.name && r.stars)
+    .map((r) => ({
+      stars: Number(r.stars),
+      text: r.comment || "",
+      name: r.name,
+      suburb: r.suburb || "",
+      vehicle: r.vehicle || "",
+      service: r.service || "",
+    }));
+  return { reviews, total, totalPages: Math.ceil(total / PER_PAGE) };
+}
+
+export default async function ReviewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam ?? 1) || 1);
+  const { reviews, total, totalPages } = await getPublishedReviews(page);
+
   return (
     <main>
       <Nav />
 
-      <section className="px-10 py-20 border-b border-white/[0.08]">
-        <div className="flex items-center gap-2 text-xs text-upfit-muted uppercase tracking-widest mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-          Verified Google reviews
-        </div>
+      <section className="px-6 md:px-10 py-20 border-b border-white/[0.08]">
+        <p className="section-label mb-4">What customers say</p>
         <h1 className="font-serif text-5xl font-normal leading-tight mb-5">
-          What customers say
+          Customer reviews
         </h1>
-        <div className="flex items-center gap-4">
-          <p className="font-serif text-4xl text-accent">5.0★</p>
-          <p className="text-upfit-muted text-sm">
-            Average rating · {reviews.length}+ reviews
-          </p>
-        </div>
+        {total > 0 && (
+          <p className="text-upfit-muted text-sm">{total} verified review{total !== 1 ? "s" : ""}</p>
+        )}
       </section>
 
-      <section className="px-10 py-16 border-b border-white/[0.08]">
-        <div className="grid grid-cols-3 gap-4">
-          {reviews.map((review, i) => (
-            <div
-              key={i}
-              className="bg-bg-2 border border-white/[0.08] rounded-xl p-6 flex flex-col gap-4"
-            >
-              <p className="text-accent text-sm tracking-[0.15em]">
-                {"★".repeat(review.stars)}
-              </p>
-              <p className="text-sm text-upfit-text leading-relaxed italic flex-1">
-                &ldquo;{review.text}&rdquo;
-              </p>
-              <div>
-                <p className="text-xs text-upfit-muted">
-                  <span className="text-upfit-text font-medium">{review.name}</span>{" "}
-                  · {review.suburb}
-                </p>
-                <span className="inline-block text-[11px] text-upfit-faint bg-bg-3 px-2 py-0.5 rounded mt-1.5">
-                  {review.vehicle} · {review.service}
-                </span>
-              </div>
+      {reviews.length > 0 ? (
+        <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+            {reviews.map((review, i) => (
+              <ReviewCard key={i} review={review} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center gap-2">
+              {page > 1 && (
+                <Link
+                  href={`/reviews?page=${page - 1}`}
+                  className="px-4 py-2 text-sm border border-white/[0.14] rounded-lg text-upfit-muted hover:text-upfit-text hover:border-white/30 transition-colors"
+                >
+                  ← Previous
+                </Link>
+              )}
+              <span className="text-xs text-upfit-faint px-2">
+                Page {page} of {totalPages}
+              </span>
+              {page < totalPages && (
+                <Link
+                  href={`/reviews?page=${page + 1}`}
+                  className="px-4 py-2 text-sm border border-white/[0.14] rounded-lg text-upfit-muted hover:text-upfit-text hover:border-white/30 transition-colors"
+                >
+                  Next →
+                </Link>
+              )}
             </div>
-          ))}
-        </div>
-      </section>
+          )}
+        </section>
+      ) : (
+        <section className="px-6 md:px-10 py-20 border-b border-white/[0.08]">
+          <p className="text-upfit-muted text-sm">No reviews yet.</p>
+        </section>
+      )}
 
-      <section className="px-10 py-20 text-center border-b border-white/[0.08]">
+      <section className="px-6 md:px-10 py-20 text-center border-b border-white/[0.08]">
         <h2 className="font-serif text-4xl font-normal mb-4">
           Ready to join them?
         </h2>

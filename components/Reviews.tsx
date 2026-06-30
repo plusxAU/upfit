@@ -1,33 +1,16 @@
 import Link from "next/link";
+import redis from "@/lib/redis";
 
-const reviews = [
-  {
-    stars: 5,
-    text: "Booked Sunday night, installed Monday morning in my driveway. 90 minutes and looks completely factory-fitted. Couldn't be happier.",
-    name: "James T.",
-    suburb: "Chatswood",
-    vehicle: "Toyota RAV4",
-    service: "CarPlay",
-  },
-  {
-    stars: 5,
-    text: "Finally got CarPlay in my HiLux. Had no idea this was even possible. Incredibly clean install, no rattles, no loose wires. Worth every cent.",
-    name: "Sarah M.",
-    suburb: "Parramatta",
-    vehicle: "Toyota HiLux",
-    service: "CarPlay",
-  },
-  {
-    stars: 5,
-    text: "Dashcam front and rear done in under an hour at my office car park. Pricing was exactly as listed — no surprises. Booking the wife's Mazda next.",
-    name: "Dave K.",
-    suburb: "Sutherland",
-    vehicle: "Ford Ranger",
-    service: "Dashcam",
-  },
-];
+type Review = {
+  stars: number;
+  text: string;
+  name: string;
+  suburb: string;
+  vehicle: string;
+  service: string;
+};
 
-function ReviewCard({ review }: { review: typeof reviews[0] }) {
+export function ReviewCard({ review }: { review: Review }) {
   return (
     <div className="bg-bg-2 border border-white/[0.08] rounded-xl p-5 md:p-6 flex flex-col gap-4 h-full">
       <p className="text-accent text-sm tracking-[0.15em]">
@@ -49,7 +32,32 @@ function ReviewCard({ review }: { review: typeof reviews[0] }) {
   );
 }
 
-export default function Reviews() {
+async function fetchPublishedReviews(count = 6): Promise<Review[]> {
+  try {
+    const jobIds = await redis.zrevrange("reviews:published", 0, count - 1);
+    if (jobIds.length === 0) return [];
+    const records = await Promise.all(jobIds.map((id) => redis.hgetall(`review:${id}`)));
+    return records
+      .filter((r) => r && r.name && r.stars)
+      .map((r) => ({
+        stars: Number(r.stars),
+        text: r.comment || "",
+        name: r.name,
+        suburb: r.suburb || "",
+        vehicle: r.vehicle || "",
+        service: r.service || "",
+      }));
+  } catch (err) {
+    console.error("Reviews fetch error:", err);
+    return [];
+  }
+}
+
+export default async function Reviews() {
+  const reviews = await fetchPublishedReviews(6);
+
+  if (reviews.length === 0) return null;
+
   return (
     <section className="py-16 border-b border-white/[0.08]">
       <div className="px-6 md:px-10 mb-6">

@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
+import { buildReviewInviteEmail } from "@/lib/reviewEmail";
 
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -137,6 +138,26 @@ export async function POST(req: NextRequest) {
       });
     } catch (err) {
       console.error("Team invoice copy error:", err);
+    }
+
+    // Review invitation to customer
+    if (receiptEmail) {
+      try {
+        await resend.emails.send({
+          from: "UpFit <team@upfit.au>",
+          to: receiptEmail,
+          subject: "How did your install go?",
+          html: buildReviewInviteEmail({
+            name: customerName || "there",
+            service: job,
+            jobId: paymentIntent.id,
+            suburb: "",
+            vehicle: "",
+          }),
+        });
+      } catch (err) {
+        console.error("Review invite email error:", err);
+      }
     }
 
     return NextResponse.json({

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function StripeModeTag() {
   const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";
@@ -325,6 +325,109 @@ function ChargeBalanceSection() {
   );
 }
 
+function ReviewInviteSection() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    suburb: "",
+    vehicle: "",
+    service: "",
+    jobId: "",
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setForm((s) => ({ ...s, jobId: crypto.randomUUID() }));
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    setError("");
+    try {
+      const res = await fetch("/api/admin/send-review-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      setStatus("success");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      setStatus("error");
+    }
+  }
+
+  return (
+    <section>
+      <h2 style={{ color: "#f0ede6", fontSize: "16px", fontWeight: 500, marginBottom: "4px" }}>
+        Send review invitation
+      </h2>
+      <p style={{ color: "#888880", fontSize: "13px", marginBottom: "20px" }}>
+        Sends a feedback request email to the customer with star-rating links.
+      </p>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <input
+          style={inputStyle}
+          placeholder="Customer name"
+          required
+          value={form.name}
+          onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
+        />
+        <input
+          style={inputStyle}
+          type="email"
+          placeholder="Customer email"
+          required
+          value={form.email}
+          onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
+        />
+        <input
+          style={inputStyle}
+          placeholder="Suburb"
+          value={form.suburb}
+          onChange={(e) => setForm((s) => ({ ...s, suburb: e.target.value }))}
+        />
+        <input
+          style={inputStyle}
+          placeholder="Vehicle (e.g. Toyota RAV4)"
+          value={form.vehicle}
+          onChange={(e) => setForm((s) => ({ ...s, vehicle: e.target.value }))}
+        />
+        <input
+          style={inputStyle}
+          placeholder="Service (e.g. CarPlay installation)"
+          value={form.service}
+          onChange={(e) => setForm((s) => ({ ...s, service: e.target.value }))}
+        />
+        <input
+          style={{ ...inputStyle, color: "#555550", fontSize: "12px" }}
+          value={form.jobId}
+          onChange={(e) => setForm((s) => ({ ...s, jobId: e.target.value }))}
+          title="Job ID — auto-generated, edit if needed"
+        />
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          style={{ ...btnStyle, opacity: status === "loading" ? 0.6 : 1 }}
+        >
+          {status === "loading" ? "Sending…" : "Send review invitation →"}
+        </button>
+      </form>
+      {status === "success" && (
+        <p style={{ marginTop: "14px", fontSize: "13px", color: "#e8f44a" }}>
+          Invitation sent to {form.email}.
+        </p>
+      )}
+      {status === "error" && (
+        <p style={{ marginTop: "14px", fontSize: "13px", color: "#e8f44a" }}>{error}</p>
+      )}
+    </section>
+  );
+}
+
 export default function AdminForms() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
@@ -335,6 +438,8 @@ export default function AdminForms() {
       <SendRequestSection />
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }} />
       <ChargeBalanceSection />
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }} />
+      <ReviewInviteSection />
     </div>
   );
 }
