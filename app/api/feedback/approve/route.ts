@@ -41,11 +41,12 @@ export async function GET(req: NextRequest) {
     });
   }
 
+  const featureDate = new Date().toISOString();
   await redis
     .multi()
     .zrem("reviews:pending", jobId)
     .zadd("reviews:published", Date.now(), jobId)
-    .hset(`review:${jobId}`, "status", "published")
+    .hset(`review:${jobId}`, "status", "published", "featureDate", featureDate)
     .exec();
 
   return new Response(page("Review published ✓ — it will appear in the homepage carousel."), {

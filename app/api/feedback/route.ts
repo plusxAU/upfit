@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       service: service ?? "",
       status: "pending",
       dateSubmitted,
+      featureDate: dateSubmitted,
     });
 
     await redis.zadd("reviews:pending", Date.now(), jobId);
