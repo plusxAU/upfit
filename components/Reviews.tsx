@@ -1,4 +1,3 @@
-import Link from "next/link";
 import redis from "@/lib/redis";
 
 type Review = {
@@ -61,7 +60,9 @@ export default async function Reviews() {
   return (
     <section className="py-16 border-b border-white/[0.08]">
       <div className="px-6 md:px-10 mb-6">
-        <p className="section-label">What customers say</p>
+        <p className="section-label">
+          {reviews.length === 1 ? "Latest customer review" : "Latest customer reviews"}
+        </p>
       </div>
 
       {/* Mobile: horizontal scroll carousel showing ~1.3 cards */}
@@ -88,14 +89,7 @@ export default async function Reviews() {
         ))}
       </div>
 
-      <div className="px-6 md:px-10 mt-4">
-        <Link
-          href="/reviews"
-          className="text-sm text-upfit-muted hover:text-upfit-text transition-colors"
-        >
-          See all reviews →
-        </Link>
-      </div>
+
     </section>
   );
 }

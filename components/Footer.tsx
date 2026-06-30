@@ -4,8 +4,7 @@ const links = [
   { label: "Services", href: "/services" },
   { label: "Vehicles", href: "/vehicles" },
   { label: "How it works", href: "/how-it-works" },
-  { label: "Reviews", href: "/reviews" },
-  { label: "For installers", href: "/installers" },
+{ label: "For installers", href: "/installers" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
 ];
