@@ -6,6 +6,7 @@ const PROTECTED_PREFIXES = [
   "/admin",
   "/api/admin",
   "/api/payment/charge-balance",
+  "/api/payment/send-request",
 ];
 
 // Paths inside the protected prefixes that are exempt (login page itself)
@@ -42,5 +43,6 @@ export const config = {
     "/admin/:path*",
     "/api/admin/:path*",
     "/api/payment/charge-balance",
+    "/api/payment/send-request",
   ],
 };
