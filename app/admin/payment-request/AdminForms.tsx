@@ -2,6 +2,28 @@
 
 import { useState, useRef } from "react";
 
+function StripeModeTag() {
+  const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";
+  const isLive = key.startsWith("pk_live");
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        padding: "2px 8px",
+        borderRadius: "4px",
+        fontSize: "11px",
+        fontWeight: 600,
+        letterSpacing: "0.06em",
+        background: isLive ? "rgba(232,244,74,0.12)" : "rgba(255,160,50,0.15)",
+        color: isLive ? "#e8f44a" : "#ffb347",
+        border: `1px solid ${isLive ? "rgba(232,244,74,0.3)" : "rgba(255,160,50,0.3)"}`,
+      }}
+    >
+      {isLive ? "LIVE" : "TEST"}
+    </span>
+  );
+}
+
 const inputStyle: React.CSSProperties = {
   display: "block",
   width: "100%",
@@ -220,7 +242,7 @@ function ChargeBalanceSection() {
           placeholder="Stripe Customer ID (cus_…)"
           required
           value={form.customerId}
-          onChange={(e) => setForm((s) => ({ ...s, customerId: e.target.value }))}
+          onChange={(e) => setForm((s) => ({ ...s, customerId: e.target.value.trim() }))}
         />
         <input
           style={inputStyle}
@@ -306,6 +328,10 @@ function ChargeBalanceSection() {
 export default function AdminForms() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <span style={{ fontSize: "12px", color: "#444440" }}>Stripe mode</span>
+        <StripeModeTag />
+      </div>
       <SendRequestSection />
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }} />
       <ChargeBalanceSection />

@@ -9,12 +9,13 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY!);
   try {
     const {
-      customerId,
+      customerId: rawCustomerId,
       balanceAmount,
       jobDescription,
       depositAmount,
       includedItems,
     } = await req.json();
+    const customerId = typeof rawCustomerId === "string" ? rawCustomerId.trim() : rawCustomerId;
 
     if (!customerId || !balanceAmount) {
       return NextResponse.json(
@@ -145,7 +146,13 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("charge-balance error:", err);
-    return NextResponse.json({ error: "Balance charge failed" }, { status: 500 });
+    const message =
+      err instanceof Stripe.errors.StripeError
+        ? err.message
+        : err instanceof Error
+        ? err.message
+        : "Balance charge failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
