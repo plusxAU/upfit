@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 type Props = { params: Promise<{ state: string }> };
 
 const SERVICES = [
-  { slug: "carplay-installation", label: "CarPlay & Android Auto", from: 450 },
+  { slug: "carplay-installation", label: "CarPlay & Android Auto", from: 699 },
   { slug: "dashcam-installation", label: "Dashcam installation", from: 349 },
   { slug: "reverse-camera-installation", label: "Reverse camera", from: 320 },
   { slug: "parking-sensors", label: "Parking sensors", from: 620 },

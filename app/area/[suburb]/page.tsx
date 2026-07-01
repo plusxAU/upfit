@@ -23,7 +23,7 @@ const serviceConfig = {
   "carplay-installation": {
     label: "Apple CarPlay installation",
     short: "CarPlay",
-    fromPrice: 450,
+    fromPrice: 699,
     description: "Apple CarPlay and Android Auto retrofit",
     serviceSlug: "carplay-installation",
   },

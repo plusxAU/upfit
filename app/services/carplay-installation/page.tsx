@@ -7,7 +7,7 @@ import { vehicles } from "@/lib/vehicles";
 export const metadata = {
   title: "Apple CarPlay & Android Auto Installation Australia — UpFit",
   description:
-    "Professional Apple CarPlay and Android Auto installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Activation module from $350 or full head unit from $450. Mobile service — we come to you.",
+    "Professional Apple CarPlay and Android Auto installation across Sydney, Melbourne, Brisbane, Perth and Adelaide. Activation module from $350 or full head unit from $699. Mobile service — we come to you.",
   alternates: {
     canonical: "https://upfit.au/services/carplay-installation",
   },
@@ -19,10 +19,10 @@ const serviceSchema = {
   "name": "Apple CarPlay & Android Auto Installation",
   "provider": { "@type": "LocalBusiness", "name": "UpFit", "url": "https://upfit.au", "telephone": "+61435508050" },
   "areaServed": "Australia",
-  "description": "Professional Apple CarPlay and Android Auto installation. Module activation from $350 or full head unit upgrade from $450. Mobile service — we come to you.",
+  "description": "Professional Apple CarPlay and Android Auto installation. Module activation from $350 or full head unit upgrade from $699. Mobile service — we come to you.",
   "offers": [
     { "@type": "Offer", "name": "CarPlay Activation Module", "price": "350", "priceCurrency": "AUD" },
-    { "@type": "Offer", "name": "CarPlay Full Head Unit", "price": "450", "priceCurrency": "AUD" },
+    { "@type": "Offer", "name": "CarPlay Full Head Unit", "price": "699", "priceCurrency": "AUD" },
   ],
 };
 
@@ -58,7 +58,7 @@ export default function CarPlayPage() {
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed mb-8 max-w-xl">
           We retrofit CarPlay and Android Auto into any supported vehicle across Sydney, Melbourne, Brisbane, Perth and Adelaide.
           Factory-quality result, installed at your home or office.
-          Module activation from $350. Full head unit from $450.
+          Module activation from $350. Full head unit from $699.
         </p>
         <Link
           href="/book?service=carplay"

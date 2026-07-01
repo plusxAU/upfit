@@ -16,7 +16,7 @@ const services = [
     title: "CarPlay & Android Auto Upgrade",
     description:
       "Full head unit replacement with a premium touchscreen. Wired cleanly using OEM harness adaptors. Installed at your door.",
-    fromPrice: 450,
+    fromPrice: 699,
     priceNote: "Unit + installation · GST incl. · price varies by model",
     href: "/services/carplay-installation",
     time: "1.5–2 hours",
