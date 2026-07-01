@@ -153,9 +153,8 @@ export default async function BrandPage({ params }: Props) {
         <p className="section-label">Don&apos;t see your model?</p>
         <div className="max-w-lg">
           <p className="text-upfit-muted text-base leading-relaxed mb-6">
-            We&apos;re adding new models regularly. If your {brand.name} isn&apos;t listed,
-            request a custom quote — we can usually accommodate most vehicles
-            with a bit of extra lead time.
+            We&apos;re adding new models regularly. If your {brand.name}{" "}isn&apos;t listed,
+            request a custom quote — we can usually accommodate most vehicles with a bit of extra lead time.
           </p>
           <Link
             href="/quote"
