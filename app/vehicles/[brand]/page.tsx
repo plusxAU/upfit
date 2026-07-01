@@ -53,6 +53,10 @@ export default async function BrandPage({ params }: Props) {
     "description": `Apple CarPlay, dashcam, reverse camera and parking sensor installation for ${brand.name} vehicles across Australia. Mobile service.`,
   };
 
+  const hasAnyBookable = brand.models.some((m) =>
+    m.generations.some((g) => !g.configurator.requiresQuote)
+  );
+
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
@@ -169,15 +173,31 @@ export default async function BrandPage({ params }: Props) {
         <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4">
           Ready to upgrade your {brand.name}?
         </h2>
-        <p className="text-upfit-muted mb-8">
-          Check your model and book in 2 minutes. We come to you across Australia.
-        </p>
-        <Link
-          href={`/book?make=${encodeURIComponent(brand.name)}`}
-          className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors"
-        >
-          Book {brand.name} install →
-        </Link>
+        {hasAnyBookable ? (
+          <>
+            <p className="text-upfit-muted mb-8">
+              Check your model and book in 2 minutes. We come to you across Australia.
+            </p>
+            <Link
+              href={`/book?make=${encodeURIComponent(brand.name)}`}
+              className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors"
+            >
+              Book {brand.name} install →
+            </Link>
+          </>
+        ) : (
+          <>
+            <p className="text-upfit-muted mb-8">
+              We come to you across Australia. Request a quote and we&apos;ll get back to you with pricing and availability.
+            </p>
+            <Link
+              href="/quote"
+              className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors"
+            >
+              Request a custom quote →
+            </Link>
+          </>
+        )}
       </section>
 
       <Footer />
