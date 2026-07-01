@@ -149,6 +149,23 @@ export default async function BrandPage({ params }: Props) {
         </div>
       </section>
 
+      <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
+        <p className="section-label">Don&apos;t see your model?</p>
+        <div className="max-w-lg">
+          <p className="text-upfit-muted text-base leading-relaxed mb-6">
+            We&apos;re adding new models regularly. If your {brand.name} isn&apos;t listed,
+            request a custom quote — we can usually accommodate most vehicles
+            with a bit of extra lead time.
+          </p>
+          <Link
+            href="/quote"
+            className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-5 py-2.5 rounded-lg hover:bg-accent-dark transition-colors text-sm"
+          >
+            Request a custom quote →
+          </Link>
+        </div>
+      </section>
+
       <section className="px-6 md:px-10 py-20 text-center border-b border-white/[0.08]">
         <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4">
           Ready to upgrade your {brand.name}?
