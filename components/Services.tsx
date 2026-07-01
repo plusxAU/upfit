@@ -55,7 +55,7 @@ const services = [
 
 export default function Services() {
   return (
-    <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
+    <section id="services" className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
       <p className="section-label">Services — fixed pricing on supported models</p>
 
       {/* Mobile: stacked */}
