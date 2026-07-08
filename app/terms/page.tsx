@@ -74,8 +74,9 @@ export default function TermsPage() {
                     A deposit of 50% of the total booking value is collected at
                     the time of booking. The remaining balance is charged
                     automatically upon confirmation of job completion. By
-                    completing a booking, you authorise UpFit to store your
-                    payment method and charge the balance on your behalf as agent
+                    completing a booking, you authorise UpFit to charge the
+                    remaining balance to the same payment method upon
+                    confirmation of job completion, on your behalf as agent
                     for the installer.
                   </p>
                   <h3 className="font-medium text-upfit-text mb-2 mt-5">
