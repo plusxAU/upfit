@@ -44,6 +44,8 @@ export default async function StatePage({ params }: Props) {
     "description": `Mobile Apple CarPlay, Android Auto, dashcam and reverse camera installation across ${state.name}. We come to you.`,
   };
 
+  const subRegions = states.filter((s) => s.parentSlug === stateSlug);
+
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
@@ -91,6 +93,28 @@ export default async function StatePage({ params }: Props) {
           ))}
         </div>
       </section>
+
+      {/* Sub-regions (e.g. Gold Coast / Sunshine Coast / Cairns under QLD) */}
+      {subRegions.length > 0 && (
+        <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
+          <p className="section-label">Also covering</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {subRegions.map((region) => (
+              <Link
+                key={region.slug}
+                href={`/locations/${region.slug}`}
+                className="bg-bg-2 border border-white/[0.08] rounded-xl p-6 hover:border-white/[0.2] hover:bg-bg-3 transition-all group"
+              >
+                <p className="font-serif text-3xl text-upfit-text mb-1 group-hover:text-accent transition-colors">
+                  {region.abbr}
+                </p>
+                <p className="font-medium text-upfit-text mb-1">{region.name}</p>
+                <p className="text-xs text-upfit-muted">{region.suburbs.length} suburbs covered →</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Suburbs — link to all services, not just CarPlay */}
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
