@@ -62,11 +62,25 @@ export default async function StatePage({ params }: Props) {
           <br />
           <em className="text-accent not-italic">across {state.name}.</em>
         </h1>
-        <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed max-w-xl mb-8">
+        <p className={`text-upfit-muted text-base md:text-lg font-light leading-relaxed max-w-xl ${subRegions.length > 0 ? "mb-4" : "mb-8"}`}>
           Apple CarPlay, Android Auto, dashcams and reverse cameras —
           installed at your home or office anywhere in {state.name}.
           Fixed pricing, same-week availability.
         </p>
+        {subRegions.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 mb-8">
+            <span className="text-xs text-upfit-faint">Also covering:</span>
+            {subRegions.map((r) => (
+              <Link
+                key={r.slug}
+                href={`/locations/${r.slug}`}
+                className="text-xs text-upfit-muted border border-white/[0.08] px-3 py-1 rounded-full hover:border-accent/40 hover:text-accent transition-all"
+              >
+                {r.name} →
+              </Link>
+            ))}
+          </div>
+        )}
         <Link
           href="/book"
           className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors"
@@ -93,28 +107,6 @@ export default async function StatePage({ params }: Props) {
           ))}
         </div>
       </section>
-
-      {/* Sub-regions (e.g. Gold Coast / Sunshine Coast / Cairns under QLD) */}
-      {subRegions.length > 0 && (
-        <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
-          <p className="section-label">Also covering</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {subRegions.map((region) => (
-              <Link
-                key={region.slug}
-                href={`/locations/${region.slug}`}
-                className="bg-bg-2 border border-white/[0.08] rounded-xl p-6 hover:border-white/[0.2] hover:bg-bg-3 transition-all group"
-              >
-                <p className="font-serif text-3xl text-upfit-text mb-1 group-hover:text-accent transition-colors">
-                  {region.abbr}
-                </p>
-                <p className="font-medium text-upfit-text mb-1">{region.name}</p>
-                <p className="text-xs text-upfit-muted">{region.suburbs.length} suburbs covered →</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Suburbs — link to all services, not just CarPlay */}
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
