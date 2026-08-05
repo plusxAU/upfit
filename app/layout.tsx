@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | UpFit",
   },
   description:
-    "Mobile Apple CarPlay, Android Auto, dashcam, reverse camera and parking sensor installation across Australia. Fixed pricing, we come to you. Same-week availability.",
+    "Mobile Apple CarPlay, Android Auto, dashcam and reverse camera installation across Australia. Fixed pricing, we come to you. Same-week availability.",
   icons: {
     icon: "/favicon.svg",
     apple: "/apple-touch-icon.svg",

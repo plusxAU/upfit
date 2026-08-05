@@ -5,15 +5,9 @@ import Link from "next/link";
 import { vehicles } from "@/lib/vehicles";
 import type { Metadata } from "next";
 import { getConfiguratorOptions, formatPrice } from "@/lib/configurator";
+import { getActiveServices } from "@/lib/services";
 
 type Props = { params: Promise<{ brand: string }> };
-
-const ALL_SERVICES = [
-  { slug: "carplay-installation", label: "CarPlay & Android Auto" },
-  { slug: "dashcam-installation", label: "Dashcam" },
-  { slug: "reverse-camera-installation", label: "Reverse cam" },
-  { slug: "parking-sensors", label: "Parking sensors" },
-];
 
 const CITIES = "Sydney, Melbourne, Brisbane, Perth & Adelaide";
 
@@ -23,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!brand) return {};
   return {
     title: `${brand.name} CarPlay & Dashcam Installation Australia — UpFit`,
-    description: `Apple CarPlay, dashcam, reverse camera and parking sensor installation for all supported ${brand.name} models across ${CITIES}. Mobile service — we come to you.`,
+    description: `Apple CarPlay, dashcam and reverse camera installation for all supported ${brand.name} models across ${CITIES}. Mobile service — we come to you.`,
     alternates: {
       canonical: `https://upfit.au/vehicles/${brandSlug}`,
     },
@@ -50,7 +44,7 @@ export default async function BrandPage({ params }: Props) {
       "telephone": "+61435508050",
     },
     "areaServed": "Australia",
-    "description": `Apple CarPlay, dashcam, reverse camera and parking sensor installation for ${brand.name} vehicles across Australia. Mobile service.`,
+    "description": `Apple CarPlay, dashcam and reverse camera installation for ${brand.name} vehicles across Australia. Mobile service.`,
   };
 
   const hasAnyBookable = brand.models.some((m) =>
@@ -76,7 +70,7 @@ export default async function BrandPage({ params }: Props) {
           {brand.name} installations
         </h1>
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed max-w-xl">
-          Apple CarPlay, dashcam, reverse camera and parking sensor installation for all
+          Apple CarPlay, dashcam and reverse camera installation for all
           supported {brand.name} models across {CITIES}. Mobile service — we come to you.
         </p>
       </section>
@@ -113,14 +107,6 @@ export default async function BrandPage({ params }: Props) {
                               <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
                             )}
                           </span>
-                          <span className="text-xs text-upfit-muted">
-                            Sensors{" "}
-                            {gen.pricing.installedWithSensorsRear !== null ? (
-                              <span className="text-accent font-medium">from ${gen.pricing.installedWithSensorsRear}</span>
-                            ) : (
-                              <Link href={quoteUrl} className="text-accent font-medium hover:underline">Quote</Link>
-                            )}
-                          </span>
                         </div>
                       </div>
                       {/* Service pills — or single quote link for quote-only generations */}
@@ -133,7 +119,7 @@ export default async function BrandPage({ params }: Props) {
                             Get a quote →
                           </Link>
                         ) : (
-                          ALL_SERVICES.map((service) => (
+                          getActiveServices().map((service) => (
                             <Link
                               key={service.slug}
                               href={`/${brand.slug}-${model.slug}/${service.slug}?gen=${encodeURIComponent(gen.id)}`}

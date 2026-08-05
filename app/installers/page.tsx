@@ -12,7 +12,7 @@ export const metadata = {
 const existingFaq = [
   {
     q: "What kind of jobs does UpFit send?",
-    a: "Head units, Apple CarPlay upgrades, parking sensors, reverse cameras, and dash cams. Each job is pre-booked by the customer and pre-priced based on the specific vehicle — you see the vehicle, service, and your install payout before you accept.",
+    a: "Head units, Apple CarPlay upgrades, reverse cameras, and dash cams. Each job is pre-booked by the customer and pre-priced based on the specific vehicle — you see the vehicle, service, and your install payout before you accept.",
   },
   {
     q: "How and when do I get paid?",
@@ -136,7 +136,7 @@ export default function InstallersPage() {
     "@type": "JobPosting",
     title: "Mobile Car Accessory Installer",
     description:
-      "UpFit is looking for experienced mobile car accessory installers across Australia. Install head units, parking sensors, dash cams, and reverse cameras. Jobs are confirmed and pre-priced — no quoting, no lead chasing. Get paid within 3 business days.",
+      "UpFit is looking for experienced mobile car accessory installers across Australia. Install head units, dash cams, and reverse cameras. Jobs are confirmed and pre-priced — no quoting, no lead chasing. Get paid within 3 business days.",
     hiringOrganization: {
       "@type": "Organization",
       name: "UpFit",
@@ -152,7 +152,7 @@ export default function InstallersPage() {
     jobBenefits:
       "No quoting or lead generation required. Confirmed pre-priced jobs. Guaranteed payment within 3 business days. Flexible schedule — accept only the jobs that suit you.",
     responsibilities:
-      "Install car accessories including head units, parking sensors, dash cams, and reverse cameras at customer locations across Australia.",
+      "Install car accessories including head units, dash cams, and reverse cameras at customer locations across Australia.",
     qualifications:
       "Experience installing car electronics. Ability to work independently. Own tools and transport.",
   };

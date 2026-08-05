@@ -1,34 +1,24 @@
 import type { MetadataRoute } from "next";
 import { vehicles } from "@/lib/vehicles";
 import { states } from "@/components/Suburbs";
+import { getActiveServices } from "@/lib/services";
 
 const BASE = "https://upfit.au";
 
-const VEHICLE_SERVICES = [
-  "carplay-installation",
-  "dashcam-installation",
-  "reverse-camera-installation",
-  "parking-sensors",
-];
-
-const SUBURB_SERVICES = [
-  "carplay-installation",
-  "dashcam-installation",
-  "reverse-camera-installation",
-  "parking-sensors",
-];
-
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  const activeServices = getActiveServices();
   const urls: MetadataRoute.Sitemap = [];
 
   // ── Static pages ────────────────────────────────────────────────────────────
   urls.push(
     { url: BASE, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
-    { url: `${BASE}/services/carplay-installation`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/services/dashcam-installation`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/services/reverse-camera-installation`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/services/parking-sensors`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    ...activeServices.map(s => ({
+      url: `${BASE}/services/${s.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
     { url: `${BASE}/vehicles`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/how-it-works`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/reviews`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
@@ -61,9 +51,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // ── Vehicle × Service pages ──────────────────────────────────────────────
     for (const model of brand.models) {
-      for (const service of VEHICLE_SERVICES) {
+      for (const service of activeServices) {
         urls.push({
-          url: `${BASE}/${brand.slug}-${model.slug}/${service}`,
+          url: `${BASE}/${brand.slug}-${model.slug}/${service.slug}`,
           lastModified: now,
           changeFrequency: "monthly",
           priority: 0.7,
@@ -76,9 +66,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const state of states) {
     for (const suburb of state.suburbs) {
       const suburbSlug = suburb.toLowerCase().replace(/\s+/g, "-");
-      for (const service of SUBURB_SERVICES) {
+      for (const service of activeServices) {
         urls.push({
-          url: `${BASE}/area/${service}-${suburbSlug}`,
+          url: `${BASE}/area/${service.slug}-${suburbSlug}`,
           lastModified: now,
           changeFrequency: "monthly",
           priority: 0.65,

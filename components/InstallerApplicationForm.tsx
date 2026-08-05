@@ -4,7 +4,6 @@ import { useState } from "react";
 
 const SERVICES = [
   { id: "head-units", label: "Head units / Apple CarPlay" },
-  { id: "parking-sensors", label: "Parking sensors" },
   { id: "dash-cams", label: "Dash cams" },
   { id: "reverse-cameras", label: "Reverse cameras" },
   { id: "audio", label: "Speakers / amplifiers / subwoofers" },

@@ -41,16 +41,6 @@ const services = [
     href: "/services/reverse-camera-installation",
     time: "~45 minutes",
   },
-  {
-    tag: "Park with confidence",
-    title: "Parking sensors",
-    description:
-      "Front and/or rear ultrasonic parking sensors with audible alert. Natural bundle with reverse camera.",
-    fromPrice: 620,
-    priceNote: "Sensors + installation · GST incl. · drilling required",
-    href: "/services/parking-sensors",
-    time: "1–1.5 hours",
-  },
 ];
 
 export default function Services() {

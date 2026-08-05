@@ -3,6 +3,8 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { states } from "@/components/Suburbs";
+import { getActiveServices, type ServiceMeta } from "@/lib/services";
+import type { Metadata } from "next";
 
 const allSuburbs = states.flatMap((s) => s.suburbs);
 
@@ -15,52 +17,18 @@ function getNearbySuburbs(suburb: string, count = 6): string[] {
   if (!state) return [];
   return state.suburbs.filter((s) => s !== suburb).slice(0, count);
 }
-import type { Metadata } from "next";
 
 type Props = { params: Promise<{ suburb: string }> };
 
-const serviceConfig = {
-  "carplay-installation": {
-    label: "Apple CarPlay installation",
-    short: "CarPlay",
-    fromPrice: 699,
-    description: "Apple CarPlay and Android Auto retrofit",
-    serviceSlug: "carplay-installation",
-  },
-  "dashcam-installation": {
-    label: "Dashcam installation",
-    short: "Dashcam",
-    fromPrice: 349,
-    description: "Front and rear dashcam installation",
-    serviceSlug: "dashcam-installation",
-  },
-  "reverse-camera-installation": {
-    label: "Reverse camera installation",
-    short: "Reverse cam",
-    fromPrice: 320,
-    description: "Reverse camera installation",
-    serviceSlug: "reverse-camera-installation",
-  },
-  "parking-sensors": {
-    label: "Parking sensor installation",
-    short: "Parking sensors",
-    fromPrice: 620,
-    description: "Front and rear parking sensor installation",
-    serviceSlug: "parking-sensors",
-  },
-} as const;
-
-type ServiceSlug = keyof typeof serviceConfig;
-
-function parseSuburbSlug(slug: string): { suburb: string; service: ServiceSlug } | null {
-  for (const serviceSlug of Object.keys(serviceConfig) as ServiceSlug[]) {
-    const prefix = `${serviceSlug}-`;
+function parseSuburbSlug(slug: string): { suburb: string; service: ServiceMeta } | null {
+  for (const service of getActiveServices()) {
+    const prefix = `${service.slug}-`;
     if (slug.startsWith(prefix)) {
       const suburbSlug = slug.slice(prefix.length);
       const name = allSuburbs.find(
         (s) => s.toLowerCase().replace(/\s+/g, "-") === suburbSlug
       );
-      if (name) return { suburb: name, service: serviceSlug };
+      if (name) return { suburb: name, service };
     }
   }
   return null;
@@ -70,11 +38,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { suburb: slugParam } = await params;
   const parsed = parseSuburbSlug(slugParam);
   if (!parsed) return {};
-  const config = serviceConfig[parsed.service];
-  const city = getCityForSuburb(parsed.suburb);
+  const { suburb, service } = parsed;
+  const city = getCityForSuburb(suburb);
   return {
-    title: `${config.label} ${parsed.suburb} — Mobile, We Come to You`,
-    description: `Professional ${config.label.toLowerCase()} in ${parsed.suburb}, ${city}. Mobile service — we come to your home or office. Fixed pricing from $${config.fromPrice}. Same-week availability.`,
+    title: `${service.label} ${suburb} — Mobile, We Come to You`,
+    description: `Professional ${service.label.toLowerCase()} in ${suburb}, ${city}. Mobile service — we come to your home or office. Fixed pricing from $${service.fromPrice}. Same-week availability.`,
     alternates: {
       canonical: `https://upfit.au/area/${slugParam}`,
     },
@@ -82,11 +50,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
+  const services = getActiveServices();
   const params: { suburb: string }[] = [];
   for (const suburb of allSuburbs) {
     const suburbSlug = suburb.toLowerCase().replace(/\s+/g, "-");
-    for (const serviceSlug of Object.keys(serviceConfig)) {
-      params.push({ suburb: `${serviceSlug}-${suburbSlug}` });
+    for (const service of services) {
+      params.push({ suburb: `${service.slug}-${suburbSlug}` });
     }
   }
   return params;
@@ -98,14 +67,13 @@ export default async function SuburbPage({ params }: Props) {
   if (!parsed) notFound();
 
   const { suburb, service } = parsed;
-  const config = serviceConfig[service];
   const city = getCityForSuburb(suburb);
   const nearbySuburbs = getNearbySuburbs(suburb, 6);
 
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": `${config.label} in ${suburb}`,
+    "name": `${service.label} in ${suburb}`,
     "provider": {
       "@type": "LocalBusiness",
       "name": "UpFit",
@@ -118,10 +86,10 @@ export default async function SuburbPage({ params }: Props) {
       "name": suburb,
       "containedInPlace": { "@type": "State", "name": city },
     },
-    "description": `Professional ${config.description.toLowerCase()} in ${suburb}, ${city}. Mobile service — we come to you. Fixed pricing from $${config.fromPrice}.`,
+    "description": `Professional ${service.description.toLowerCase()} in ${suburb}, ${city}. Mobile service — we come to you. Fixed pricing from $${service.fromPrice}.`,
     "offers": {
       "@type": "Offer",
-      "price": String(config.fromPrice),
+      "price": String(service.fromPrice),
       "priceCurrency": "AUD",
     },
   };
@@ -132,10 +100,10 @@ export default async function SuburbPage({ params }: Props) {
     "mainEntity": [
       {
         "@type": "Question",
-        "name": `How much does ${config.label.toLowerCase()} cost in ${suburb}?`,
+        "name": `How much does ${service.label.toLowerCase()} cost in ${suburb}?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `${config.label} in ${suburb} starts from $${config.fromPrice}. Final price depends on your vehicle make, model, and year — check your vehicle on our website for your exact price.`,
+          "text": `${service.label} in ${suburb} starts from $${service.fromPrice}. Final price depends on your vehicle make, model, and year — check your vehicle on our website for your exact price.`,
         },
       },
       {
@@ -178,18 +146,18 @@ export default async function SuburbPage({ params }: Props) {
           Mobile installation · {suburb} · {city}
         </div>
         <h1 className="font-serif text-4xl md:text-5xl font-normal leading-tight mb-5">
-          {config.label}
+          {service.label}
           <br />
           <em className="text-accent not-italic">in {suburb}.</em>
         </h1>
         <p className="text-upfit-muted text-base md:text-lg font-light leading-relaxed mb-3 max-w-xl">
-          Professional {config.description.toLowerCase()} in {suburb}, {city}.
+          Professional {service.description.toLowerCase()} in {suburb}, {city}.
           We come to your home, office, or wherever the car is parked.
-          Fixed pricing from ${config.fromPrice} — no surprises.
+          Fixed pricing from ${service.fromPrice} — no surprises.
         </p>
-        <p className="text-accent font-serif text-2xl mb-8">From ${config.fromPrice}</p>
+        <p className="text-accent font-serif text-2xl mb-8">From ${service.fromPrice}</p>
         <Link
-          href={`/book?suburb=${encodeURIComponent(suburb)}&service=${service}`}
+          href={`/book?suburb=${encodeURIComponent(suburb)}&service=${service.slug}`}
           className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors"
         >
           Book in {suburb} →
@@ -248,15 +216,15 @@ export default async function SuburbPage({ params }: Props) {
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
         <p className="section-label">Other services in {suburb}</p>
         <div className="flex gap-3 flex-wrap">
-          {(Object.entries(serviceConfig) as [ServiceSlug, typeof serviceConfig[ServiceSlug]][])
-            .filter(([slug]) => slug !== service)
-            .map(([slug, cfg]) => (
+          {getActiveServices()
+            .filter((s) => s.slug !== service.slug)
+            .map((s) => (
               <Link
-                key={slug}
-                href={`/area/${slug}-${suburb.toLowerCase().replace(/\s+/g, "-")}`}
+                key={s.slug}
+                href={`/area/${s.slug}-${suburb.toLowerCase().replace(/\s+/g, "-")}`}
                 className="bg-bg-2 border border-white/[0.08] rounded-lg px-4 py-3 text-sm text-upfit-muted hover:text-upfit-text hover:border-white/[0.2] transition-all"
               >
-                {cfg.label} {suburb} →
+                {s.label} {suburb} →
               </Link>
             ))}
         </div>
@@ -264,12 +232,12 @@ export default async function SuburbPage({ params }: Props) {
 
       {/* FAQ */}
       <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
-        <p className="section-label">Common questions about {config.short} in {suburb}</p>
+        <p className="section-label">Common questions about {service.short} in {suburb}</p>
         <div className="space-y-5 max-w-2xl">
           {[
             {
-              q: `How much does ${config.label.toLowerCase()} cost in ${suburb}?`,
-              a: `${config.label} in ${suburb} starts from $${config.fromPrice}. Final price depends on your vehicle — check your make and model on our site for an exact price.`,
+              q: `How much does ${service.label.toLowerCase()} cost in ${suburb}?`,
+              a: `${service.label} in ${suburb} starts from $${service.fromPrice}. Final price depends on your vehicle — check your make and model on our site for an exact price.`,
             },
             {
               q: `Do you come to ${suburb}?`,
@@ -300,10 +268,10 @@ export default async function SuburbPage({ params }: Props) {
             {nearbySuburbs.map((s) => (
               <Link
                 key={s}
-                href={`/area/${service}-${s.toLowerCase().replace(/\s+/g, "-")}`}
+                href={`/area/${service.slug}-${s.toLowerCase().replace(/\s+/g, "-")}`}
                 className="text-xs text-upfit-muted border border-white/[0.08] px-3.5 py-1.5 rounded-full hover:border-accent/40 hover:text-accent transition-all"
               >
-                {config.short} in {s}
+                {service.short} in {s}
               </Link>
             ))}
           </div>
@@ -319,7 +287,7 @@ export default async function SuburbPage({ params }: Props) {
           Check your vehicle and book in 2 minutes.
         </p>
         <Link
-          href={`/book?suburb=${encodeURIComponent(suburb)}&service=${service}`}
+          href={`/book?suburb=${encodeURIComponent(suburb)}&service=${service.slug}`}
           className="inline-flex items-center gap-2 bg-accent text-bg font-medium px-6 py-3 rounded-lg hover:bg-accent-dark transition-colors"
         >
           Book in {suburb} →

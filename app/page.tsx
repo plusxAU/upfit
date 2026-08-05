@@ -13,7 +13,7 @@ const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "UpFit",
-  "description": "Mobile Apple CarPlay, Android Auto, dashcam, reverse camera and parking sensor installation across Australia. We come to you.",
+  "description": "Mobile Apple CarPlay, Android Auto, dashcam and reverse camera installation across Australia. We come to you.",
   "url": "https://upfit.au",
   "telephone": "+61435508050",
   "email": "team@upfit.au",

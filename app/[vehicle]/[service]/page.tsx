@@ -39,12 +39,6 @@ const serviceMap: Record<string, ServiceEntry> = {
     unit: "Reverse camera",
     bookingKey: "revcam",
   },
-  "parking-sensors": {
-    label: "Parking sensor installation",
-    getPrice: (gen) => gen.pricing.installedWithSensorsRear,
-    unit: "Parking sensors",
-    bookingKey: "parking-sensors",
-  },
 };
 
 function parseVehicleSlug(vehicleSlug: string) {
