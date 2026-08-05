@@ -6,6 +6,7 @@ export type StateEntry = {
   slug: string;
   city: string;
   suburbs: string[];
+  parentSlug?: string;
 };
 
 export const states: StateEntry[] = [
@@ -72,6 +73,7 @@ export const states: StateEntry[] = [
     abbr: "GC",
     slug: "gold-coast",
     city: "Gold Coast",
+    parentSlug: "qld",
     suburbs: [
       "Surfers Paradise", "Broadbeach", "Southport", "Robina", "Bundall",
       "Labrador", "Nerang", "Coomera", "Helensvale", "Hope Island",
@@ -85,6 +87,7 @@ export const states: StateEntry[] = [
     abbr: "SC",
     slug: "sunshine-coast",
     city: "Sunshine Coast",
+    parentSlug: "qld",
     suburbs: [
       "Maroochydore", "Caloundra", "Noosa Heads", "Nambour", "Buderim",
       "Mooloolaba", "Kawana Waters", "Sippy Downs", "Coolum Beach",
@@ -98,6 +101,7 @@ export const states: StateEntry[] = [
     abbr: "FNQ",
     slug: "cairns",
     city: "Cairns",
+    parentSlug: "qld",
     suburbs: [
       "Cairns City", "Cairns North", "Edge Hill", "Westcourt", "Manunda",
       "Manoora", "Bungalow", "Mooroobool", "Earlville", "Whitfield",
@@ -109,12 +113,22 @@ export const states: StateEntry[] = [
 ];
 
 export default function Suburbs() {
+  const topLevel = states.filter((s) => !s.parentSlug);
+  const subRegions = states.filter((s) => s.parentSlug);
+
+  const subRegionsByParent = subRegions.reduce<Record<string, StateEntry[]>>((acc, s) => {
+    const key = s.parentSlug!;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(s);
+    return acc;
+  }, {});
+
   return (
     <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
       <p className="section-label">Australia-wide coverage</p>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        {states.map((state) => (
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+        {topLevel.map((state) => (
           <Link
             key={state.slug}
             href={`/locations/${state.slug}`}
@@ -128,7 +142,26 @@ export default function Suburbs() {
         ))}
       </div>
 
-      <p className="text-sm text-upfit-muted">
+      {/* Sub-region pills, grouped by parent state */}
+      {Object.entries(subRegionsByParent).map(([parentSlug, subs]) => {
+        const parent = topLevel.find((s) => s.slug === parentSlug);
+        return (
+          <div key={parentSlug} className="flex flex-wrap items-center gap-2 mb-3">
+            <span className="text-xs text-upfit-faint">Also in {parent?.name}:</span>
+            {subs.map((sub) => (
+              <Link
+                key={sub.slug}
+                href={`/locations/${sub.slug}`}
+                className="text-xs text-upfit-muted border border-white/[0.08] px-3 py-1 rounded-full hover:border-accent/40 hover:text-accent transition-all"
+              >
+                {sub.name} →
+              </Link>
+            ))}
+          </div>
+        );
+      })}
+
+      <p className="text-sm text-upfit-muted mt-4">
         Mobile installation — we come to you.{" "}
         <Link href="/quote" className="text-accent hover:text-accent-dark transition-colors">
           Not sure if we cover your area? →
