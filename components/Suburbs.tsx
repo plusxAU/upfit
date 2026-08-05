@@ -67,6 +67,45 @@ export const states: StateEntry[] = [
       "Modbury", "Elizabeth", "Noarlunga", "Unley", "Prospect",
     ],
   },
+  {
+    name: "Gold Coast",
+    abbr: "GC",
+    slug: "gold-coast",
+    city: "Gold Coast",
+    suburbs: [
+      "Surfers Paradise", "Broadbeach", "Southport", "Robina", "Bundall",
+      "Labrador", "Nerang", "Coomera", "Helensvale", "Hope Island",
+      "Varsity Lakes", "Burleigh Heads", "Mudgeeraba", "Coolangatta",
+      "Parkwood", "Ashmore", "Runaway Bay", "Benowa", "Mermaid Beach",
+      "Palm Beach", "Tugun", "Bilinga", "Currumbin", "Elanora",
+    ],
+  },
+  {
+    name: "Sunshine Coast",
+    abbr: "SC",
+    slug: "sunshine-coast",
+    city: "Sunshine Coast",
+    suburbs: [
+      "Maroochydore", "Caloundra", "Noosa Heads", "Nambour", "Buderim",
+      "Mooloolaba", "Kawana Waters", "Sippy Downs", "Coolum Beach",
+      "Peregian Springs", "Bli Bli", "Landsborough", "Beerwah",
+      "Currimundi", "Alexandra Headland", "Palmview", "Mountain Creek",
+      "Bokarina", "Wurtulla", "Birtinya",
+    ],
+  },
+  {
+    name: "Cairns",
+    abbr: "FNQ",
+    slug: "cairns",
+    city: "Cairns",
+    suburbs: [
+      "Cairns City", "Cairns North", "Edge Hill", "Westcourt", "Manunda",
+      "Manoora", "Bungalow", "Mooroobool", "Earlville", "Whitfield",
+      "Smithfield", "Caravonica", "Redlynch", "Gordonvale", "Palm Cove",
+      "Trinity Beach", "Yorkeys Knob", "Holloways Beach", "Kewarra Beach",
+      "Trinity Park",
+    ],
+  },
 ];
 
 export default function Suburbs() {
@@ -74,7 +113,7 @@ export default function Suburbs() {
     <section className="px-6 md:px-10 py-16 border-b border-white/[0.08]">
       <p className="section-label">Australia-wide coverage</p>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {states.map((state) => (
           <Link
             key={state.slug}

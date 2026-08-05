@@ -17,7 +17,7 @@ const localBusinessSchema = {
   "url": "https://upfit.au",
   "telephone": "+61435508050",
   "email": "team@upfit.au",
-  "areaServed": ["New South Wales", "Victoria", "Queensland", "Western Australia", "South Australia"],
+  "areaServed": ["New South Wales", "Victoria", "Queensland", "Gold Coast", "Sunshine Coast", "Cairns", "Western Australia", "South Australia"],
   "serviceType": ["Apple CarPlay Installation", "Android Auto Installation", "Dashcam Installation", "Reverse Camera Installation", "Parking Sensor Installation"],
   "priceRange": "$$",
   "sameAs": [],
